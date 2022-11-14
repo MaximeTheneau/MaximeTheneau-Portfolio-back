@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About{% endblock %}
+
+{% block body %}
+    <h1>About</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Cv</th>
+                <td>{{ about.cv }}</td>
+            </tr>
+            <tr>
+                <th>ImgWebp</th>
+                <td>{{ about.imgWebp }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ about.content }}</td>
+            </tr>
+            <tr>
+                <th>Contents2</th>
+                <td>{{ about.contents2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_about_index') }}">back to list</a>
+
+    <a href="{{ path('app_about_edit', {'id': about.id}) }}">edit</a>
+
+    {{ include('back/about/_delete_form.html.twig') }}
+{% endblock %}
