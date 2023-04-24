@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Subtopic{% endblock %}
+
+{% block body %}
+    <h1>Edit Subtopic</h1>
+
+    {{ include('back/subtopic/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_back_subtopic_index') }}">back to list</a>
+
+    {{ include('back/subtopic/_delete_form.html.twig') }}
+{% endblock %}

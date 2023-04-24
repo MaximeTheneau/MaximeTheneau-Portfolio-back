@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Posts index{% endblock %}
+
+{% block body %}
+        <table class="w-9/12 text-left text-sm font-light m-auto">
+            <thead>
+                <tr class="border-b dark:border-neutral-500">
+                    <th>Titre</th>
+                    <th>Sous-categorie</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for post in posts %}
+                <tr>
+                    <td>{{ post.title }}</td>
+                    <td>
+                        {% if post.subcategory %}
+                            {{ post.subcategory.name }}
+                        {% endif %}
+                    </td>
+                    <td>
+
+                        <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/' ~ post.imgPost ~ '.webp'}} alt="imgHeader" width="100px">
+                    </td>
+                    <td>
+                        <a href="{{ path('app_back_posts_edit', {'id': post.id}) }}" class="button is-info">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    <a href="{{ path('app_back_posts_new') }}" class="button is-primary items-center">Nouvelle post</a>
+{% endblock %}

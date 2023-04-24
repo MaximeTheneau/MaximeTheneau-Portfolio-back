@@ -1,0 +1,148 @@
+{{ form_start(form) }}
+
+    {% if post.imgPost is empty %}
+            <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/Accueil.webp'}} alt="imgHeader" > 
+    {% else %}
+            <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/' ~ post.imgPost ~ '.webp'}} alt="imgHeader" >
+    {% endif %}
+            <ul class="pb-4">
+                <li class="flex text-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+                    </svg> Catégories :
+                </li>
+                <li class="flex text-sm border-gray-600 border-b">
+                    {{ form_widget(form.category) }}
+                </li>
+                <li class="flex text-lg pt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+                    </svg> Sous-catégories :
+                </li>
+                <li class=" text-sm border-gray-600 border-b ">
+                    {{ form_widget(form.subcategory) }}
+                </li>
+                
+            </ul>
+            {{ form_row(form.imgPost) }}
+            <div class="add__altImg hidden">
+                {{ form_row(form.altImg) }}
+            </div>
+            <p class="button__altImg pb-4">Changez le descriptif de l'image</p>
+            {{ form_row(form.video )}}
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title) }}
+            
+            
+            {{ form_label(form.contents) }}
+            {{ form_widget(form.contents) }}
+            
+            
+            <div class="pt-4">
+                <ul 
+                    class="paragraph"
+                    data-index="{{ form.paragraphPosts|length > 0 ? form.paragraphPosts|last.vars.name + 1 : 0 }}"
+                    data-prototype="{{ form_widget(form.paragraphPosts.vars.prototype)|e('html_attr') }}"
+                >   
+                    {% for paragraph in form.paragraphPosts %}
+                        <li class="h-auto">
+                            {{ form_widget(paragraph.imgPostParagh) }}
+                            {{ form_widget(paragraph.altImg) }}
+                            <p >Changez le descriptif de l'image</p>
+                            {{ form_widget(paragraph) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="flex text-lg border-gray-600 border-b button_paragraph ">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                      </svg>              
+                      Ajouter un paragrapghe
+                </div>
+            </div>
+
+            <ul 
+                class="list"
+                data-index="{{ form.listPosts|length > 0 ? form.listPosts|last.vars.name + 0 : 0 }}"
+                data-prototype="{{ form_widget(form.listPosts.vars.prototype)|e('html_attr') }}"
+            >   
+                {% for tag in form.listPosts %}
+                    <li>
+                        {{ form_row(tag) }}
+                    </li>
+
+                {% endfor %}
+            </ul>
+
+            <div class="flex text-lg border-gray-600 border-b button__list pt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                  </svg>
+                  Ajouter une liste
+                </div>  
+
+
+            <div class="add__link hidden">
+                {{ form_label(form.links) }}
+                {{ form_widget(form.links) }}
+                {{ form_label(form.textLinks) }}
+                {{ form_widget(form.textLinks) }}
+            </div>
+            <div class="button__link flex text-lg border-gray-600 border-b pt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                  </svg>
+                  Ajouter un lien
+            </div>
+            <button type="submit" class="button is-primary is-fullwidth">{{ button_label|default('Sauvegarder') }}</button>
+
+{{ form_end(form) }}
+
+{% block javascripts %}
+    <script src={{asset('js/posts.js')}}></script>
+    <script type="text/javascript">
+
+
+    const addParagraphButton = document.querySelector('.button_paragraph');
+
+
+    addParagraphButton.addEventListener('click', function() {
+        let collectionHolder = document.querySelector('.paragraph');
+        let index = collectionHolder.dataset.index;
+        
+
+        let newParagraph = collectionHolder.dataset.prototype;
+
+        newParagraph = newParagraph.replace(/__name__/g, index);
+
+        let newParagraphLi = document.createElement('li');
+        newParagraphLi.innerHTML = newParagraph;
+
+        collectionHolder.appendChild(newParagraphLi);
+
+        collectionHolder.dataset.index = parseInt(index) + 1;
+    });
+
+    const addListButton = document.querySelector('.button__list');
+
+    addListButton.addEventListener('click', function() {
+        let collectionHolder = document.querySelector('.list');
+        let index = collectionHolder.dataset.index;
+        
+
+        let newList = collectionHolder.dataset.prototype;
+
+        newList = newList.replace(/__name__/g, index);
+
+        let newListLi = document.createElement('li');
+        newListLi.innerHTML = newList;
+
+        collectionHolder.appendChild(newListLi);
+
+        collectionHolder.dataset.index = parseInt(index) + 1;
+    });
+   
+    </script>
+{% endblock %}

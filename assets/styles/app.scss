@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.button {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-col justify-center items-center;
+}
+
+@font-face {
+  font-family: 'principal';
+  src: url('/assets/fonts/principal.woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.body{
+  font-family: 'principal';
+}
+
+.form__contents{
+  & nav{
+    & button, label{
+      font-size: 1rem;
+    }
+  }
+}
+.pages__form {
+  & img{
+    max-width: 70%;
+    max-height: 50vh;
+    object-fit: contain;
+    margin: 0 auto;
+  }
+}
+
+input,
+textarea,
+select,
+button {
+  width: 100%;
+  background: rgb(245, 245, 245);
+  font-size: 1.5rem;
+  padding: 0.1rem;
+  border: none;
+  border-radius: 0.2rem;
+  margin: 0.1rem 0;
+  font-family: 'principal';
+  &::placeholder {
+    color: rgb(31, 30, 30);
+  }
+}
+
+input[type="radio"] {
+  width: 10%;
+}
+input[type="checkbox"] {
+  width: 10%;
+}
+
+
+.krea, 
+h1 {
+  font-size: 3rem;
+  font-family: 'Krea' !important;
+}
+h1{
+  text-align: center;
+}
+form button.button, 
+a.button{
+  width: 50%;
+  display: block;
+  margin: 1rem auto;
+
+}
+nav a.button.is-black,
+a.button.is-info,
+nav a.button.is-primary {
+  width: 100%;
+  margin: 0;
+}
+
+.card-krea{
+  font-family: 'krea';
+  font-size: 1.5rem;
+  width: 250px;
+  height: 250px;
+  text-align: center;
+  display: block;
+  margin: 1rem ;
+}
+.cards{
+  display: flex;
+  justify-content: center;
+}
+.card-krea img{
+  object-fit: cover;
+  width: 250px;
+  height: 250px;
+}
+
+.none{
+  display: none !important;
+}
+#posts_category {
+  width: 100%;
+}

@@ -1,9 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-// Utile quand on fait :
-// php bin/console ...
-
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 

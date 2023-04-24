@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subtopic index{% endblock %}
+
+{% block body %}
+    <h1>Subtopic index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for subtopic in subtopics %}
+            <tr>
+                <td>{{ subtopic.id }}</td>
+                <td>{{ subtopic.name }}</td>
+                <td>{{ subtopic.slug }}</td>
+                <td>
+                    <a href="{{ path('app_back_subtopic_show', {'id': subtopic.id}) }}">show</a>
+                    <a href="{{ path('app_back_subtopic_edit', {'id': subtopic.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_back_subtopic_new') }}">Create new</a>
+{% endblock %}
