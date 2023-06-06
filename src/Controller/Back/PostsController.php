@@ -11,6 +11,7 @@ use App\Form\ParagraphPostsType;
 use App\Repository\PostsRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ParagraphPostsRepository;
+use App\Repository\LinkPostsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,7 +61,7 @@ class PostsController extends AbstractController
         ]);
     }
 
-    #[Route('/category/{name}', name: 'app_back_posts_list', methods: ['GET'])]
+    #[Route('/{name}', name: 'app_back_posts_list', methods: ['GET'])]
     public function categoryPage(PostsRepository $postsRepository, Category $category, CategoryRepository $categoryRepository): Response
     {
         $posts = $postsRepository->findBy(['category' => $category]);
@@ -79,6 +80,8 @@ class PostsController extends AbstractController
         $post = new Posts();
 
         $category = new Category();
+
+
         
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
         <head>
@@ -32,9 +34,9 @@
           </li>
           <li>
             <ul class=" navbar__menu__list hidden p-2">
-              {% for category in categories %}
+              {% for category in categories  %}
                   <li class="flex text-lg pl-4 p-2">
-                    <a href="/posts/category/{{ category.slug }}">{{ category.name }}</a>
+                    <a href="{{ category.name }}">{{ category.name }}</a>
                   </li>
               {% endfor %}
 

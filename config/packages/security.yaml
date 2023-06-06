@@ -36,16 +36,17 @@ security:
 
         - { path: ^/login, roles: PUBLIC_ACCESS}
 
-        - { path: ^/*, roles: ROLE_USER}
+        - { path: ^/back/(.*)/(new|edit), roles: [ROLE_ADMIN] }
+        - { path: ^/back/(.*)/\d+$, roles: [ROLE_ADMIN] , methods: [POST]}
+        - { path: ^/, roles: ROLE_MANAGER }
+        # - { path: ^/*, roles: ROLE_USER}
 
-        - { path: ^/user*, roles: ROLE_ADMIN}
+        # - { path: ^/user*, roles: ROLE_ADMIN}
 
     role_hierarchy:
         # ADMIN > USER        
-        ROLE_ADMIN : ROLE_USER
-
-
-
+        ROLE_ADMIN : ROLE_MANAGER
+        ROLE_MANAGER : ROLE_USER
 
 when@test:
     security:

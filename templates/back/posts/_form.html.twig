@@ -1,5 +1,7 @@
 {{ form_start(form) }}
 
+        
+
     {% if post.imgPost is empty %}
             <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/Accueil.webp'}} alt="imgHeader" > 
     {% else %}
@@ -96,8 +98,20 @@
                   </svg>
                   Ajouter un lien
             </div>
-            <button type="submit" class="button is-primary is-fullwidth">{{ button_label|default('Sauvegarder') }}</button>
 
+
+            <div class="add__github hidden">
+                {{ form_label(form.github) }}
+                {{ form_widget(form.github) }}
+            </div>
+            <div class="add__website hidden">
+                {{ form_label(form.website) }}
+                {{ form_widget(form.website) }}
+            </div>
+
+
+            <button type="submit" class="button is-primary is-fullwidth">{{ button_label|default('Sauvegarder') }}</button>
+            
 {{ form_end(form) }}
 
 {% block javascripts %}

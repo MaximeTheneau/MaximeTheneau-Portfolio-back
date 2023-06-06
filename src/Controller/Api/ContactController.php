@@ -11,6 +11,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
+use Symfony\Component\Validator\Validation;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\NamedAddress;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -46,6 +48,44 @@ class ContactController extends ApiController
                     "code_error" => 404
                 ],
                 Response::HTTP_NOT_FOUND,// 404
+            );
+        }
+
+        if (strlen($data['name']) < 2 || strlen($data['name']) > 35) {
+            return $this->json(
+                [
+                    "erreur" => "Le nom doit contenir entre 2 et 35 caractères",
+                    "code_error" => 400
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if (strlen($data['message'] < 5 || strlen($data['message']) > 500)) {
+            return $this->json(
+                [
+                    "erreur" => "Le message doit contenir au moins 10 caractères",
+                    "code_error" => 400
+                ],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        
+        $validator = Validation::createValidator();
+        $emailConstraint = new EmailConstraint();
+
+        // Valider l'adresse e-mail
+        $errors = $validator->validate($data['email'], $emailConstraint);
+
+        if (count($errors) > 0) {
+            // L'adresse e-mail est invalide
+            return $this->json(
+                [
+                    "erreur" => "Adresse e-mail invalide",
+                    "code_error" => 400
+                ],
+                Response::HTTP_BAD_REQUEST,
             );
         }
 

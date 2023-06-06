@@ -2,6 +2,7 @@
 toggleDivWithButton('.button__altImg', '.add__altImg');
 toggleDivWithButton('.button__link', '.add__link');
 
+
 function toggleDivWithButton(buttonId, divId) {
     const button = document.querySelector(buttonId);
     const div = document.querySelector(divId);
@@ -11,23 +12,40 @@ function toggleDivWithButton(buttonId, divId) {
     });
   }
 
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryRadios = document.getElementsByName('posts[category]');
+    const selectedCategory = document.querySelector('input[name="posts[category]"]:checked').value;
+    console.log(selectedCategory); // Affiche la valeur de la catégorie sélectionnée
+    const githubDiv = document.querySelector('.add__github');
+    const websiteDiv = document.querySelector('.add__website');
 
-// // Add list 
-// const addTagLink = document.querySelector('');
-// const collectionHolder = document.querySelector('.');
-// const prototype = collectionHolder.dataset.prototype;
-// let index = collectionHolder.dataset.index;
+  if (selectedCategory === '3') {
+      githubDiv.classList.remove('hidden'); // Afficher le champ "Github"
+      websiteDiv.classList.remove('hidden'); // Afficher le champ "Site web"
+  } else {
+      githubDiv.classList.add('hidden'); // Masquer le champ "Github"
+      websiteDiv.classList.add('hidden'); // Masquer le champ "Site web"
+  }
+});
 
-// addTagLink.addEventListener('click', function(e) {
-// e.preventDefault();
-// const button = document.querySelector('.tags');
-// addTagLink.textContent = 'Ajouter un element à la liste';
-// console.log(addTagLink.textContent);
-// const ul = document.querySelector('.tags');
-// ul.classList.remove('none');
-// const newForm = prototype.replace(/__name__/g, index);
-// index++;
-// const newLi = document.createElement('li');
-// newLi.innerHTML = newForm;
-// collectionHolder.appendChild(newLi);
-// });
+const categoryRadios = document.getElementsByName('posts[category]');
+
+  for (let i = 0; i < categoryRadios.length; i++) {
+      categoryRadios[i].addEventListener('change', function() {
+          const selectedCategory = this.value;
+         
+
+// Affiche la valeur de la catégorie sélectionnée
+          const githubDiv = document.querySelector('.add__github');
+          const websiteDiv = document.querySelector('.add__website');
+  
+          if (selectedCategory === '3') {
+              githubDiv.classList.remove('hidden'); // Afficher le champ "Github"
+              websiteDiv.classList.remove('hidden'); // Afficher le champ "Site web"
+          } else {
+              githubDiv.classList.add('hidden'); // Masquer le champ "Github"
+              websiteDiv.classList.add('hidden'); // Masquer le champ "Site web"
+          }
+      });
+
+  }

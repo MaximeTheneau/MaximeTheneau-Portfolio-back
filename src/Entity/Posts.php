@@ -82,6 +82,14 @@ class Posts
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $video = null;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    #[Groups(['api_posts_read'])]
+    private ?string $github = null;
+
+    #[ORM\Column(length: 500, nullable: true)]
+    #[Groups(['api_posts_read'])]
+    private ?string $website = null;
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
@@ -324,4 +332,27 @@ class Posts
         return $this;
     }
 
+    public function getGithub(): ?string
+    {
+        return $this->github;
+    }
+
+    public function setGithub(?string $github): self
+    {
+        $this->github = $github;
+
+        return $this;
+    }
+
+    public function getWebsite(): ?string
+    {
+        return $this->website;
+    }
+
+    public function setWebsite(?string $website): self
+    {
+        $this->website = $website;
+
+        return $this;
+    }
 }
