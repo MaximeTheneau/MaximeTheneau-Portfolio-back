@@ -36,7 +36,7 @@
             <ul class=" navbar__menu__list hidden p-2">
               {% for category in categories  %}
                   <li class="flex text-lg pl-4 p-2">
-                    <a href="{{ category.name }}">{{ category.name }}</a>
+                    <a href="{{ path('app_back_category_index') }}">{{ category.name }}</a>
                   </li>
               {% endfor %}
 
