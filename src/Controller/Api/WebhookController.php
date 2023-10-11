@@ -19,7 +19,7 @@ class WebhookController extends ApiController
      */
     public function handleWebhook(Request $request): JsonResponse
 {
-    // Récupérez le contenu JSON de la demande du webhook GitHub
+    // test
     $payload = json_decode($request->getContent(), true);
 
     // Vérifiez si le webhook provient de GitHub
