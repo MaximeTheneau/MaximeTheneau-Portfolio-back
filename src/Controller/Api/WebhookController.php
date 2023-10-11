@@ -14,7 +14,6 @@ use Symfony\Component\Process\Process;
  */
 class WebhookController extends ApiController
 {
-    
     /**
      * @Route("/webhook/github", name="webhook_github", methods={" POST", "GET"})
      */
