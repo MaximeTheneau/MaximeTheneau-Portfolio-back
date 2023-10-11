@@ -15,7 +15,7 @@ use Symfony\Component\Process\Process;
 class WebhookController extends ApiController
 {
     /**
-     * @Route("/webhook/github", name="webhook_github", methods={" POST", "GET"})
+     * @Route("/webhook/github", name="webhook_github", methods={"POST"})
      */
     public function handleWebhook(Request $request): JsonResponse
     {
