@@ -16,7 +16,6 @@ class SubtopicType extends AbstractType
         $builder
             ->add('name')
             ->add('slug')
-
         ;
     }
 
