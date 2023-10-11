@@ -27,9 +27,9 @@ class WebhookController extends ApiController
     $secret = $_ENV['AUTH_TOKEN_WEBHOOK']; // Remplacez par votre secret GitHub
     $expectedSignature = 'sha1=' . hash_hmac('sha1', $request->getContent(), $secret);
     
-    if ($signature !== $expectedSignature) {
-        return new JsonResponse(['message' => 'Signature invalide'], 403);
-    }
+    // if ($signature !== $expectedSignature) {
+    //     return new JsonResponse(['message' => 'Signature invalide'], 403);
+    // }
 
     // Assurez-vous que le webhook concerne un push vers la branche souhaitée
     if ($payload['ref'] !== 'refs/heads/votre_branche') {
