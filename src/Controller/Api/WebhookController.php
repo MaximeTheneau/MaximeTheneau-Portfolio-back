@@ -20,9 +20,8 @@ class WebhookController extends ApiController
      */
     public function handleWebhook(Request $request): JsonResponse
     {
-        $authToken = $_ENV['AUTH_TOKEN_WEBHOOK']; // Assurez-vous que votre jeton d'authentification est stocké dans les variables d'environnement.
+        $authToken = $_ENV['AUTH_TOKEN_WEBHOOK']; 
 
-        // Vérifiez la signature HMAC
         $signature = $request->headers->get('X-Hub-Signature-256');
         $body = $request->getContent();
         $calculatedSignature = 'sha256=' . hash_hmac('sha256', $body, $authToken);
@@ -31,7 +30,6 @@ class WebhookController extends ApiController
             return new JsonResponse('Unauthorized request!', 401);
         }
 
-        // Exécutez "git stash" pour sauvegarder les modifications locales
         $stashProcess = new Process(['git', 'stash']);
         $stashProcess->run();
 
@@ -39,7 +37,6 @@ class WebhookController extends ApiController
             return new JsonResponse('Git stash failed', 500);
         }
 
-        // Exécutez "git pull" pour mettre à jour depuis la branche principale
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
         $pullProcess->run();
 
