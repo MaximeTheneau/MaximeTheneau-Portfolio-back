@@ -34,13 +34,13 @@ class PostsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('category', EntityType::class, [
-            'label' => false,
-            'class' => Category::class,
-            'choice_label' => 'name',
-            'multiple' => false,
-            'expanded' => true,
-        ]
+            ->add('category', EntityType::class, [
+                'label' => false,
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'multiple' => false,
+                'expanded' => true,
+            ]
             )
             ->add('subcategory', EntityType::class, [
                 'label' => "Sous-catégorie de l'article",
