@@ -19,7 +19,7 @@ class WebhookController extends ApiController
      */
     public function handleWebhook(Request $request): JsonResponse
     {   
-        // x
+        // test
         $authToken = $_ENV['AUTH_TOKEN_WEBHOOK']; 
 
         $signature = $request->headers->get('X-Hub-Signature-256');
@@ -35,7 +35,7 @@ class WebhookController extends ApiController
         // if (!$stashProcess->isSuccessful()) {
         //     return new JsonResponse('Git stash failed', 500);
         // }
-        
+
 
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
         $pullProcess->run();
