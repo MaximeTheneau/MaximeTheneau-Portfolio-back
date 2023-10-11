@@ -42,8 +42,6 @@ class WebhookController extends ApiController
     $process = new Process(['git', 'pull']);
     $process->run();
     // d
-    $process->getOutput();
-    dd($process->getOutput());  
  
     // if (!$process->isSuccessful()) {
     //     return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
