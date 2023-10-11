@@ -39,10 +39,10 @@ class WebhookController extends ApiController
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
         $pullProcess->run();
 
-        if ($pullProcess->isSuccessful()) {
-            return new JsonResponse('Git pull successful', 200);
-        } else {
-            return new JsonResponse('Git pull failed', 500);
-        }
+        // if ($pullProcess->isSuccessful()) {
+        //     return new JsonResponse('Git pull successful', 200);
+        // } else {
+        //     return new JsonResponse('Git pull failed', 500);
+        // }
     }
 }
