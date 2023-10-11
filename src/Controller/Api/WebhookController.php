@@ -24,7 +24,7 @@ class WebhookController extends ApiController
 
         $signature = $request->headers->get('X-Hub-Signature-256');
         $body = $request->getContent();
-        
+
         $calculatedSignature = 'sha256=' . hash_hmac('sha256', $body, $authToken);
 
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
@@ -34,7 +34,6 @@ class WebhookController extends ApiController
         } else {
             return new JsonResponse('Git pull failed: ' . $pullProcess->getErrorOutput(), 500);
         }
-        
 
 
     }
