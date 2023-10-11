@@ -39,6 +39,5 @@ class WebhookController extends ApiController
         return new JsonResponse('Git pull failed: ' . $pullProcess->getErrorOutput(), 500);
     }
 
-
     }
 }
