@@ -19,7 +19,7 @@ class WebhookController extends ApiController
      */
     public function handleWebhook(Request $request): JsonResponse
     {   
-        // teddy secret
+        // teddy secret  
         $authToken = $_ENV['AUTH_TOKEN_WEBHOOK']; 
 
         $signature = $request->headers->get('X-Hub-Signature-256');
