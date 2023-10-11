@@ -18,10 +18,10 @@ class WebhookController extends ApiController
      * @Route("/webhook/github", name="webhook_github", methods={"POST"})
      */
     public function handleWebhook(Request $request): JsonResponse
-    {
+    {   
         // test
-        $authToken = $_ENV['AUTH_TOKEN_WEBHOOK'];
-        
+        $authToken = $_ENV['AUTH_TOKEN_WEBHOOK']; 
+
         $signature = $request->headers->get('X-Hub-Signature-256');
         $body = $request->getContent();
         $calculatedSignature = 'sha256=' . hash_hmac('sha256', $body, $authToken);
