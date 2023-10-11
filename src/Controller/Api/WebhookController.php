@@ -19,7 +19,7 @@ class WebhookController extends ApiController
      */
     public function handleWebhook(Request $request): JsonResponse
 {
-    // test
+    // test ddd
     $payload = json_decode($request->getContent(), true);
 
     // Vérifiez si le webhook provient de GitHub
@@ -39,10 +39,11 @@ class WebhookController extends ApiController
    
     // Exécutez un 'git pull' dans le répertoire de votre projet
     $projectDir = $this->getParameter('kernel.project_dir');
+    dd($projectDir);
     $process = new Process(['git', 'pull']);
     $process->setWorkingDirectory($projectDir);
     $process->run();
-
+ 
     // if (!$process->isSuccessful()) {
     //     return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
     // }
