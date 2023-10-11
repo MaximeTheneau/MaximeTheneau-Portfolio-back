@@ -42,9 +42,9 @@ class WebhookController extends ApiController
     $process->setWorkingDirectory($projectDir);
     $process->run();
 
-    if (!$process->isSuccessful()) {
-        return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
-    }
+    // if (!$process->isSuccessful()) {
+    //     return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
+    // }
 
     return new JsonResponse(['message' => 'Git pull réussi'], 200);
 }
