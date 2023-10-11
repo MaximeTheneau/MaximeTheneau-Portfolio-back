@@ -26,7 +26,6 @@ class WebhookController extends ApiController
         $body = $request->getContent();
         $calculatedSignature = 'sha256=' . hash_hmac('sha256', $body, $authToken);
 
-        
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
         $pullProcess->run();
         if ($pullProcess->isSuccessful()) {
