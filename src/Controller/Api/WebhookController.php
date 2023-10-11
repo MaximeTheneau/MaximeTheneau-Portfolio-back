@@ -18,25 +18,33 @@ class WebhookController extends ApiController
      * @Route("/webhook/github", name="webhook_github", methods={"POST"})
      */
     public function handleWebhook(Request $request): JsonResponse
-    {   
-        // Mise de côté des modifications non validées
+{
+    // Récupérez le contenu JSON de la demande du webhook GitHub
+    $payload = json_decode($request->getContent(), true);
 
-
-
-    // Le stash a réussi, vous pouvez maintenant effectuer le tirage
-    $authToken = $_ENV['AUTH_TOKEN_WEBHOOK']; 
-    $signature = $request->headers->get('X-Hub-Signature-256');
-    $body = $request->getContent();
-    $calculatedSignature = 'sha256=' . hash_hmac('sha256', $body, $authToken);
-    $stashProcess = new Process(['git', 'stash']);
-    $stashProcess->run();
-    $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
-    $pullProcess->run();
-
-    if ($pullProcess->isSuccessful()) {
-        return new JsonResponse('Git pull successful', 200);
-    } else {
-        return new JsonResponse('Git pull failed: ' . $pullProcess->getErrorOutput(), 500);
+    // Vérifiez si le webhook provient de GitHub
+    $signature = $request->headers->get('X-Hub-Signature');
+    $secret = 'votre_secret_webhook'; // Remplacez par votre secret GitHub
+    $expectedSignature = 'sha1=' . hash_hmac('sha1', $request->getContent(), $secret);
+    
+    if ($signature !== $expectedSignature) {
+        return new JsonResponse(['message' => 'Signature invalide'], 403);
     }
+
+    // Assurez-vous que le webhook concerne un push vers la branche souhaitée
+    if ($payload['ref'] !== 'refs/heads/votre_branche') {
+        return new JsonResponse(['message' => 'Webhook non pertinent'], 400);
     }
+
+    // Exécutez un 'git pull' dans le répertoire de votre projet
+    $projectDir = $this->getParameter('kernel.project_dir');
+    $process = new Process(['git', 'pull']);
+    $process->setWorkingDirectory($projectDir);
+    $process->run();
+
+    if (!$process->isSuccessful()) {
+        return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
+    }
+
+    return new JsonResponse(['message' => 'Git pull réussi'], 200);
 }
