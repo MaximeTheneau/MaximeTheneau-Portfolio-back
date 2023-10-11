@@ -24,7 +24,7 @@ class WebhookController extends ApiController
 
     // Vérifiez si le webhook provient de GitHub
     $signature = $request->headers->get('X-Hub-Signature');
-    $secret = 'votre_secret_webhook'; // Remplacez par votre secret GitHub
+    $secret = $_ENV['AUTH_TOKEN_WEBHOOK']; // Remplacez par votre secret GitHub
     $expectedSignature = 'sha1=' . hash_hmac('sha1', $request->getContent(), $secret);
     
     if ($signature !== $expectedSignature) {
