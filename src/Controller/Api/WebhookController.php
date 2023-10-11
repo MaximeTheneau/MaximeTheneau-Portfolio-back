@@ -28,7 +28,6 @@ class WebhookController extends ApiController
         if ($signature !== $calculatedSignature) {
             return new JsonResponse('Unauthorized request!', 401);
         }
-
         $stashProcess = new Process(['git', 'stash']);
         $stashProcess->run();
 
