@@ -38,11 +38,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // TODO : hash du mdp avant modification
-            //? je récupère le mot de passe en clair depuis le formulaire
-            // c'est le formulaire qui me le met dans la propriété password
+
             $plaintextPassword = $user->getPassword();
-            // hash the password (based on the security.yaml config for the $user class)
             $hashedPassword = $hasher->hashPassword(
                 $user,
                 $plaintextPassword
