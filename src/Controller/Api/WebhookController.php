@@ -35,6 +35,7 @@ class WebhookController extends ApiController
         // if (!$stashProcess->isSuccessful()) {
         //     return new JsonResponse('Git stash failed', 500);
         // }
+        
 
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
         $pullProcess->run();
