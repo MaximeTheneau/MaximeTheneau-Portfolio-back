@@ -51,14 +51,6 @@ class PostsType extends AbstractType
                 'expanded' => true,
             ]
                 )
-            // ->add('subtopic', EntityType::class, [
-            //     'label' => "Sous-rubriques de l'article",
-            //     'class' => Subtopic::class,
-            //     'choice_label' => 'name',
-            //     'multiple' => true,
-            //     'expanded' => true,
-            // ]
-            //     )
             ->add('title', TextType::class, [
                 'label' => 'Titre',
                 'required' => true,
