@@ -26,26 +26,16 @@ class WebhookController extends ApiController
         $body = $request->getContent();
         $calculatedSignature = 'sha256=' . hash_hmac('sha256', $body, $authToken);
 
-        // if ($signature !== $calculatedSignature) {
-        //     return new JsonResponse('Unauthorized request!', 401);
-        // }
-        // $stashProcess = new Process(['git', 'stash']);
-        // $stashProcess->run();
-
-        // if (!$stashProcess->isSuccessful()) {
-        //     return new JsonResponse('Git stash failed', 500);
-        // }
-
 
         $pullProcess = new Process(['git', 'pull', 'origin', 'main']);
         $pullProcess->run();
+        if ($pullProcess->isSuccessful()) {
             return new JsonResponse('Git pull successful', 200);
+        } else {
+            return new JsonResponse('Git pull failed: ' . $pullProcess->getErrorOutput(), 500);
+        }
+        
 
-        // if ($pullProcess->isSuccessful()) {
-        //     return new JsonResponse('Git pull successful', 200);
-        // } else {
-        //     return new JsonResponse('Git pull failed', 500);
-        // }
 
     }
 }
