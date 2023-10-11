@@ -15,7 +15,7 @@ use Symfony\Component\Process\Process;
 class WebhookController extends ApiController
 {
     /**
-     * @Route("/webhook/github", name="webhook_github", methods={"POST"})
+     * @Route("/webhook/github", name="webhook_github", methods={"get", "post"})
      */
     public function handleWebhook(Request $request): JsonResponse
 {
@@ -39,10 +39,11 @@ class WebhookController extends ApiController
    
     // Exécutez un 'git pull' dans le répertoire de votre projet
     $projectDir = $this->getParameter('kernel.project_dir');
-    dd($projectDir);
     $process = new Process(['git', 'pull']);
-    $process->setWorkingDirectory($projectDir);
     $process->run();
+    // d
+    $process->getOutput();
+    dd($process->getOutput());  
  
     // if (!$process->isSuccessful()) {
     //     return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
