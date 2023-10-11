@@ -35,7 +35,7 @@ class WebhookController extends ApiController
     // Assurez-vous que le webhook concerne un push vers la branche souhaitée
     // if ($payload['ref'] !== 'refs/heads/votre_branche') {
     //     return new JsonResponse(['message' => 'Webhook non pertinent'], 400);
-    // }
+    // } 
    
     // Exécutez un 'git pull' dans le répertoire de votre projet
     $projectDir = $this->getParameter('kernel.project_dir');
