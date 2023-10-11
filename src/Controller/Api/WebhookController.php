@@ -48,3 +48,4 @@ class WebhookController extends ApiController
 
     return new JsonResponse(['message' => 'Git pull réussi'], 200);
 }
+}
