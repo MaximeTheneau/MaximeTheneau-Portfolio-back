@@ -47,7 +47,6 @@ class WebhookController extends ApiController
     //     return new JsonResponse(['message' => 'Erreur lors de l\'exécution de git pull'], 500);
     // }
 
-
     return new JsonResponse(['message' => 'Git pull réussi'. $process->getErrorOutput()], 200);
 }
 }
