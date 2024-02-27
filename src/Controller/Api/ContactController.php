@@ -41,75 +41,51 @@ class ContactController extends ApiController
         $content = $request->getContent();
         $data = json_decode($content, true);
 
-        if (empty($data['name'] || $data['email'] || $data['message'])) {
+        try {
+            
+
+            $email = (new TemplatedEmail())
+                ->to($_ENV['MAILER_FROM'])
+                ->from($data['email'])
+                ->subject('nouveau message de ' . $data['name'])
+                ->htmlTemplate('emails/contact.html.twig')
+                ->context([
+                    'emailContact' => $data['email'],
+                    'subjectContact' => $data['subject'],
+                    'nameContact' => $data['name'],
+                    'messageContact' => $data['message'],
+                ])
+                ->replyTo($data['email']);
+                
+    
+            $mailer->send($email);
+    
             return $this->json(
                 [
-                    "erreur" => "Erreur de saisie",
-                    "code_error" => 404
+                    "message" => "Votre message a bien été envoyé",
                 ],
-                Response::HTTP_NOT_FOUND,// 404
+                Response::HTTP_OK,
             );
-        }
 
-        if (strlen($data['name']) < 2 || strlen($data['name']) > 35) {
-            return $this->json(
-                [
-                    "erreur" => "Le nom doit contenir entre 2 et 35 caractères",
-                    "code_error" => 400
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        if (strlen($data['message'] < 5 || strlen($data['message']) > 500)) {
-            return $this->json(
-                [
-                    "erreur" => "Le message doit contenir au moins 10 caractères",
-                    "code_error" => 400
-                ],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        
-        $validator = Validation::createValidator();
-        $emailConstraint = new EmailConstraint();
-
-        // Valider l'adresse e-mail
-        $errors = $validator->validate($data['email'], $emailConstraint);
-
-        if (count($errors) > 0) {
-            // L'adresse e-mail est invalide
-            return $this->json(
-                [
-                    "erreur" => "Adresse e-mail invalide",
-                    "code_error" => 400
-                ],
-                Response::HTTP_BAD_REQUEST,
-            );
-        }
-
-        $email = (new TemplatedEmail())
-            ->to($_ENV['MAILER_TO'])
-            ->from($_ENV['MAILER_FROM'])
-            ->subject('nouveau message de ' . $data['name'])
-            ->htmlTemplate('emails/contact.html.twig')
+        } catch (\Exception $e) {
+            $email = (new TemplatedEmail())
+            ->to($_ENV['MAILER_FROM'])
+            ->from($_ENV['MAILER_TO'])
+            ->subject('Erreur lors de l\'envoie de l\'email')
+            ->htmlTemplate('emails/error.html.twig')
             ->context([
-                'emailContact' => $data['email'],
-                'subjectContact' => $data['subject'],
-                'nameContact' => $data['name'],
-                'messageContact' => $data['message'],
-            ])
-            ->replyTo($data['email']);
-
-        $mailer->send($email);
-
-        return $this->json(
-            [
-                "message" => "Votre message a bien été envoyé",
-            ],
-            Response::HTTP_OK,
-        );
+                'error' => $e->getMessage(),
+            ]);
+            $mailer->send($email);
+            
+            
+            return $this->json(
+                [
+                    "message" => "Une erreur est survenue lors de l'envoie de votre message. Veuillez réessayer plus tard.",
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+            );
         }
-	
+    }   
+
 }
