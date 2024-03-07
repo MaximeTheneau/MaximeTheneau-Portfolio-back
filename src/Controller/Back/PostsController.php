@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use App\Service\ImageOptimizer;
 use App\Service\VideoUpload;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/posts')]
 class PostsController extends AbstractController
@@ -277,11 +276,4 @@ class PostsController extends AbstractController
         return $this->redirectToRoute('app_back_posts_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/post/infinite-list", name="article_infinite_list")
-     */
-    public function infiniteList(Request $request): Response
-    {
-        
-    }
 }

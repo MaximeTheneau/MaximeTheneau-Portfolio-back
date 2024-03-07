@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Twig\Environment;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/category')]
 class CategoryController extends AbstractController
@@ -64,8 +63,8 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('app_back_category_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/category/new.html.twig', [
-            'category' => $category,
+        return $this->render('back/category/new.html.twig', [
+            'categories' => $category,
             'form' => $form,
         ]);
     }

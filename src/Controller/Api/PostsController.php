@@ -20,16 +20,10 @@ use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\HttpFoundation\Cookie;
 
-/**
- * @Route("/api/posts",name="api_posts_")
- */
+#[Route('/api/posts', name: 'api_posts_')]
 class PostsController extends ApiController
 {
-
-
-    /**
-     * @Route("/home", name="browse", methods={"GET"})
-     */
+    #[Route('/home', name: 'browse', methods: ['GET'])]
     public function browse(PostsRepository $postsRepository ): JsonResponse
     {
     
@@ -48,9 +42,7 @@ class PostsController extends ApiController
         );
     }
 
-    /**
-     * @Route("&category={name}", name="articles", methods={"GET"})
-     */
+    #[Route('&category={name}', name: 'category', methods: ['GET'])]  
     public function category(PostsRepository $postsRepository, Category $category): JsonResponse
     {
         $posts = $postsRepository->findBy(['category' => $category], ['createdAt' => 'DESC']);
@@ -69,9 +61,7 @@ class PostsController extends ApiController
         );
     }
 
-    /**
-     * @Route("&subcategory={slug}", name="subcategory", methods={"GET"})
-     */
+    #[Route('&subcategory={slug}', name: 'subcategory', methods: ['GET'])]
     public function subcategory(PostsRepository $postsRepository, Subcategory $subcategory): JsonResponse
     {
         $posts = $postsRepository->findBy(['subcategory' => $subcategory]);
@@ -90,9 +80,7 @@ class PostsController extends ApiController
         );
     }
 
-    /**
-    * @Route("&limit=3&category={name}", name="browse", methods={"GET"})
-    */
+    #[Route('&limit=3&category={name}', name: 'limit', methods: ['GET'])]
     public function limit(PostsRepository $postsRepository, Category $category): JsonResponse
     {
         $posts = $postsRepository->findBy(['category' => $category], ['createdAt' => 'ASC'], 3);
@@ -112,9 +100,7 @@ class PostsController extends ApiController
         );
     }
         
-    /**
-     * @Route("&limit=3&filter=desc&category={name}", name="desc", methods={"GET"})
-     */
+    #[Route('&limit=3&filter=desc&category={name}', name: 'desc', methods: ['GET'])]
     public function desc(PostsRepository $postsRepository, Category $category ): JsonResponse
     {
 
@@ -133,9 +119,7 @@ class PostsController extends ApiController
         );
     }
 
-    /**
-     * @Route("/all", name="all", methods={"GET"})
-     */
+    #[Route('/all', name: 'all', methods: ['GET'])]
     public function all(PostsRepository $postsRepository ): JsonResponse
     {
     
@@ -154,9 +138,7 @@ class PostsController extends ApiController
         );
     }
 
-    /**
-     * @Route("/thumbnail/{slug}", name="thumbnail", methods={"GET"})
-     */
+    #[Route('/thumbnail/{slug}', name: 'thumbnail', methods: ["GET"])]
     public function thumbnail(PostsRepository $postsRepository, Posts $posts = null ): JsonResponse
     {
     
@@ -185,9 +167,7 @@ class PostsController extends ApiController
         );
     }
 
-    /**
-     * @Route("/{slug}", name="read", methods={"GET"})
-     */
+    #[Route('/{slug}', name: 'read', methods: ['GET'])]
     public function read(Posts $posts = null)
     {
         if ($posts === null)
@@ -214,9 +194,7 @@ class PostsController extends ApiController
             ]);
     }
 
-    /**
-    *@Route("&filter=subcategory", name="allSubcategory", methods={"GET"})
-    */
+    #[Route('&filter=subcategory', name: 'allSubcategory', methods: ['GET'])]
     public function allSubcategory(SubcategoryRepository $subcategories ): JsonResponse
     {
     
