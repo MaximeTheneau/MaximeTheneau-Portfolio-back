@@ -9,9 +9,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Process\Process;
 
-/**
- * @Route("/api")
- */
+
+#[Route('/api')]
 class WebhookController extends ApiController
 {
     #[Route('/webhook/github', name: 'webhook_github', methods: ["get", "post"])]

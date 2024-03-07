@@ -16,9 +16,8 @@ use Symfony\Component\Validator\Validation;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\NamedAddress;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-/**
- * @Route("/api/contact")
- */
+
+#[Route('/api/contact')]
 class ContactController extends ApiController
 {    
     private $tokenService;
@@ -32,9 +31,7 @@ class ContactController extends ApiController
         $this->serializer = $serializer;
     }
 	
-        /**
-         * @Route("", name="add_contact", methods={"POST"})
-         */
+        #[Route('', name: 'add_contact', methods: ['POST'])]
         public function add(Request $request, MailerInterface $mailer): JsonResponse
         {
 
