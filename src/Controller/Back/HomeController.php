@@ -15,6 +15,7 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_back_home', methods: ['GET'])]
     public function home(CategoryRepository $categoryRepository): Response
     {
+
         return $this->render('back/index.html.twig', [
         ]);
     }

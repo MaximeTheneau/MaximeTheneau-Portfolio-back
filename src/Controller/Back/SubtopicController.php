@@ -41,7 +41,7 @@ class SubtopicController extends AbstractController
             return $this->redirectToRoute('app_back_subtopic_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/subtopic/new.html.twig', [
+        return $this->render('back/subtopic/new.html.twig', [
             'subtopic' => $subtopic,
             'form' => $form,
         ]);
@@ -78,7 +78,7 @@ class SubtopicController extends AbstractController
             return $this->redirectToRoute('app_back_subtopic_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/subtopic/edit.html.twig', [
+        return $this->render('back/subtopic/edit.html.twig', [
             'subtopic' => $subtopic,
             'form' => $form,
         ]);

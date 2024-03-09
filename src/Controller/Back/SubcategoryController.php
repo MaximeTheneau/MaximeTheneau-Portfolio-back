@@ -51,7 +51,7 @@ class SubcategoryController extends AbstractController
             return $this->redirectToRoute('app_back_subcategory_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/subcategory/new.html.twig', [
+        return $this->render('back/subcategory/new.html.twig', [
             'subcategory' => $subcategory,
             'form' => $form,
         ]);
@@ -90,7 +90,7 @@ class SubcategoryController extends AbstractController
             return $this->redirectToRoute('app_back_subcategory_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/subcategory/edit.html.twig', [
+        return $this->render('back/subcategory/edit.html.twig', [
             'subcategory' => $subcategory,
             'form' => $form,
         ]);

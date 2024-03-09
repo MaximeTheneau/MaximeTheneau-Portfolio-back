@@ -74,6 +74,7 @@ class PostsController extends AbstractController
     #[Route('/new', name: 'app_back_posts_new', methods: ['GET', 'POST'])]
     public function new(Request $request, PostsRepository $postsRepository, CategoryRepository $categoryRepository): Response
     {
+        dd($request);
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         $post = new Posts();
@@ -81,7 +82,6 @@ class PostsController extends AbstractController
         $category = new Category();
 
 
-        
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);
         
@@ -158,7 +158,7 @@ class PostsController extends AbstractController
             return $this->redirectToRoute('app_back_posts_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/posts/new.html.twig', [
+        return $this->render('back/posts/new.html.twig', [
             'post' => $post,
             'form' => $form,
             'categories' => $categoryRepository->findAll(),
@@ -259,7 +259,7 @@ class PostsController extends AbstractController
             return $response;
         }
 
-        return $this->renderForm('back/posts/edit.html.twig', [
+        return $this->render('back/posts/edit.html.twig', [
             'post' => $post,
             'form' => $form,
             'categories' => $categoryRepository->findAll(),
