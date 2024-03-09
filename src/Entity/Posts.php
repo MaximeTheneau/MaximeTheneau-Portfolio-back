@@ -90,6 +90,11 @@ class Posts
     #[Groups(['api_posts_read'])]
     private ?string $website = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $url = null;
+
+    
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
@@ -352,6 +357,18 @@ class Posts
     public function setWebsite(?string $website): self
     {
         $this->website = $website;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): static
+    {
+        $this->url = $url;
 
         return $this;
     }
