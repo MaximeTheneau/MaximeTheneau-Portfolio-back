@@ -53,7 +53,6 @@ class ContactController extends ApiController
                     'messageContact' => $data['message'],
                 ])
                 ->replyTo($data['email']);
-                
     
             $mailer->send($email);
     
