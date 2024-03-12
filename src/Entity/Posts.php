@@ -20,11 +20,11 @@ class Posts
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_desc' ])]
+    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_desc', 'api_posts_sitemap' ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
-    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory' ])]
+    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory', 'api_posts_sitemap' ])]
     private ?string $title = null;
     
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
@@ -38,11 +38,11 @@ class Posts
     private ?string $contents = null;
 
     #[ORM\Column]
-    #[Groups(['api_posts_read'])]
+    #[Groups(['api_posts_read', 'api_posts_sitemap'])]
     private ?\DateTime $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['api_posts_read'])]
+    #[Groups(['api_posts_read', 'api_posts_sitemap'])]
     private ?\DateTime $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'posts', targetEntity: ListPosts::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -91,6 +91,7 @@ class Posts
     private ?string $website = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['api_posts_read', 'api_posts_sitemap'])]
     private ?string $url = null;
 
     

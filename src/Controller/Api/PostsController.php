@@ -167,6 +167,24 @@ class PostsController extends ApiController
         );
     }
 
+    #[Route('/sitemap', name: 'sitemap', methods: ['GET'])]
+    public function site(PostsRepository $postsRepository ): JsonResponse
+    {
+        $allPosts = $postsRepository->findAllPosts();
+
+        return $this->json(
+            $allPosts,
+            Response::HTTP_OK,
+            [],
+            [
+                "groups" => 
+                [
+                    "api_posts_sitemap"
+                ]
+            ]
+        );
+    }
+
     #[Route('/{slug}', name: 'read', methods: ['GET'])]
     public function read(Posts $posts = null)
     {
@@ -209,6 +227,7 @@ class PostsController extends ApiController
             ]
         );
     }
+
    
 
 }
