@@ -72,7 +72,7 @@ class Posts
     private ?string $altImg = null;
 
     #[ORM\Column(length: 500, nullable: true)]
-    #[Groups(['api_posts_read'])]
+    #[Groups(['api_posts_read', 'api_posts_sitemap'])]
     private ?string $imgPost = null;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
