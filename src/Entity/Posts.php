@@ -26,11 +26,18 @@ class Posts
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
     #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory', 'api_posts_sitemap' ])]
     private ?string $title = null;
-    
+
+    #[ORM\Column(length: 65)]
+    #[Groups(['api_posts_read'])]
+    private ?string $heading = null;
+
+    #[ORM\Column(length: 160)]
+    #[Groups(['api_posts_read'])]
+    private ?string $metaDescription = null;
+
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
     #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory' ])]
     private ?string $slug = null;
-
     
     #[ORM\Column(length: 5000, nullable: true, type: Types::STRING)]
     #[Type(type: Types::string)]
@@ -93,6 +100,10 @@ class Posts
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['api_posts_read', 'api_posts_sitemap'])]
     private ?string $url = null;
+
+
+
+
 
     
 
@@ -370,6 +381,30 @@ class Posts
     public function setUrl(?string $url): static
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getMetaDescription(): ?string
+    {
+        return $this->metaDescription;
+    }
+
+    public function setMetaDescription(string $metaDescription): static
+    {
+        $this->metaDescription = $metaDescription;
+
+        return $this;
+    }
+
+    public function getHeading(): ?string
+    {
+        return $this->heading;
+    }
+
+    public function setHeading(string $heading): static
+    {
+        $this->heading = $heading;
 
         return $this;
     }

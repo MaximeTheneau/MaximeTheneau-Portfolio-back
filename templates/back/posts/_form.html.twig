@@ -34,14 +34,10 @@
             </div>
             <p class="button__altImg pb-4">Changez le descriptif de l'image</p>
             {{ form_row(form.video )}}
-            {{ form_label(form.title) }}
-            {{ form_widget(form.title) }}
-            
-            
-            {{ form_label(form.contents) }}
-            {{ form_widget(form.contents) }}
-            
-            
+            {{ form_row(form.heading) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.metaDescription) }}
+            {{ form_row(form.contents) }}
             <div class="pt-4">
                 <ul 
                     class="paragraph"
