@@ -26,5 +26,5 @@ jobs:
         
     - name: Deploy Next.js frontend
       run: |
-            cd ./
+            cd ../
             ls 
