@@ -26,5 +26,7 @@ jobs:
         
     - name: Deploy Next.js frontend
       run: |
-            cd ../
-            ls 
+            ssh -o StrictHostKeyChecking=no root@193.203.191.121
+            "cd /var/www/html/MaximeTheneau-Portfolio-Next
+            ls
+            "
