@@ -26,5 +26,4 @@ jobs:
         
     - name: Deploy Next.js frontend
       run: |
-            cd ./var/www/html/MaximeTheneau-Portfolio-Next
-            pnpm run build
+            ls
