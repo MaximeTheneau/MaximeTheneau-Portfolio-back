@@ -14,5 +14,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.SERVER_HOST }}
-          repository: MaximeTheneau/MaximeTheneau-Portfolio-Next.git
+          repository: MaximeTheneau/MaximeTheneau-Portfolio-Next
           event-type: new-post 
