@@ -24,7 +24,7 @@ class GithubService
         $jsonData = json_encode($eventData);
         $hmacSignature = hash_hmac('sha256', $jsonData, $authToken);
 
-        $url = 'http://' . $_ENV['DOMAIN_FRONTEND'] . '/api/webhook';
+        $url = 'https://' . $_ENV['DOMAIN_FRONTEND'] . '/api/webhook';
 
         try {
             $responseApi = $this->client->request('POST', $url, [

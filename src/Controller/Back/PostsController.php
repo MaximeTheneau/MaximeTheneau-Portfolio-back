@@ -48,7 +48,7 @@ class PostsController extends AbstractController
     private $photoDir;
     private $projectDir;
     private $entityManager;
-    private $markdown;
+    private $markdownProcessor;
     private $messageBus;
     private $urlGeneratorService;
     private $githubService;
@@ -60,6 +60,7 @@ class PostsController extends AbstractController
         EntityManagerInterface $entityManager,
         MessageBusInterface $messageBus,
         UrlGeneratorService $urlGeneratorService,
+        MarkdownExtra $markdownProcessor,
         GitHubService $githubService,
     )
     {
@@ -71,6 +72,7 @@ class PostsController extends AbstractController
         $this->photoDir =  $this->params->get('app.imgDir');
         $this->messageBus = $messageBus;
         $this->urlGeneratorService = $urlGeneratorService;
+        $this->markdownProcessor = $markdownProcessor;
         $this->githubService = $githubService;
     }
     
