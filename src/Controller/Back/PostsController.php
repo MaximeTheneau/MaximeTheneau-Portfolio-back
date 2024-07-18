@@ -28,6 +28,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use App\Service\ImageOptimizer;
+use App\Service\GitHubService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,6 +51,7 @@ class PostsController extends AbstractController
     private $markdown;
     private $messageBus;
     private $urlGeneratorService;
+    private $githubService;
 
     public function __construct(
         ContainerBagInterface $params,
@@ -58,6 +60,7 @@ class PostsController extends AbstractController
         EntityManagerInterface $entityManager,
         MessageBusInterface $messageBus,
         UrlGeneratorService $urlGeneratorService,
+        GitHubService $githubService,
     )
     {
         $this->params = $params;
@@ -68,6 +71,7 @@ class PostsController extends AbstractController
         $this->photoDir =  $this->params->get('app.imgDir');
         $this->messageBus = $messageBus;
         $this->urlGeneratorService = $urlGeneratorService;
+        $this->githubService = $githubService;
     }
     
     #[Route('/', name: 'app_back_posts_index', methods: ['GET'])]
@@ -184,6 +188,8 @@ class PostsController extends AbstractController
 
 
             $postsRepository->save($post, true);
+
+            $this->githubService->triggerWorkflow();
             return $this->redirectToRoute('app_back_posts_index', [
             ], Response::HTTP_SEE_OTHER);
 
