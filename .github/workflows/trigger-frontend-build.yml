@@ -9,14 +9,14 @@ jobs:
   build_in_repository_A:
     runs-on: ubuntu-latest
     env:
-        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN_WEBHOOK }}
+        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
     steps:
       - name: Install OpenSSL
         run: sudo apt-get install -y openssl
         
       - name: Calculate SHA-256 Hash
         id: hash
-        run: echo -n "${{ secrets.AUTH_TOKEN_WEBHOOK }}" | openssl dgst -sha256 | awk '{print $2}'
+        run: echo -n "${{ secrets.AUTH_TOKEN }}" | openssl dgst -sha256 | awk '{print $2}'
       
       - name: Trigger Build via API
         env:
