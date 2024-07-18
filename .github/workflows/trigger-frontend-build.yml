@@ -25,4 +25,4 @@ jobs:
           curl -X POST \
           -H "x-github-event: Build" \
           -H "X-Hub-Signature-256: sha256=$HASHED_TOKEN" \
-          https://theneaumaxime.fr/api/webhook
+          http://localhost:3002/api/webhook

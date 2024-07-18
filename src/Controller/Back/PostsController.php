@@ -28,7 +28,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use App\Service\ImageOptimizer;
-use App\Service\GitHubService;
+use App\Service\GithubService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -78,8 +78,10 @@ class PostsController extends AbstractController
     public function index(PostsRepository $postsRepository, Request $request ): Response
     {
         $error = $request->query->get('error');
+        $posts = $postsRepository->findAll();
+    
         return $this->render('back/posts/index.html.twig', [
-            'posts' => $postsRepository->findAll(),
+            'posts' => $posts,
             'error' => $error,
         ]);
     }
@@ -189,7 +191,6 @@ class PostsController extends AbstractController
 
             $postsRepository->save($post, true);
 
-            $this->githubService->triggerWorkflow();
             return $this->redirectToRoute('app_back_posts_index', [
             ], Response::HTTP_SEE_OTHER);
 
@@ -339,12 +340,13 @@ class PostsController extends AbstractController
             $updatedDate = $formatter->format($post->getUpdatedAt());
             $createdAt = $formatter->format($post->getCreatedAt());
 
+            $this->githubService->triggerWorkflow();
             
             $postsRepository->save($post, true);
             
 
             return $this->redirectToRoute('app_back_posts_index', [
-                'error' => $response->getContent(),
+                // 'error' => $response->getContent(),
             ], Response::HTTP_SEE_OTHER);
         }
     
