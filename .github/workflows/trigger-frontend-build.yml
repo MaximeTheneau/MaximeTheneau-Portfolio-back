@@ -1,7 +1,7 @@
 name: Trigger Frontend Build
 
 on:
-  repository_dispatch:
+  release:
     types: [trigger-build]
 
 jobs:
