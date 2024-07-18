@@ -25,4 +25,4 @@ jobs:
           curl -X POST \
           -H "x-github-event: Build" \
           -H "X-Hub-Signature-256: sha256=$HASHED_TOKEN" \
-          https://unetaupechezvous.fr/api/webhook
+          https://theneaumaxime.fr/api/webhook
