@@ -1,32 +1,27 @@
 name: Trigger Frontend Build
 
 on:
-  push:
-    branches:
-      - main 
+  repository_dispatch:
+    types: [trigger-build]
 
 jobs:
-  trigger-frontend:
+  build_in_repository_A:
     runs-on: ubuntu-latest
-
+    env:
+        AUTH_TOKEN: ${{ secrets.AUTH_TOKEN_WEBHOOK }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up SSH
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-    
-    - name: Make envfile
-      uses: SpicyPizza/create-envfile@v2.0
-      with:
-        file_name: .env
-
+      - name: Install OpenSSL
+        run: sudo apt-get install -y openssl
         
-    - name: Deploy Next.js frontend
-      run: |
-            ssh -o StrictHostKeyChecking=no root@193.203.191.121
-            "cd /var/www/html/MaximeTheneau-Portfolio-Next
-            ls
-            "
+      - name: Calculate SHA-256 Hash
+        id: hash
+        run: echo -n "${{ secrets.AUTH_TOKEN_WEBHOOK }}" | openssl dgst -sha256 | awk '{print $2}'
+      
+      - name: Trigger Build via API
+        env:
+          HASHED_TOKEN: ${{ steps.hash.outputs.hash }}
+        run: |
+          curl -X POST \
+          -H "x-github-event: build" \
+          -H "X-Hub-Signature-256: sha256=$HASHED_TOKEN" \
+          https://unetaupechezvous.fr/api/webhook
