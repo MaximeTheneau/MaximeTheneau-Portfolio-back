@@ -1,8 +1,9 @@
 name: Trigger Frontend Build
 
 on:
-  release:
-    types: [trigger-build]
+  push:
+      branches:
+        - main
 
 jobs:
   build_in_repository_A:
