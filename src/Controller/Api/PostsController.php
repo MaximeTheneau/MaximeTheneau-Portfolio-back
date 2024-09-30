@@ -43,7 +43,7 @@ class PostsController extends ApiController
     #[Route('&category={name}', name: 'category', methods: ['GET'])]  
     public function category(PostsRepository $postsRepository, Category $category): JsonResponse
     {
-        $posts = $postsRepository->findBy(['category' => $category], ['createdAt' => 'DESC']);
+        $posts = $postsRepository->findBy(['category' => $category],  ['updatedAt' => 'DESC' ]);
 
         return $this->json(
             $posts,

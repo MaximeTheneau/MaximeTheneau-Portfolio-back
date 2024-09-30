@@ -34,6 +34,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Michelf\MarkdownExtra;
 use \IntlDateFormatter;
+use App\Service\MarkdownProcessor;
 use App\Service\UrlGeneratorService;
 use App\Service\TriggerNextJsBuild;
 use App\Message\UpdateNextAppMessage;
@@ -60,7 +61,7 @@ class PostsController extends AbstractController
         EntityManagerInterface $entityManager,
         MessageBusInterface $messageBus,
         UrlGeneratorService $urlGeneratorService,
-        MarkdownExtra $markdownProcessor,
+        MarkdownProcessor $markdownProcessor,
         GitHubService $githubService,
     )
     {
