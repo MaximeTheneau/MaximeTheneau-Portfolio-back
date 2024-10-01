@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Entity\Subcategory;
 use App\Repository\PostsRepository;
 use App\Repository\SubcategoryRepository;
+use App\Repository\CategoryRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Cookie;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 #[Route('/api/posts', name: 'api_posts_')]
 class PostsController extends ApiController
@@ -41,9 +43,15 @@ class PostsController extends ApiController
     }
 
     #[Route('&category={name}', name: 'category', methods: ['GET'])]  
-    public function category(PostsRepository $postsRepository, Category $category): JsonResponse
+    public function category(PostsRepository $postsRepository, CategoryRepository $categoryRepository, string $name): JsonResponse
     {
-        $posts = $postsRepository->findBy(['category' => $category],  ['updatedAt' => 'DESC' ]);
+        $category = $categoryRepository->findByName($name);
+
+        if (!$category) {
+            return $this->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $posts = $postsRepository->findBy(['category' => $category], ['createdAt' => 'DESC']);
 
         return $this->json(
             $posts,
