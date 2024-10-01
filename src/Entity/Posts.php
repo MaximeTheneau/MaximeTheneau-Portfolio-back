@@ -98,7 +98,7 @@ class Posts
     private ?string $website = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['api_posts_read', 'api_posts_sitemap'])]
+    #[Groups(['api_posts_read', 'api_posts_sitemap', 'api_posts_category'])]
     private ?string $url = null;
 
 
