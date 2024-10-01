@@ -197,22 +197,24 @@ class PostsController extends ApiController
     }
 
     #[Route('/{slug}', name: 'read', methods: ['GET'])]
-    public function read(Posts $posts = null)
+    public function read(EntityManagerInterface $em, string $slug )
     {
-        if ($posts === null)
-        {
-            // on renvoie donc une 404
-            return $this->json(
-                [
-                    "erreur" => "Page non trouvée",
-                    "code_error" => 404
-                ],
-                Response::HTTP_NOT_FOUND,// 404
-            );
-        }
+        $post = $em->getRepository(Posts::class)->findOneBy(['slug' => $slug]);
+
+        // if ($posts === null)
+        // {
+        //     // on renvoie donc une 404
+        //     return $this->json(
+        //         [
+        //             "erreur" => "Page non trouvée",
+        //             "code_error" => 404
+        //         ],
+        //         Response::HTTP_NOT_FOUND,// 404
+        //     );
+        // }
 
         return $this->json(
-            $posts,
+            $post,
             Response::HTTP_OK,
             [],
             [
