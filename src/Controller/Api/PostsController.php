@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\HttpFoundation\Cookie;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/api/posts', name: 'api_posts_')]
 class PostsController extends ApiController
@@ -43,15 +43,15 @@ class PostsController extends ApiController
     }
 
     #[Route('&category={name}', name: 'category', methods: ['GET'])]  
-    public function category(PostsRepository $postsRepository, CategoryRepository $categoryRepository, string $name): JsonResponse
+    public function category(EntityManagerInterface $em , string $name): JsonResponse
     {
-        $category = $categoryRepository->findByName($name);
+        $category = $em->getRepository(Category::class)->findByName($name);
 
         if (!$category) {
             return $this->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $posts = $postsRepository->findBy(['category' => $category], ['createdAt' => 'DESC']);
+        $posts = $em->getRepository(Posts::class)->findBy(['category' => $category], ['createdAt' => 'DESC']);
 
         return $this->json(
             $posts,
@@ -87,10 +87,15 @@ class PostsController extends ApiController
     }
 
     #[Route('&limit=3&category={name}', name: 'limit', methods: ['GET'])]
-    public function limit(PostsRepository $postsRepository, Category $category): JsonResponse
+    public function limit(EntityManagerInterface $em, string $name): JsonResponse
     {
-        $posts = $postsRepository->findBy(['category' => $category], ['createdAt' => 'ASC'], 3);
+        $category = $em->getRepository(Category::class)->findByName($name);
 
+        if (!$category) {
+            return $this->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $posts = $em->getRepository(Posts::class)->findBy(['category' => $category], ['createdAt' => 'ASC'], 3);
 
         return $this->json(
             $posts,
