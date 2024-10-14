@@ -314,18 +314,18 @@ class PostsController extends AbstractController
                 //     }
 
                 // IMAGE PARAGRAPH
-                if (!empty($paragraph->getImgPostParaghFile())) {
-                    $brochureFileParagraph = $paragraph->getImgPostParaghFile();
-                    $slugPara = $this->slugger->slug($paragraph->getSubtitle());
-                    $slugPara = substr($slugPara, 0, 30);
-                    $paragraph->setImgPostParagh($slugPara);
-                    $this->imageOptimizer->setPicture($brochureFileParagraph, $slugPara, $paragraph);
+                // if (!empty($paragraph->getImgPostParaghFile())) {
+                //     $brochureFileParagraph = $paragraph->getImgPostParaghFile();
+                //     $slugPara = $this->slugger->slug($paragraph->getSubtitle());
+                //     $slugPara = substr($slugPara, 0, 30);
+                //     $paragraph->setImgPostParagh($slugPara);
+                //     $this->imageOptimizer->setPicture($brochureFileParagraph, $slugPara, $paragraph);
                     
-                    // ALT IMG PARAGRAPH
-                    if (empty($paragraph->getAltImg())) {
-                        $paragraph->setAltImg($paragraph->getSubtitle());
-                    } 
-                }
+                //     // ALT IMG PARAGRAPH
+                //     if (empty($paragraph->getAltImg())) {
+                //         $paragraph->setAltImg($paragraph->getSubtitle());
+                //     } 
+                // }
             } 
             $listPosts = $post->getListPosts();
             if ($listPosts !== null) {
