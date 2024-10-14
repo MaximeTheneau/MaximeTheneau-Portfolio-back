@@ -274,24 +274,24 @@ class PostsController extends AbstractController
                 $paragraph->setParagraph($htmlText);
 
                 // LINK
-                $articleLink = $paragraph->getLinkPostSelect();
-                if ($articleLink !== null) {
+                // $articleLink = $paragraph->getLinkPostSelect();
+                // if ($articleLink !== null) {
                     
-                    $paragraph->setLinkSubtitle($articleLink->getTitle());
-                    $slugLink = $articleLink->getSlug();
+                //     $paragraph->setLinkSubtitle($articleLink->getTitle());
+                //     $slugLink = $articleLink->getSlug();
 
-                    $categoryLink = $articleLink->getCategory()->getSlug();
-                    if ($categoryLink === "Pages") {
-                        $paragraph->setLink('/'.$slugLink);
-                    }                     
-                    if ($categoryLink === "Annuaire") {
-                        $paragraph->setLink('/'.$categoryLink.'/'.$slugLink);
-                    } 
-                    if ($categoryLink === "Articles") {
-                        $subcategoryLink = $articleLink->getSubcategory()->getSlug();
-                        $paragraph->setLink('/'.$categoryLink.'/'.$subcategoryLink.'/'.$slugLink);
-                    }
-                } 
+                //     $categoryLink = $articleLink->getCategory()->getSlug();
+                //     if ($categoryLink === "Pages") {
+                //         $paragraph->setLink('/'.$slugLink);
+                //     }                     
+                //     if ($categoryLink === "Annuaire") {
+                //         $paragraph->setLink('/'.$categoryLink.'/'.$slugLink);
+                //     } 
+                //     if ($categoryLink === "Articles") {
+                //         $subcategoryLink = $articleLink->getSubcategory()->getSlug();
+                //         $paragraph->setLink('/'.$categoryLink.'/'.$subcategoryLink.'/'.$slugLink);
+                //     }
+                // } 
 
               
                 
