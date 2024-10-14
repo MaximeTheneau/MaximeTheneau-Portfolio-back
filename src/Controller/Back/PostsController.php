@@ -327,16 +327,16 @@ class PostsController extends AbstractController
                 //     } 
                 // }
             } 
-            $listPosts = $post->getListPosts();
-            if ($listPosts !== null) {
-                foreach ($listPosts as $listPost) {
-                    if ($listPost->getLinkPostSelect() !== null){
+            // $listPosts = $post->getListPosts();
+            // if ($listPosts !== null) {
+            //     foreach ($listPosts as $listPost) {
+            //         if ($listPost->getLinkPostSelect() !== null){
 
-                        $listPost->setLinkSubtitle($listPost->getLinkPostSelect()->getTitle());
-                        $listPost->setLink($listPost->getLinkPostSelect()->getUrl());
-                    }
-                }
-            }
+            //             $listPost->setLinkSubtitle($listPost->getLinkPostSelect()->getTitle());
+            //             $listPost->setLink($listPost->getLinkPostSelect()->getUrl());
+            //         }
+            //     }
+            // }
             // DATE
             $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE, null, null, 'dd MMMM yyyy');
             $post->setUpdatedAt(new DateTime());
