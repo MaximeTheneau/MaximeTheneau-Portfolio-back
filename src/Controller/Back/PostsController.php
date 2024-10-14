@@ -302,16 +302,16 @@ class PostsController extends AbstractController
                 //     $paragraph->setLinkSubtitle(null);
                 // }
 
-                // SLUG
-                if (!empty($paragraph->getSubtitle())) {
-                    $slugPara = $this->slugger->slug($paragraph->getSubtitle());
-                    $slugPara = substr($slugPara, 0, 30); 
-                    $paragraph->setSlug($slugPara);
+                // // SLUG
+                // if (!empty($paragraph->getSubtitle())) {
+                //     $slugPara = $this->slugger->slug($paragraph->getSubtitle());
+                //     $slugPara = substr($slugPara, 0, 30); 
+                //     $paragraph->setSlug($slugPara);
 
-                } else {
-                    $this->entityManager->remove($paragraph);
-                    $this->entityManager->flush();
-                    }
+                // } else {
+                //     $this->entityManager->remove($paragraph);
+                //     $this->entityManager->flush();
+                //     }
 
                 // IMAGE PARAGRAPH
                 if (!empty($paragraph->getImgPostParaghFile())) {
