@@ -95,7 +95,7 @@ class PostsController extends ApiController
             return $this->json(['error' => 'Category not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $posts = $em->getRepository(Posts::class)->findBy(['category' => $category], ['createdAt' => 'ASC'], 3);
+        $posts = $em->getRepository(Posts::class)->findBy(['category' => $category, 'isHomeImage' => true], ['createdAt' => 'DESC'], 3);
 
         return $this->json(
             $posts,

@@ -342,7 +342,6 @@ class PostsController extends AbstractController
             $post->setUpdatedAt(new DateTime());
             $updatedDate = $formatter->format($post->getUpdatedAt());
             $createdAt = $formatter->format($post->getCreatedAt());
-
             $this->githubService->triggerWorkflow();
             
             $postsRepository->save($post, true);

@@ -101,11 +101,8 @@ class Posts
     #[Groups(['api_posts_read', 'api_posts_sitemap', 'api_posts_category'])]
     private ?string $url = null;
 
-
-
-
-
-    
+    #[ORM\Column(nullable: true)]
+    private ?bool $isHomeImage = null;
 
     public function __construct()
     {
@@ -405,6 +402,18 @@ class Posts
     public function setHeading(string $heading): static
     {
         $this->heading = $heading;
+
+        return $this;
+    }
+
+    public function isHomeImage(): ?bool
+    {
+        return $this->isHomeImage;
+    }
+
+    public function setIsHomeImage(?bool $isHomeImage): static
+    {
+        $this->isHomeImage = $isHomeImage;
 
         return $this;
     }

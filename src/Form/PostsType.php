@@ -27,6 +27,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class PostsType extends AbstractType
 {
@@ -197,6 +198,10 @@ class PostsType extends AbstractType
                         'placeholder' => 'ex: https://www.exemple.fr',
                         'maxlength' => '500',
                     ]
+                    ])
+                    ->add('isHomeImage', CheckboxType::class, [
+                        'required' => false,
+                        'label' => 'Définir comme image d\'accueil',
                     ])
                     ;
 
