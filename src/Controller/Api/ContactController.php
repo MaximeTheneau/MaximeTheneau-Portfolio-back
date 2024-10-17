@@ -11,11 +11,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Validator\Constraints\Email as EmailConstraint;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\NamedAddress;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[Route('/api/contact')]
 class ContactController extends ApiController
@@ -63,15 +63,15 @@ class ContactController extends ApiController
         }
     }
 
-    if (strlen($data['postalCode']) !== 5) {
-        return $this->json(
-            [
-                "erreur" => "Erreur lors de la saisie du code postal (5 chiffres attendus)",
-                "code_error" => Response::HTTP_FORBIDDEN
-            ],
-            Response::HTTP_FORBIDDEN
-        );
-    }
+    // if (strlen($data['postalCode']) !== 5) {
+    //     return $this->json(
+    //         [
+    //             "erreur" => "Erreur lors de la saisie du code postal (5 chiffres attendus)",
+    //             "code_error" => Response::HTTP_FORBIDDEN
+    //         ],
+    //         Response::HTTP_FORBIDDEN
+    //     );
+    // }
 
     // if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
     //     return $this->json(
@@ -177,4 +177,6 @@ class ContactController extends ApiController
         );
     }
     }
+            
+    
 }
