@@ -28,7 +28,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use App\Service\ImageOptimizer;
-use App\Service\GithubService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +51,6 @@ class PostsController extends AbstractController
     private $markdownProcessor;
     private $messageBus;
     private $urlGeneratorService;
-    private $githubService;
 
     public function __construct(
         ContainerBagInterface $params,
@@ -62,7 +60,6 @@ class PostsController extends AbstractController
         MessageBusInterface $messageBus,
         UrlGeneratorService $urlGeneratorService,
         MarkdownProcessor $markdownProcessor,
-        GitHubService $githubService,
     )
     {
         $this->params = $params;
@@ -74,7 +71,6 @@ class PostsController extends AbstractController
         $this->messageBus = $messageBus;
         $this->urlGeneratorService = $urlGeneratorService;
         $this->markdownProcessor = $markdownProcessor;
-        $this->githubService = $githubService;
     }
     
     #[Route('/', name: 'app_back_posts_index', methods: ['GET'])]
@@ -342,7 +338,9 @@ class PostsController extends AbstractController
             $post->setUpdatedAt(new DateTime());
             $updatedDate = $formatter->format($post->getUpdatedAt());
             $createdAt = $formatter->format($post->getCreatedAt());
-            $this->githubService->triggerWorkflow();
+
+            $message = new TriggerNextJsBuild('Build');
+            $messageBus->dispatch($message);
             
             $postsRepository->save($post, true);
             
