@@ -36,7 +36,6 @@ use Michelf\MarkdownExtra;
 use \IntlDateFormatter;
 use App\Service\MarkdownProcessor;
 use App\Service\UrlGeneratorService;
-use App\Service\TriggerNextJsBuild;
 use App\Message\UpdateNextAppMessage;
 use Symfony\Component\String\UnicodeString;
 
