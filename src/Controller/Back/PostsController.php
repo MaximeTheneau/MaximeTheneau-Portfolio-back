@@ -9,6 +9,7 @@ use App\Entity\ParagraphPosts;
 use App\Entity\Keyword;
 use App\Form\PostsType;
 use App\Form\ParagraphPostsType;
+use App\Message\TriggerNextJsBuild;
 use App\Repository\PostsRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\ParagraphPostsRepository;
