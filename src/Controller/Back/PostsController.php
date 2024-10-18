@@ -51,7 +51,7 @@ class PostsController extends AbstractController
     private $markdownProcessor;
     private $messageBus;
     private $urlGeneratorService;
-
+    
     public function __construct(
         ContainerBagInterface $params,
         ImageOptimizer $imageOptimizer,
@@ -340,7 +340,7 @@ class PostsController extends AbstractController
             $createdAt = $formatter->format($post->getCreatedAt());
 
             $message = new TriggerNextJsBuild('Build');
-            $messageBus->dispatch($message);
+            $this->messageBus->dispatch($message);
             
             $postsRepository->save($post, true);
             
