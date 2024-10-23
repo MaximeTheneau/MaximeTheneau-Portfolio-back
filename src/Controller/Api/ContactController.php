@@ -170,7 +170,7 @@ class ContactController extends ApiController
 
         return $this->json(
             [
-                "erreur" => "Erreur lors de l'envoie de l'email, veuillez réessayer plus tard",
+                "message" => "Erreur lors de l'envoie de l'email, veuillez réessayer plus tard",
                 "code_error" => Response::HTTP_FORBIDDEN
             ],
             Response::HTTP_FORBIDDEN

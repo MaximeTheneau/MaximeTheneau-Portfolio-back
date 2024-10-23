@@ -1,0 +1,72 @@
+{{ form_start(form) }}
+    {{ form_row(form.name )}}
+    {{ form_row(form.description )}}
+    {{ form_row(form.url )}}
+    {{ form_row(form.price )}}
+
+    <ul 
+        class="list"
+        data-index="{{ form.productOptions|length > 0 ? form.productOptions|last.vars.name + 0 : 0 }}"
+        data-prototype="{{ form_widget(form.productOptions.vars.prototype)|e('html_attr') }}"
+    >   
+        {% for tag in form.productOptions %}
+            <li>
+                {{ form_row(tag) }}
+                <button type="button" class="remove-item"></button>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="flex text-lg border-gray-600 border-b button__list pt-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+          </svg>
+          Ajouter une options
+    </div>  
+    <button type="submit" class="button is-primary is-fullwidth">{{ button_label|default('Sauvegarder') }}</button>
+
+{{ form_end(form) }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const addListButton = document.querySelector('.button__list');
+        let collectionHolder = document.querySelector('.list');
+
+        // Ajoute des boutons de suppression aux éléments existants
+        collectionHolder.querySelectorAll('li').forEach(function(item) {
+            addDeleteButton(item);
+        });
+
+        addListButton.addEventListener('click', function() {
+            let index = collectionHolder.dataset.index;
+            let newList = collectionHolder.dataset.prototype;
+
+            newList = newList.replace(/__name__/g, index);
+
+            let newListLi = document.createElement('li');
+            newListLi.innerHTML = newList;
+
+            // Ajouter le nouveau formulaire à la liste
+            collectionHolder.appendChild(newListLi);
+
+            // Ajouter le bouton de suppression au nouvel élément
+            addDeleteButton(newListLi);
+
+            collectionHolder.dataset.index = parseInt(index) + 1;
+        });
+
+        // Fonction pour ajouter un bouton de suppression
+        function addDeleteButton(item) {
+            let removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.classList.add('remove-item');
+            removeButton.innerText = 'Supprimer';
+
+            // Ajouter l'événement de suppression
+            removeButton.addEventListener('click', function() {
+                item.remove();
+            });
+
+            // Ajouter le bouton de suppression à l'élément
+            item.appendChild(removeButton);
+        }
+    });
+</script>
