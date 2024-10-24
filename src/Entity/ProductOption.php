@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use App\Repository\ProductOptionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
 class ProductOption
@@ -14,9 +17,11 @@ class ProductOption
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups([ 'api_posts_home'])]
     private ?string $label = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups([ 'api_posts_home'])]
     private ?bool $active = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]

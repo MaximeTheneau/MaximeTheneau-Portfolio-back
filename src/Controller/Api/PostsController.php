@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Posts;
+use App\Entity\Product;
 use App\Entity\Category;
 use App\Entity\Subcategory;
 use App\Repository\PostsRepository;
@@ -23,11 +24,17 @@ use Doctrine\ORM\EntityManagerInterface;
 #[Route('/api/posts', name: 'api_posts_')]
 class PostsController extends ApiController
 {
-    #[Route('/home', name: 'browse', methods: ['GET'])]
-    public function browse(PostsRepository $postsRepository ): JsonResponse
+    #[Route('/home', name: 'home', methods: ['GET'])]
+    public function browse(PostsRepository $postsRepository, EntityManagerInterface $em ): JsonResponse
     {
     
-        $allPosts = $postsRepository->findLastPosts();
+        $posts = $postsRepository->findOneBy(['slug'=> 'Accueil']);
+        
+        $products = $em->getRepository(Product::class)->findAll();
+
+        $allPosts = [
+            'home' => $posts,
+            'products' => $products];
 
         return $this->json(
             $allPosts,
@@ -36,7 +43,7 @@ class PostsController extends ApiController
             [
                 "groups" => 
                 [
-                    "api_posts__browse"
+                    "api_posts_home"
                 ]
             ]
         );
