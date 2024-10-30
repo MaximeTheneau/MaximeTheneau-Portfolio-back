@@ -40,6 +40,9 @@ class Product
     #[ORM\OneToMany(targetEntity: ProductOption::class, mappedBy: 'product', cascade: ['persist'])]
     private Collection $productOptions;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    private ?string $discounted_price = null;
+
     public function __construct()
     {
         $this->productOptions = new ArrayCollection();
@@ -124,6 +127,18 @@ class Product
     public function setDescription(string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getDiscountedPrice(): ?string
+    {
+        return $this->discounted_price;
+    }
+
+    public function setDiscountedPrice(string $discounted_price): static
+    {
+        $this->discounted_price = $discounted_price;
 
         return $this;
     }

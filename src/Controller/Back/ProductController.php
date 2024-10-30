@@ -76,6 +76,7 @@ final class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $product->setDiscountedPrice($product->getPrice() * 0.5);
 
             $productPosts = $form->get('productOptions')->getData();
 
