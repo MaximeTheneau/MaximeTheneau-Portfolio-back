@@ -41,6 +41,7 @@ class Product
     private Collection $productOptions;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
+    #[Groups([ 'api_posts_home'])]
     private ?string $discounted_price = null;
 
     public function __construct()
