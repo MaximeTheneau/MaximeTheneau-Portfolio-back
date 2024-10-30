@@ -42,7 +42,7 @@ class Product
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 0)]
     #[Groups([ 'api_posts_home'])]
-    private ?string $discounted_price = null;
+    private ?string $discountedPrice = null;
 
     public function __construct()
     {
@@ -134,12 +134,12 @@ class Product
 
     public function getDiscountedPrice(): ?string
     {
-        return $this->discounted_price;
+        return $this->discountedPrice;
     }
 
-    public function setDiscountedPrice(string $discounted_price): static
+    public function setDiscountedPrice(string $discountedPrice): static
     {
-        $this->discounted_price = $discounted_price;
+        $this->discountedPrice = $discountedPrice;
 
         return $this;
     }
