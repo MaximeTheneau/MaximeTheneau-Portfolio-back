@@ -38,7 +38,7 @@
             {{ form_row(form.heading) }}
             {{ form_row(form.title) }}
             {{ form_row(form.metaDescription) }}
-            {{ form_row(form.contents) }}
+            {{ form_row(form.contents, {'attr': {'data-controller': 'tinymce'}}) }}
             <div class="pt-4">
                 <ul 
                     class="paragraph"
@@ -47,6 +47,8 @@
                 >   
                     {% for paragraph in form.paragraphPosts %}
                         <li class="h-auto">
+                            {{ form_row(paragraph.subtitle) }}
+                            {{ form_row(paragraph.chatGptButton, {'attr': {'data-subtitle':  paragraph.subtitle.vars.value, 'data-id': paragraph.vars.id}}) }}
                             {{ form_widget(paragraph.imgPostParagh) }}
                             {{ form_widget(paragraph.altImg) }}
                             <p >Changez le descriptif de l'image</p>
@@ -112,48 +114,6 @@
 {{ form_end(form) }}
 
 {% block javascripts %}
+    <script src="https://cdn.tiny.cloud/1/7u35jqplbqwmajtzpxrhtp68lx5t04fxq9qtnrtwxf03z0pw/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script src={{asset('js/posts.js')}}></script>
-    <script type="text/javascript">
-
-
-    const addParagraphButton = document.querySelector('.button_paragraph');
-
-
-    addParagraphButton.addEventListener('click', function() {
-        let collectionHolder = document.querySelector('.paragraph');
-        let index = collectionHolder.dataset.index;
-        
-
-        let newParagraph = collectionHolder.dataset.prototype;
-
-        newParagraph = newParagraph.replace(/__name__/g, index);
-
-        let newParagraphLi = document.createElement('li');
-        newParagraphLi.innerHTML = newParagraph;
-
-        collectionHolder.appendChild(newParagraphLi);
-
-        collectionHolder.dataset.index = parseInt(index) + 1;
-    });
-
-    const addListButton = document.querySelector('.button__list');
-
-    addListButton.addEventListener('click', function() {
-        let collectionHolder = document.querySelector('.list');
-        let index = collectionHolder.dataset.index;
-        
-
-        let newList = collectionHolder.dataset.prototype;
-
-        newList = newList.replace(/__name__/g, index);
-
-        let newListLi = document.createElement('li');
-        newListLi.innerHTML = newList;
-
-        collectionHolder.appendChild(newListLi);
-
-        collectionHolder.dataset.index = parseInt(index) + 1;
-    });
-   
-    </script>
 {% endblock %}
