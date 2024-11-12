@@ -83,7 +83,15 @@ class Product
      */
     public function getProductOptions(): Collection
     {
-        return $this->productOptions;
+        $productOptionsArray = iterator_to_array($this->productOptions);
+
+        // Trier le tableau par position (assurez-vous que votre entité ProductOption a une méthode `getPosition()`)
+        usort($productOptionsArray, function ($a, $b) {
+            return $a->getPosition() <=> $b->getPosition();
+        });
+    
+        // Retourner la collection triée
+        return new ArrayCollection($productOptionsArray);
     }
 
     public function addProductOption(ProductOption $productOption): static

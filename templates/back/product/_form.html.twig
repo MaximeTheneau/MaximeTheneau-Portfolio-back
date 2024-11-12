@@ -10,9 +10,15 @@
         data-prototype="{{ form_widget(form.productOptions.vars.prototype)|e('html_attr') }}"
     >   
         {% for tag in form.productOptions %}
-            <li>
+            <li  data-index="{{ loop.index }}">
                 {{ form_row(tag) }}
-                <button type="button" class="remove-item"></button>
+                
+                <button type="button" class="move-up"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                  </svg></button>
+                <button type="button" class="move-down"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                  </svg></button>
             </li>
         {% endfor %}
     </ul>
@@ -53,6 +59,35 @@
             collectionHolder.dataset.index = parseInt(index) + 1;
         });
 
+        collectionHolder.querySelectorAll('li').forEach((item) => {
+            item.querySelector('.move-up').addEventListener('click', () => {
+                const prev = item.previousElementSibling;
+                if (prev) {
+                    item.parentNode.insertBefore(item, prev);
+                    updateDataIndexes(item.parentNode);
+                }
+            });
+
+            item.querySelector('.move-down').addEventListener('click', () => {
+                const next = item.nextElementSibling;
+                if (next) {
+                    item.parentNode.insertBefore(next, item);
+                    updateDataIndexes(item.parentNode);
+                }
+            });
+        });
+
+        function updateDataIndexes(container) {
+            const items = container.querySelectorAll('li');
+            items.forEach((item, index) => {
+                item.setAttribute('data-index', index);
+                const hiddenInput = item.querySelector('input[type="hidden"]');
+                if (hiddenInput) {
+                    hiddenInput.value = index; 
+                }
+            });
+            
+        }
         // Fonction pour ajouter un bouton de suppression
         function addDeleteButton(item) {
             let removeButton = document.createElement('button');
@@ -69,4 +104,9 @@
             item.appendChild(removeButton);
         }
     });
+    document.querySelector('form').addEventListener('submit', () => {
+        collectionHolder.querySelectorAll('li').forEach((item, index) => {
+        item.querySelector('data-index').value = index;
+    });
+});
 </script>

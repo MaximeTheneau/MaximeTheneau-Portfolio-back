@@ -27,6 +27,9 @@ class ProductOption
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
     private ?Product $product = null;
 
+    #[ORM\Column]
+    private ?int $position = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,6 +67,18 @@ class ProductOption
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }

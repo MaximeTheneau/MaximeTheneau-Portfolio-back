@@ -15,6 +15,19 @@ class ProductOptionRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProductOption::class);
     }
+    
+    /**
+     * @param int $position La position à filtrer.
+     * @return ProductOption[] Retourne les options de produit avec la position spécifique.
+     */
+    public function findByPosition(int $position): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.position = :position')
+            ->setParameter('position', $position)
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return ProductOption[] Returns an array of ProductOption objects

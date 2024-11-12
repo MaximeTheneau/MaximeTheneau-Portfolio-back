@@ -48,7 +48,6 @@ final class ProductController extends AbstractController
             $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
             $product->setDescription($htmlText);
-
             $entityManager->persist($product);
             $entityManager->flush();
             
@@ -87,6 +86,7 @@ final class ProductController extends AbstractController
                 $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
                 $product->setLabel($htmlText);
+                
             }
 
             $entityManager->flush();
