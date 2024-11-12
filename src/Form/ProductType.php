@@ -6,6 +6,7 @@ use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ProductType extends AbstractType
@@ -14,7 +15,15 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('description')
+            ->add('description', TextareaType::class, [
+                'label' => 'Introduction (Présentation du contenu de la page)',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Faites un aperçu de ce que les lecteurs vont découvrir',
+                    'maxlength' => '5000',
+                    'rows' => '4',
+                    ]
+            ])
             ->add('price')
             ->add('productOptions', CollectionType::class, [
                 'entry_type' => ProductOptionType::class,
