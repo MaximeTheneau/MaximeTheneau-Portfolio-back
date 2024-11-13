@@ -37,8 +37,10 @@
         let collectionHolder = document.querySelector('.list');
 
         // Ajoute des boutons de suppression aux éléments existants
-        collectionHolder.querySelectorAll('li').forEach(function(item) {
+        collectionHolder.querySelectorAll('li').forEach(function(item, index) {
             addDeleteButton(item);
+            item.setAttribute('data-index', index); // Ajoute l'index initial
+            updateHiddenIndex(item, index);
         });
 
         addListButton.addEventListener('click', function() {
@@ -49,14 +51,16 @@
 
             let newListLi = document.createElement('li');
             newListLi.innerHTML = newList;
+            newListLi.setAttribute('data-index', index + 1);
 
             // Ajouter le nouveau formulaire à la liste
             collectionHolder.appendChild(newListLi);
 
             // Ajouter le bouton de suppression au nouvel élément
             addDeleteButton(newListLi);
-
+            
             collectionHolder.dataset.index = parseInt(index) + 1;
+            updateHiddenIndex(newListLi, index);
         });
 
         collectionHolder.querySelectorAll('li').forEach((item) => {
@@ -81,12 +85,18 @@
             const items = container.querySelectorAll('li');
             items.forEach((item, index) => {
                 item.setAttribute('data-index', index);
-                const hiddenInput = item.querySelector('input[type="hidden"]');
-                if (hiddenInput) {
-                    hiddenInput.value = index; 
-                }
+                updateHiddenIndex(item, index);
             });
-            
+        }
+        function updateHiddenIndex(item, index) {
+            let hiddenInput = item.querySelector('input[type="hidden"]');
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'item_index';
+                item.appendChild(hiddenInput);
+            }
+            hiddenInput.value = index;
         }
         // Fonction pour ajouter un bouton de suppression
         function addDeleteButton(item) {
