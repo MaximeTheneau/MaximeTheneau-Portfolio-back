@@ -32,37 +32,41 @@
 
 {{ form_end(form) }}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const addListButton = document.querySelector('.button__list');
-        let collectionHolder = document.querySelector('.list');
+   document.addEventListener('DOMContentLoaded', function() {
+    const addListButton = document.querySelector('.button__list');
+    let collectionHolder = document.querySelector('.list');
 
-        // Ajoute des boutons de suppression aux éléments existants
-        collectionHolder.querySelectorAll('li').forEach(function(item, index) {
-            addDeleteButton(item);
-            item.setAttribute('data-index', index); // Ajoute l'index initial
-            updateHiddenIndex(item, index);
-        });
+    // Ajoute des boutons de suppression et d'indexation aux éléments existants
+    collectionHolder.querySelectorAll('li').forEach(function(item, index) {
+        addDeleteButton(item);
+        item.setAttribute('data-index', index); // Ajoute l'index initial
+        updateHiddenIndex(item, index);
+    });
 
-        addListButton.addEventListener('click', function() {
-            let index = collectionHolder.dataset.index;
-            let newList = collectionHolder.dataset.prototype;
+    addListButton.addEventListener('click', function() {
+        let index = collectionHolder.querySelectorAll('li').length;
+        let newList = collectionHolder.dataset.prototype;
 
-            newList = newList.replace(/__name__/g, index);
+        newList = newList.replace(/__name__/g, index);
 
-            let newListLi = document.createElement('li');
-            newListLi.innerHTML = newList;
-            newListLi.setAttribute('data-index', index + 1);
+        let newListLi = document.createElement('li');
+        newListLi.innerHTML = newList;
 
-            // Ajouter le nouveau formulaire à la liste
-            collectionHolder.appendChild(newListLi);
+        // Ajouter l'index à l'attribut `data-index` du nouvel élément
+        newListLi.setAttribute('data-index', index);
 
-            // Ajouter le bouton de suppression au nouvel élément
-            addDeleteButton(newListLi);
-            
-            collectionHolder.dataset.index = parseInt(index) + 1;
-            updateHiddenIndex(newListLi, index);
-        });
+        // Ajouter le nouveau formulaire à la liste
+        collectionHolder.appendChild(newListLi);
 
+        // Ajouter le bouton de suppression et l'index caché au nouvel élément
+        addDeleteButton(newListLi);
+        updateHiddenIndex(newListLi, index);
+
+        collectionHolder.dataset.index = parseInt(index) + 1;
+    });
+
+    // Fonction pour ajouter les boutons de déplacement et la gestion des indexes
+    function enableMoveButtons() {
         collectionHolder.querySelectorAll('li').forEach((item) => {
             item.querySelector('.move-up').addEventListener('click', () => {
                 const prev = item.previousElementSibling;
@@ -80,43 +84,53 @@
                 }
             });
         });
+    }
 
-        function updateDataIndexes(container) {
-            const items = container.querySelectorAll('li');
-            items.forEach((item, index) => {
-                item.setAttribute('data-index', index);
-                updateHiddenIndex(item, index);
-            });
-        }
-        function updateHiddenIndex(item, index) {
-            let hiddenInput = item.querySelector('input[type="hidden"]');
-            if (!hiddenInput) {
-                hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = 'item_index';
-                item.appendChild(hiddenInput);
-            }
-            hiddenInput.value = index;
-        }
-        // Fonction pour ajouter un bouton de suppression
-        function addDeleteButton(item) {
-            let removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.classList.add('remove-item');
-            removeButton.innerText = 'Supprimer';
+    enableMoveButtons(); // Activer les boutons de déplacement
 
-            // Ajouter l'événement de suppression
-            removeButton.addEventListener('click', function() {
-                item.remove();
-            });
+    // Met à jour les `data-index` et les champs cachés après chaque changement
+    function updateDataIndexes(container) {
+        const items = container.querySelectorAll('li');
+        items.forEach((item, index) => {
+            item.setAttribute('data-index', index);
+            updateHiddenIndex(item, index);
+        });
+    }
 
-            // Ajouter le bouton de suppression à l'élément
-            item.appendChild(removeButton);
+    // Fonction pour mettre à jour le champ caché d'index de chaque élément
+    function updateHiddenIndex(item, index) {
+        let hiddenInput = item.querySelector('input[type="hidden"]');
+        if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'item_index';
+            item.appendChild(hiddenInput);
         }
-    });
+        hiddenInput.value = index;
+    }
+
+    // Fonction pour ajouter un bouton de suppression
+    function addDeleteButton(item) {
+        let removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.classList.add('remove-item');
+        removeButton.innerText = 'Supprimer';
+
+        // Ajouter l'événement de suppression
+        removeButton.addEventListener('click', function() {
+            item.remove();
+            updateDataIndexes(collectionHolder);
+        });
+
+        // Ajouter le bouton de suppression à l'élément
+        item.appendChild(removeButton);
+    }
+
+    // Avant la soumission du formulaire, assure que tous les index sont mis à jour
     document.querySelector('form').addEventListener('submit', () => {
-        collectionHolder.querySelectorAll('li').forEach((item, index) => {
-        item.querySelector('data-index').value = index;
+        updateDataIndexes(collectionHolder);
     });
 });
+
+
 </script>
