@@ -20,6 +20,7 @@ jobs:
           cd /var/www/html/MaximeTheneau-Portfolio-back
           git stash
           git pull
+          rm -rf migrations/*
           bin/console ma:mi
           bin/console d:m:m
           bin/console c:c

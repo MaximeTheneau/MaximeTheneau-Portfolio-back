@@ -104,6 +104,9 @@ class Posts
     #[ORM\Column(nullable: true)]
     private ?bool $isHomeImage = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $formattedDate = null;
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
@@ -414,6 +417,18 @@ class Posts
     public function setIsHomeImage(?bool $isHomeImage): static
     {
         $this->isHomeImage = $isHomeImage;
+
+        return $this;
+    }
+
+    public function getFormattedDate(): ?string
+    {
+        return $this->formattedDate;
+    }
+
+    public function setFormattedDate(string $formattedDate): static
+    {
+        $this->formattedDate = $formattedDate;
 
         return $this;
     }
