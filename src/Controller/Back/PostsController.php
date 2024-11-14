@@ -152,6 +152,7 @@ class PostsController extends AbstractController
             $post->setCreatedAt(new DateTime());
             $createdAt = $formatter->format($post->getCreatedAt());
 
+            $post->setFormattedDate('Publié le ' . $createdAt);
 
 
             // PARAGRAPH
@@ -164,7 +165,7 @@ class PostsController extends AbstractController
                 $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
                 $paragraph->setParagraph($htmlText);
-                
+
                 // SLUG
                 if (!empty($paragraph->getSubtitle())) {
                     $slugPara = $this->createSlug($paragraph->getSubtitle());
@@ -271,7 +272,16 @@ class PostsController extends AbstractController
             } else {
                 $post->setImgPost($imgPost);
             }
+            
+            // DATE
+            $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE, null, null, 'dd MMMM yyyy');
+            $post->setUpdatedAt(new DateTime());
+            $updatedDate = $formatter->format($post->getUpdatedAt());
+            $createdAt = $formatter->format($post->getCreatedAt());
 
+            $post->setFormattedDate('Publié le ' . $createdAt . '. Mise à jour le ' . $updatedDate);
+
+            $postsRepository->save($post, true);
 
             // PARAGRAPH
             $paragraphPosts = $form->get('paragraphPosts')->getData();
