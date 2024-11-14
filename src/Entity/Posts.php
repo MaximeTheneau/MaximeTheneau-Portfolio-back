@@ -105,6 +105,7 @@ class Posts
     private ?bool $isHomeImage = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['api_posts_read'])]
     private ?string $formattedDate = null;
 
     public function __construct()
