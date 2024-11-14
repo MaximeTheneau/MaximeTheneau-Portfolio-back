@@ -19,7 +19,7 @@ class ParagraphPosts
     #[Groups(['api_posts_read', 'api_posts_home'])]
     private ?string $subtitle = null;
 
-    #[ORM\Column(length: 5000, nullable: true)]
+    #[ORM\Column(length: 10000, nullable: true)]
     #[Groups(['api_posts_read', 'api_posts_home'])]
     private ?string $paragraph = null;
 
