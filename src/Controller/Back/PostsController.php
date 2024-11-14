@@ -72,7 +72,10 @@ class PostsController extends AbstractController
         $this->urlGeneratorService = $urlGeneratorService;
         $this->markdownProcessor = $markdownProcessor;
     }
-    
+    private function createSlug(string $inputString): string
+    {
+        return strtolower($this->slugger->slug($inputString)->slice(0, 50)->toString());
+    }
     #[Route('/', name: 'app_back_posts_index', methods: ['GET'])]
     public function index(PostsRepository $postsRepository, Request $request ): Response
     {
@@ -154,16 +157,29 @@ class PostsController extends AbstractController
             // PARAGRAPH
             $paragraphPosts = $form->get('paragraphPosts')->getData();
             foreach ($paragraphPosts as $paragraph) {
+                
+                // MARKDOWN TO HTML
+                $markdownText = $paragraph->getParagraph();
+
+                $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
+
+                $paragraph->setParagraph($htmlText);
+                
+                // SLUG
                 if (!empty($paragraph->getSubtitle())) {
-                    // SLUG
-                    $slugPara = $this->slugger->slug($paragraph->getSubtitle());
+                    $slugPara = $this->createSlug($paragraph->getSubtitle());
                     $slugPara = substr($slugPara, 0, 30); 
                     $paragraph->setSlug($slugPara);
-
+                    $categoryLink = $post->getCategory()->getSlug();
+                    if ($categoryLink === "Pages") {
+                        $paragraph->setLinkSubtitle('/' . $slugPara);
+                    } else {
+                        $paragraph->setLinkSubtitle('/' . $categoryLink . '/' . $slugPara);
+                    } 
                 } else {
                     $this->entityManager->remove($paragraph);
                     $this->entityManager->flush();
-                    }
+                }
 
                 //  // IMAGE PARAGRAPH
 
@@ -268,8 +284,24 @@ class PostsController extends AbstractController
                 $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
                 $paragraph->setParagraph($htmlText);
-
-                // LINK
+                
+                // SLUG
+                if (!empty($paragraph->getSubtitle())) {
+                    $slugPara = $this->createSlug($paragraph->getSubtitle());
+                    $slugPara = substr($slugPara, 0, 30); 
+                    $paragraph->setSlug($slugPara);
+                    $categoryLink = $post->getCategory()->getSlug();
+                    if ($categoryLink === "Pages") {
+                        $paragraph->setLinkSubtitle('/' . $slugPara);
+                    } else {
+                        $paragraph->setLinkSubtitle('/' . $categoryLink . '/' . $slugPara);
+                    } 
+                } else {
+                    $this->entityManager->remove($paragraph);
+                    $this->entityManager->flush();
+                }
+                
+                // // LINK
                 // $articleLink = $paragraph->getLinkPostSelect();
                 // if ($articleLink !== null) {
                     
@@ -298,16 +330,6 @@ class PostsController extends AbstractController
                 //     $paragraph->setLinkSubtitle(null);
                 // }
 
-                // // SLUG
-                // if (!empty($paragraph->getSubtitle())) {
-                //     $slugPara = $this->slugger->slug($paragraph->getSubtitle());
-                //     $slugPara = substr($slugPara, 0, 30); 
-                //     $paragraph->setSlug($slugPara);
-
-                // } else {
-                //     $this->entityManager->remove($paragraph);
-                //     $this->entityManager->flush();
-                //     }
 
                 // IMAGE PARAGRAPH
                 // if (!empty($paragraph->getImgPostParaghFile())) {

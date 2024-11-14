@@ -36,6 +36,9 @@ class ParagraphPosts
     #[ORM\Column(length: 70)]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $linkSubtitle = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,6 +112,18 @@ class ParagraphPosts
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getLinkSubtitle(): ?string
+    {
+        return $this->linkSubtitle;
+    }
+
+    public function setLinkSubtitle(string $linkSubtitle): static
+    {
+        $this->linkSubtitle = $linkSubtitle;
 
         return $this;
     }
