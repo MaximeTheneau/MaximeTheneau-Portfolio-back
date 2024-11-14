@@ -49,8 +49,7 @@
                         <li class="h-auto">
                             {{ form_row(paragraph.subtitle) }}
                             {{ form_row(paragraph.chatGptButton, {'attr': {'data-subtitle':  paragraph.subtitle.vars.value, 'data-id': paragraph.vars.id}}) }}
-                            {{ form_widget(paragraph.imgPostParagh) }}
-                            {{ form_widget(paragraph.altImg) }}
+
                             <p >Changez le descriptif de l'image</p>
                             {{ form_widget(paragraph) }}
                         </li>
