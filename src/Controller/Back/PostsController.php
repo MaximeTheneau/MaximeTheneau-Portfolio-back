@@ -165,26 +165,26 @@ class PostsController extends AbstractController
                     $this->entityManager->flush();
                     }
 
-                 // IMAGE PARAGRAPH
+                //  // IMAGE PARAGRAPH
 
-                 $imgPostParaghFile = $paragraph->getImgPostParaghFile();
+                //  $imgPostParaghFile = $paragraph->getImgPostParaghFile();
 
-                 if ($imgPostParaghFile !== null ) {
-                     $brochureFileParagraph = $paragraph->getImgPostParagh();
-                     // SLUG
-                     $slugPara = $this->slugger->slug($paragraph->getSubtitle()); // slugify
-                     $slugPara = substr($slugPara, 0, 30); // 30 max
-                     $paragraph->setImgPostParagh($slugPara);// set slug to image paragraph
-                     // Cloudinary
-                     $this->imageOptimizer->setPicture($brochureFileParagraph, $slugPara, $paragraph ); // set image paragraph
-                 } 
+                //  if ($imgPostParaghFile !== null ) {
+                //      $brochureFileParagraph = $paragraph->getImgPostParagh();
+                //      // SLUG
+                //      $slugPara = $this->slugger->slug($paragraph->getSubtitle()); // slugify
+                //      $slugPara = substr($slugPara, 0, 30); // 30 max
+                //      $paragraph->setImgPostParagh($slugPara);// set slug to image paragraph
+                //      // Cloudinary
+                //      $this->imageOptimizer->setPicture($brochureFileParagraph, $slugPara, $paragraph ); // set image paragraph
+                //  } 
  
-                 // ALT IMG PARAGRAPH
-                 if (empty($paragraph->getAltImg())) {
-                     $paragraph->setAltImg($paragraph->getSubtitle());
-                 } else {
-                     $paragraph->setAltImg($paragraph->getAltImg());
-                 }          
+                //  // ALT IMG PARAGRAPH
+                //  if (empty($paragraph->getAltImg())) {
+                //      $paragraph->setAltImg($paragraph->getSubtitle());
+                //  } else {
+                //      $paragraph->setAltImg($paragraph->getAltImg());
+                //  }          
             } 
 
 
