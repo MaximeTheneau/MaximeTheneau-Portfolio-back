@@ -34,6 +34,7 @@ class ParagraphPosts
     private ?string $altImg = null;
 
     #[ORM\Column(length: 70)]
+    #[Groups(['api_posts_read'])]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
