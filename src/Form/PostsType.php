@@ -3,16 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Posts;
-use App\Entity\ListPosts;
-use App\Entity\LinkPosts;
 use App\Entity\Category;
 use App\Entity\Subcategory;
-use App\Entity\Subtopic;
-use Doctrine\ORM\EntityRepository;
-use App\Form\SubcategoryType;
-use App\Form\SubtopicType;
 use App\Form\ListPostsType;
-use App\Form\LinkPostsType;
+use App\Form\RelatedPostType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,11 +16,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\ChoiceList\ChoiceList;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class PostsType extends AbstractType
@@ -85,7 +76,7 @@ class PostsType extends AbstractType
             ])
             ->add('contents', TextareaType::class, [
                 'label' => 'Paragraphe',
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                     'placeholder' => 'Paragraphe de l\'article* (max 5000 caractères) ',
@@ -202,6 +193,14 @@ class PostsType extends AbstractType
                     ->add('isHomeImage', CheckboxType::class, [
                         'required' => false,
                         'label' => 'Définir comme image d\'accueil',
+                    ])
+                ->add('relatedPosts', EntityType::class, [
+                        'class' => Posts::class,
+                        'required' => false,
+                        'choice_label' => 'title',
+                        'expanded' => true,
+                        'multiple' => true,
+                        'by_reference' => false,
                     ])
                     ;
 

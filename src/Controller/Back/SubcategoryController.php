@@ -42,7 +42,7 @@ class SubcategoryController extends AbstractController
 
             // Create slug 
             if(empty($subcategory->getSlug())) {
-                $slug = $this->slugger->slug($subcategory->getName());
+                $slug = strtolower($this->slugger->slug($subcategory->getName())->slice(0, 50)->toString());
                 $subcategory->setSlug($slug);
             }
 

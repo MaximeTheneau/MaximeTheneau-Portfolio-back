@@ -114,7 +114,7 @@ class PostsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // SLUG
-            $slug = $this->slugger->slug($post->getTitle());
+            $slug = $this->createSlug($post->getTitle());
             if($post->getSlug() !== "Accueil") {
                 $post->setSlug($slug);
                 $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
@@ -128,12 +128,11 @@ class PostsController extends AbstractController
                 $post->setUrl($url);
             }
 
-
             // IMAGE Principal
             $brochureFile = $form->get('imgPost')->getData();
             if (empty($brochureFile)) {
                 $post->setImgPost('Accueil');
-                $post->setAltImg('Une Taupe Chez Vous ! image de présentation');
+                $post->setAltImg('Image de présentation');
             } else {
                 $post->setImgPost($slug);
                 $this->imageOptimizer->setPicture($brochureFile, $slug, $post );
@@ -246,20 +245,20 @@ class PostsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() ) {
 
 
-            // SLUG
+            // // SLUG
             $slug = $this->slugger->slug($post->getTitle());
-            if($post->getSlug() !== "Accueil") {
-                $post->setSlug($slug);
-                $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
-                $subcategorySlug = $post->getSubcategory() ? $post->getSubcategory()->getSlug() : null;
+            // if($post->getSlug() !== "Accueil") {
+            //     $post->setSlug($slug);
+            //     $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
+            //     $subcategorySlug = $post->getSubcategory() ? $post->getSubcategory()->getSlug() : null;
             
-                $url = $this->urlGeneratorService->generatePath($slug, $categorySlug, $subcategorySlug);
-                $post->setUrl($url);
-            } else {
-                $post->setSlug('Accueil');
-                $url = '/';
-                $post->setUrl($url);
-            }
+            //     $url = $this->urlGeneratorService->generatePath($slug, $categorySlug, $subcategorySlug);
+            //     $post->setUrl($url);
+            // } else {
+            //     $post->setSlug('Accueil');
+            //     $url = '/';
+            //     $post->setUrl($url);
+            // }
             
             // IMAGE Principal
             $brochureFile = $form->get('imgPost')->getData();

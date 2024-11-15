@@ -208,17 +208,17 @@ class PostsController extends ApiController
     {
         $post = $em->getRepository(Posts::class)->findOneBy(['slug' => $slug]);
 
-        // if ($posts === null)
-        // {
-        //     // on renvoie donc une 404
-        //     return $this->json(
-        //         [
-        //             "erreur" => "Page non trouvée",
-        //             "code_error" => 404
-        //         ],
-        //         Response::HTTP_NOT_FOUND,// 404
-        //     );
-        // }
+        if ($post === null)
+        {
+            // on renvoie donc une 404
+            return $this->json(
+                [
+                    "erreur" => "Page non trouvée",
+                    "code_error" => 404
+                ],
+                Response::HTTP_NOT_FOUND,// 404
+            );
+        }
 
         return $this->json(
             $post,
@@ -227,7 +227,8 @@ class PostsController extends ApiController
             [
                 "groups" => 
                 [
-                    "api_posts_read"
+                    "api_posts_read",
+                    "api_posts_relatedPosts"
                 ]
             ]);
     }

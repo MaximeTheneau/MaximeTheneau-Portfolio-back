@@ -29,7 +29,6 @@ class Subcategory
 
     public function __construct()
     {
-        $this->articles = new ArrayCollection();
         $this->posts = new ArrayCollection();
     }
 

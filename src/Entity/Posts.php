@@ -20,7 +20,7 @@ class Posts
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_sitemap' ])]
+    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_sitemap','api_posts_relatedPosts' ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
@@ -40,7 +40,6 @@ class Posts
     private ?string $slug = null;
     
     #[ORM\Column(length: 5000, nullable: true, type: Types::STRING)]
-    #[Type(type: Types::string)]
     #[Groups(['api_posts_read', 'api_posts_browse', 'api_posts_home'])]
     private ?string $contents = null;
 
@@ -108,11 +107,26 @@ class Posts
     #[Groups(['api_posts_read'])]
     private ?string $formattedDate = null;
 
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'posts', cascade: ['persist'],)]
+    #[ORM\JoinTable(name: 'posts_relations')]
+    #[Groups(['api_posts_relatedPosts'])]
+    private Collection $relatedPosts;
+
+    /**
+     * @var Collection<int, self>
+     */
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'relatedPosts')]
+    private Collection $posts;
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
         $this->paragraphPosts = new ArrayCollection();
         $this->subtopic = new ArrayCollection();
+        $this->relatedPosts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -430,6 +444,57 @@ class Posts
     public function setFormattedDate(string $formattedDate): static
     {
         $this->formattedDate = $formattedDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getRelatedPosts(): Collection
+    {
+        return $this->relatedPosts;
+    }
+
+    public function addRelatedPost(self $relatedPost): static
+    {
+        if (!$this->relatedPosts->contains($relatedPost)) {
+            $this->relatedPosts->add($relatedPost);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedPost(self $relatedPost): static
+    {
+        $this->relatedPosts->removeElement($relatedPost);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(self $post): static
+    {
+        if (!$this->posts->contains($post)) {
+            $this->posts->add($post);
+            $post->addRelatedPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(self $post): static
+    {
+        if ($this->posts->removeElement($post)) {
+            $post->removeRelatedPost($this);
+        }
 
         return $this;
     }

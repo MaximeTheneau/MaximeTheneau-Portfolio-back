@@ -47,6 +47,7 @@
         xhr.send(formData);
       });
       function initializeTinyMCE() {
+
         tinymce.init({
             selector: 'textarea',
             plugins: ['lists', 'link', 'table', 'image'],
@@ -80,7 +81,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     initializeTinyMCE();
-    setupParagraphObserver();
     setupEventListeners();
     attachChatGptButtons();
 });
@@ -162,19 +162,43 @@ function setupAddListButton() {
 }
 
 
-function setupParagraphObserver() {
-    const paragraphContainer = document.querySelector('.paragraph');
+function setupTextareaObserver() {
+    const container = document.querySelector('.paragraph'); // Ou un autre conteneur contenant vos textareas
+
     const observer = new MutationObserver(() => {
-        tinymce.remove();
-        initializeTinyMCE();
-        attachChatGptButtons();
+        // Chaque fois qu'un nouveau textarea est ajouté, on initialise TinyMCE dessus
+        const newTextarea = container.querySelector('textarea');
+        if (newTextarea && !tinymce.get(newTextarea.id)) {
+            tinymce.init({
+                selector: `textarea#${newTextarea.id}`,
+                plugins: ['lists', 'link', 'table', 'image'],
+                toolbar: 'bold italic underline | numlist bullist | image',
+                menubar: false,
+                branding: false,
+                images_upload_url: '/uploadImg',
+                automatic_uploads: true,
+                images_upload_handler: example_image_upload_handler,
+            });
+        }
     });
 
-    if (paragraphContainer) {
-        observer.observe(paragraphContainer, { childList: true });
+    observer.observe(container, { childList: true });
+}
+
+setupTextareaObserver();
+
+document.querySelector('form').addEventListener('submit', function(event) {
+    const textarea = document.querySelector('textarea#posts_contents');
+
+    if (textarea && textarea.style.display === 'none') {
+        textarea.style.display = 'block';
     }
 
-}
+    const editor = tinymce.get(textarea.id);
+    if (editor) {
+        textarea.value = editor.getContent();
+    }
+});
 
 function attachChatGptButtons() {
     const buttons = document.querySelectorAll('.button__chatGpt');
