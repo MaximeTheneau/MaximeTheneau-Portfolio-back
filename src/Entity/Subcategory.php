@@ -17,11 +17,11 @@ class Subcategory
     private ?int $id = null;
 
     #[ORM\Column(length: 70, nullable: true)]
-    #[Groups(['api_posts_category', 'api_posts_browse', 'api_posts_desc', 'api_posts_subcategory', 'api_posts_read', 'api_posts__allSubcategory'])]
+    #[Groups(['api_posts_category', 'api_posts_read', 'api_posts_browse', 'api_posts_desc', 'api_posts_subcategory', 'api_posts_read', 'api_posts__allSubcategory'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 70, nullable: true)]
-    #[Groups(['api_posts_category', 'api_posts_browse', 'api_posts_desc', 'api_posts_subcategory', 'api_posts_read', 'api_posts__allSubcategory'])]
+    #[Groups(['api_posts_category', 'api_posts_read', 'api_posts_browse', 'api_posts_desc', 'api_posts_subcategory', 'api_posts_read', 'api_posts__allSubcategory'])]
     private ?string $slug = null;
 
     #[ORM\OneToMany(mappedBy: 'subcategory', targetEntity: Posts::class)]
