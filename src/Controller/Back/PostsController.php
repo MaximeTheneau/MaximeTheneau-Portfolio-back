@@ -246,7 +246,7 @@ class PostsController extends AbstractController
 
 
             // // SLUG
-            $slug = $post->getTitle();
+            $slug = $post->getSlug();
             // if($post->getSlug() !== "Accueil") {
             //     $post->setSlug($slug);
                 $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
