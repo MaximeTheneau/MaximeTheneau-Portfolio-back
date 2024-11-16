@@ -72,12 +72,14 @@ class PostsController extends ApiController
                 ]
             ]
         );
-    }
+        }
 
     #[Route('&subcategory={slug}', name: 'subcategory', methods: ['GET'])]
-    public function subcategory(PostsRepository $postsRepository, string $slug): JsonResponse
+    public function subcategory(EntityManagerInterface $em, string $slug): JsonResponse
     {
-        $posts = $postsRepository->findBy(['subcategory' => $slug],  ['createdAt' => 'DESC']);
+        
+        $subcategory = $em->getRepository(Subcategory::class)->findByName($slug);
+        $posts = $em->getRepository(Posts::class)->findBy(['subcategory' => $subcategory],  ['createdAt' => 'DESC']);
 
         return $this->json(
             $posts,
@@ -87,10 +89,9 @@ class PostsController extends ApiController
                 "groups" => 
                 [
                     "api_posts_subcategory"
-
                 ]
             ]
-        );
+            );
     }
 
     #[Route('&limit=3&category={name}', name: 'limit', methods: ['GET'])]
