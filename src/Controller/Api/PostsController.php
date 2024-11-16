@@ -78,7 +78,7 @@ class PostsController extends ApiController
     public function subcategory(EntityManagerInterface $em, string $slug): JsonResponse
     {
         
-        $subcategory = $em->getRepository(Subcategory::class)->findByName($slug);
+        $subcategory = $em->getRepository(Subcategory::class)->findBySlug($slug);
         $posts = $em->getRepository(Posts::class)->findBy(['subcategory' => $subcategory],  ['createdAt' => 'DESC']);
 
         return $this->json(
