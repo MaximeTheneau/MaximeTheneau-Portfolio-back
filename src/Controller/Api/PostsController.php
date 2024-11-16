@@ -75,9 +75,9 @@ class PostsController extends ApiController
     }
 
     #[Route('&subcategory={slug}', name: 'subcategory', methods: ['GET'])]
-    public function subcategory(PostsRepository $postsRepository, Subcategory $subcategory): JsonResponse
+    public function subcategory(PostsRepository $postsRepository, string $slug): JsonResponse
     {
-        $posts = $postsRepository->findBy(['subcategory' => $subcategory]);
+        $posts = $postsRepository->findBy(['subcategory' => $slug],  ['createdAt' => 'DESC']);
 
         return $this->json(
             $posts,
