@@ -249,11 +249,11 @@ class PostsController extends AbstractController
             $slug = $this->slugger->slug($post->getTitle());
             // if($post->getSlug() !== "Accueil") {
             //     $post->setSlug($slug);
-            //     $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
-            //     $subcategorySlug = $post->getSubcategory() ? $post->getSubcategory()->getSlug() : null;
+                $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
+                $subcategorySlug = $post->getSubcategory() ? $post->getSubcategory()->getSlug() : null;
             
-            //     $url = $this->urlGeneratorService->generatePath($slug, $categorySlug, $subcategorySlug);
-            //     $post->setUrl($url);
+                $url = $this->urlGeneratorService->generatePath($slug, $categorySlug, $subcategorySlug);
+                $post->setUrl($url);
             // } else {
             //     $post->setSlug('Accueil');
             //     $url = '/';
