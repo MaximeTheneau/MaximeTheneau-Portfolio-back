@@ -77,9 +77,7 @@
         initializeTinyMCE();
 
     });
-
     observer.observe(paragraphContainer, { childList: true });
-
 
 document.addEventListener('DOMContentLoaded', function () {
     initializeTinyMCE();
