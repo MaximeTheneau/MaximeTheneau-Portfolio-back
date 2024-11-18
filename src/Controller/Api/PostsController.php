@@ -93,6 +93,8 @@ class PostsController extends ApiController
             ]
             );
     }
+        
+    
 
     #[Route('&limit=3&category={name}', name: 'limit', methods: ['GET'])]
     public function limit(EntityManagerInterface $em, string $name): JsonResponse
