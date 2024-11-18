@@ -50,8 +50,9 @@
 
         tinymce.init({
             selector: 'textarea',
-            plugins: ['lists', 'link', 'table', 'image'],
-            toolbar: 'bold italic underline | numlist bullist | image',
+            plugins: ['code', 'lists', 'link', 'table', 'image', 'pre'],
+            toolbar: 'bold italic underline | numlist bullist | image | code | pre',
+            allow_unsafe_link_target: true,
             menubar: false,
             branding: false,
             images_upload_url: '/uploadImg',
