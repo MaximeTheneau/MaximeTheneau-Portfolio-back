@@ -33,11 +33,11 @@ class ParagraphPosts
     #[ORM\Column(length: 170, nullable: true)]
     private ?string $altImg = null;
 
-    #[ORM\Column(length: 70)]
+    #[ORM\Column(length: 70, nullable: true)]
     #[Groups(['api_posts_read'])]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $linkSubtitle = null;
 
     public function getId(): ?int

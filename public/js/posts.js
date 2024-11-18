@@ -74,6 +74,7 @@
     const observer = new MutationObserver(() => {
         tinymce.remove();
         initializeTinyMCE();
+
     });
 
     observer.observe(paragraphContainer, { childList: true });
@@ -83,12 +84,12 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeTinyMCE();
     setupEventListeners();
     attachChatGptButtons();
+
 });
 
 function setupEventListeners() {
     toggleDivWithButton('.button__altImg', '.add__altImg');
     toggleDivWithButton('.button__link', '.add__link');
-    setupTextareaListener();
     setupAddParagraphButton();
     setupAddListButton();
 
@@ -107,37 +108,29 @@ function toggleDivWithButton(buttonId, divId) {
     }
   }
 
-  function setupTextareaListener() {
-    const textareaContents = document.querySelector('#posts_contents');
-    if (textareaContents) {
-        textareaContents.addEventListener('input', (e) => {
-            const length = e.target.value.length;
-            const textarea = e.target;
 
-            textarea.style.background = length < 135 ? '#ff5e5e2e' : '#f5f5f5';
-            console.log(length);
-        });
-    }
-}
 attachChatGptButtons();
 
 function setupAddParagraphButton() {
     const addParagraphButton = document.querySelector('.button_paragraph');
-    attachChatGptButtons();
-
     if (addParagraphButton) {
         addParagraphButton.addEventListener('click', function() {
-            let collectionHolder = document.querySelector('.paragraph');
-            if (!collectionHolder) return; // If collectionHolder doesn't exist, exit function
+            const collectionHolder = document.querySelector('.paragraph');
+            if (!collectionHolder) return; // Si collectionHolder n'existe pas, on sort de la fonction
 
-            let index = collectionHolder.dataset.index;
+            // On initialise ou récupère l'index actuel
+            let index = parseInt(collectionHolder.dataset.index) || 0;
+
+            // On récupère le prototype de formulaire
             let newParagraph = collectionHolder.dataset.prototype.replace(/__name__/g, index);
+
+            // On crée un nouvel élément <li> et on y ajoute le paragraphe
             let newParagraphLi = document.createElement('li');
             newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
             newParagraphLi.innerHTML = newParagraph;
 
+            // On ajoute le nouveau paragraphe au conteneur
             collectionHolder.appendChild(newParagraphLi);
-            collectionHolder.dataset.index = parseInt(index) + 1;
 
         });
     }
@@ -187,18 +180,6 @@ function setupTextareaObserver() {
 
 setupTextareaObserver();
 
-document.querySelector('form').addEventListener('submit', function(event) {
-    const textarea = document.querySelector('textarea#posts_contents');
-
-    if (textarea && textarea.style.display === 'none') {
-        textarea.style.display = 'block';
-    }
-
-    const editor = tinymce.get(textarea.id);
-    if (editor) {
-        textarea.value = editor.getContent();
-    }
-});
 
 function attachChatGptButtons() {
     const buttons = document.querySelectorAll('.button__chatGpt');
@@ -261,25 +242,3 @@ function submitChatGptForm(event, subtitle, id) {
         button.disabled = false; 
     });
 }
-
-
-
-// // Add list 
-// const addTagLink = document.querySelector('');
-// const collectionHolder = document.querySelector('.');
-// const prototype = collectionHolder.dataset.prototype;
-// let index = collectionHolder.dataset.index;
-
-// addTagLink.addEventListener('click', function(e) {
-// e.preventDefault();
-// const button = document.querySelector('.tags');
-// addTagLink.textContent = 'Ajouter un element à la liste';
-// console.log(addTagLink.textContent);
-// const ul = document.querySelector('.tags');
-// ul.classList.remove('none');
-// const newForm = prototype.replace(/__name__/g, index);
-// index++;
-// const newLi = document.createElement('li');
-// newLi.innerHTML = newForm;
-// collectionHolder.appendChild(newLi);
-// });

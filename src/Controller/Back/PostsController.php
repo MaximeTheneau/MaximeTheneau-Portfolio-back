@@ -240,13 +240,11 @@ class PostsController extends AbstractController
         $formParagraph = $this->createForm(ParagraphPostsType::class, $paragraphPosts);
         $formParagraph->handleRequest($request);
 
-        $postExist = $postsRepository->find($id);
-
         if ($form->isSubmitted() && $form->isValid() ) {
-
 
             // // SLUG
             $slug = $post->getSlug();
+            
             // if($post->getSlug() !== "Accueil") {
             //     $post->setSlug($slug);
                 $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
