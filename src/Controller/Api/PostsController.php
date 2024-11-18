@@ -231,7 +231,35 @@ class PostsController extends ApiController
                 "groups" => 
                 [
                     "api_posts_read",
-                    "api_posts_relatedPosts"
+                ]
+            ]);
+    }
+
+     #[Route('/relatedPosts/{slug}', name: 'relatedPosts', methods: ['GET'])]
+    public function relatedPosts(EntityManagerInterface $em, string $slug )
+    {
+        $post = $em->getRepository(Posts::class)->findOneBy(['slug' => $slug]);
+
+        if ($post === null)
+        {
+            // on renvoie donc une 404
+            return $this->json(
+                [
+                    "erreur" => "Page non trouvée",
+                    "code_error" => 404
+                ],
+                Response::HTTP_NOT_FOUND,// 404
+            );
+        }
+
+        return $this->json(
+            $post,
+            Response::HTTP_OK,
+            [],
+            [
+                "groups" => 
+                [
+                    "api_posts_relatedPosts",
                 ]
             ]);
     }
