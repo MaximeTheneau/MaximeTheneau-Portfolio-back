@@ -12,7 +12,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
-
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 class Posts
@@ -20,11 +20,11 @@ class Posts
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_sitemap','api_posts_relatedPosts' ])]
+    #[Groups(['api_posts_browse', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_sitemap','api_posts_related' ])]
     private ?int $id = null;
 
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
-    #[Groups(['api_posts_browse', 'api_posts_relatedPosts', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory', 'api_posts_sitemap' ])]
+    #[Groups(['api_posts_browse', 'api_posts_related', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory', 'api_posts_sitemap' ])]
     private ?string $title = null;
 
     #[ORM\Column(length: 65)]
@@ -36,7 +36,7 @@ class Posts
     private ?string $metaDescription = null;
 
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
-    #[Groups(['api_posts_browse', 'api_posts_relatedPosts', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory' ])]
+    #[Groups(['api_posts_browse', 'api_posts_related', 'api_posts_read', 'api_posts_home', 'api_posts_desc', 'api_posts_category', 'api_posts_subcategory' ])]
     private ?string $slug = null;
     
     #[ORM\Column(length: 5000, nullable: true, type: Types::STRING)]
@@ -74,7 +74,7 @@ class Posts
     private Collection $subtopic;
 
     #[ORM\Column(length: 125, nullable: true)]
-    #[Groups(['api_posts_read', 'api_posts_home', 'api_posts_relatedPosts',])]
+    #[Groups(['api_posts_read', 'api_posts_home', 'api_posts_related',])]
     private ?string $altImg = null;
 
     #[ORM\Column(length: 500, nullable: true)]
@@ -97,7 +97,7 @@ class Posts
     private ?string $website = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['api_posts_read', 'api_posts_relatedPosts', 'api_posts_sitemap', 'api_posts_category', 'api_posts_home', 'api_posts_subcategory'])]
+    #[Groups(['api_posts_read', 'api_posts_related', 'api_posts_sitemap', 'api_posts_category', 'api_posts_home', 'api_posts_subcategory'])]
     private ?string $url = null;
 
     #[ORM\Column(nullable: true)]
@@ -112,7 +112,7 @@ class Posts
      */
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'posts', cascade: ['persist'],)]
     #[ORM\JoinTable(name: 'posts_relations')]
-    #[Groups(['api_posts_relatedPosts'])]
+    #[Groups(['api_posts_related'])]
     private Collection $relatedPosts;
     
     /**
