@@ -114,22 +114,22 @@ function setupAddParagraphButton() {
     const addParagraphButton = document.querySelector('.button_paragraph');
     if (addParagraphButton) {
         addParagraphButton.addEventListener('click', function() {
-            const collectionHolder = document.querySelector('.paragraph');
+            let collectionHolder = document.querySelector('.paragraph');
             if (!collectionHolder) return; // Si collectionHolder n'existe pas, on sort de la fonction
 
-            // On initialise ou récupère l'index actuel
-            let index = parseInt(collectionHolder.dataset.index) || 0;
+            let index = collectionHolder.dataset.index;
 
-            // On récupère le prototype de formulaire
-            let newParagraph = collectionHolder.dataset.prototype.replace(/__name__/g, index);
+            let newParagraph = collectionHolder.dataset.prototype;
 
             // On crée un nouvel élément <li> et on y ajoute le paragraphe
-            let newParagraphLi = document.createElement('li');
+             let newParagraphLi = document.createElement('li');
             newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
             newParagraphLi.innerHTML = newParagraph;
 
             // On ajoute le nouveau paragraphe au conteneur
             collectionHolder.appendChild(newParagraphLi);
+                
+            collectionHolder.dataset.index = parseInt(index) + 1;
 
         });
     }
