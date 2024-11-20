@@ -57,7 +57,6 @@ class CommentsController extends ApiController
         $jwtToken = $request->cookies->get('jwt');
         $tokenData = $this->JWTEncoderInterface->decode($jwtToken);
 
-
         $user = $tokenData['username'];
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $user]);
 
@@ -82,7 +81,7 @@ class CommentsController extends ApiController
             $this->entityManager->flush();
 
             $email = (new TemplatedEmail())
-            ->to($_ENV['MAILER_TO_WEBMASTER'])
+            ->to($_ENV['MAILER_TO'])
             ->from($_ENV['MAILER_TO'])
             ->subject('Nouveau Commentaire de ' . $data['user'] )
             ->htmlTemplate('emails/comments.html.twig')
@@ -200,7 +199,6 @@ class CommentsController extends ApiController
     
             $token = $this->jwtManager->create($existingUser);
             $date = time() + (3600 * 24 * 365); 
-
             $cookie = new Cookie(
                 'jwt',
                 $token,
@@ -212,6 +210,7 @@ class CommentsController extends ApiController
                 // false,  // Désactivez l'option HttpOnly pour permettre l'accès via JavaScript
                 // 'lax',
             );
+            dd($cookie);
     
             $response = new JsonResponse(['message' => true]);
             $response->headers->set('Content-Type', 'application/json');

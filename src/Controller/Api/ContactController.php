@@ -158,7 +158,7 @@ class ContactController extends ApiController
         }
     catch (\Exception $e) {
         $email = (new TemplatedEmail())
-        ->to($_ENV['MAILER_TO_WEBMASTER'])
+        ->to($_ENV['MAILER_TO'])
         ->from($_ENV['MAILER_TO'])
         ->subject('Erreur lors de l\'envoie de l\'email')
         ->htmlTemplate('emails/error.html.twig')
