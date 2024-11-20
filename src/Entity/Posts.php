@@ -121,12 +121,20 @@ class Posts
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'relatedPosts')]
     private Collection $posts;
 
+    /**
+     * @var Collection<int, Comments>
+     */
+    #[ORM\OneToMany(mappedBy: 'posts', targetEntity: Comments::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['api_posts_read'])]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
         $this->paragraphPosts = new ArrayCollection();
         $this->subtopic = new ArrayCollection();
         $this->relatedPosts = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -494,6 +502,36 @@ class Posts
     {
         if ($this->posts->removeElement($post)) {
             $post->removeRelatedPost($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comments>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setCommentsPosts($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getCommentsPosts() === $this) {
+                $comment->setCommentsPosts(null);
+            }
         }
 
         return $this;
