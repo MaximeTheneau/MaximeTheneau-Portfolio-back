@@ -48,11 +48,14 @@ class ImageOptimizer
     }
 
     public function setPicture( $brochureFile, $slug ): void
-    {   
+    {       
+        
+        $localFilePath = $this->photoDir . $slug . '.webp';
+
         // Save Local File
-        $img = $this->imagine->open($brochureFile)
+        $this->imagine->open($brochureFile)
             ->thumbnail(new Box(1280, 1080))
-            ->save($this->photoDir.$slug.'.webp', ['webp_quality' => 100]);
+            ->save($localFilePath, ['webp_quality' => 100]);
 
         // Save Cloudinary File
 
@@ -68,6 +71,11 @@ class ImageOptimizer
             "crop" => "limit",
             "secure" => true)
         );
+         if (file_exists($localFilePath)) {
+        unlink($localFilePath);
+        } else {
+            throw new \Exception("Fichier temporaire introuvable : " . $localFilePath);
+        }
     }
         
 }

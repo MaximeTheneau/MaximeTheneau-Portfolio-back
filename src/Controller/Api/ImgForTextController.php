@@ -23,6 +23,7 @@ class ImgForTextController extends ApiController
 
         if ($file) {
             $slug = uniqid(); // Générer un ID unique pour l'image
+            
             $this->imageOptimizer->setPicture($file, $slug);
 
             // Retourner l'URL de l'image téléchargée
