@@ -1,86 +1,85 @@
 
    
-    const example_image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.withCredentials = false; // Mettre true si nécessaire pour les cookies ou les sessions
-        xhr.open('POST', '/uploadImg'); // URL de votre contrôleur Symfony
+    // const example_image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
+    //     const xhr = new XMLHttpRequest();
+    //     xhr.withCredentials = false; // Mettre true si nécessaire pour les cookies ou les sessions
+    //     xhr.open('POST', '/uploadImg'); // URL de votre contrôleur Symfony
       
-        // Mise à jour de la progression du téléchargement
-        xhr.upload.onprogress = (e) => {
-          progress(e.loaded / e.total * 100);
-        };
+    //     // Mise à jour de la progression du téléchargement
+    //     xhr.upload.onprogress = (e) => {
+    //       progress(e.loaded / e.total * 100);
+    //     };
       
-        // Gestion de la réponse du serveur
-        xhr.onload = () => {
-          if (xhr.status === 403) {
-            reject({ message: 'Erreur HTTP : ' + xhr.status, remove: true });
-            return;
-          }
+    //     // Gestion de la réponse du serveur
+    //     xhr.onload = () => {
+    //       if (xhr.status === 403) {
+    //         reject({ message: 'Erreur HTTP : ' + xhr.status, remove: true });
+    //         return;
+    //       }
       
-          if (xhr.status < 200 || xhr.status >= 300) {
-            reject('Erreur HTTP : ' + xhr.status);
-            return;
-          }
+    //       if (xhr.status < 200 || xhr.status >= 300) {
+    //         reject('Erreur HTTP : ' + xhr.status);
+    //         return;
+    //       }
       
-          const json = JSON.parse(xhr.responseText);
+    //       const json = JSON.parse(xhr.responseText);
       
-          // Vérification de la réponse JSON
-          if (!json || typeof json.location !== 'string') {
-            reject('JSON invalide : ' + xhr.responseText);
-            return;
-          }
+    //       // Vérification de la réponse JSON
+    //       if (!json || typeof json.location !== 'string') {
+    //         reject('JSON invalide : ' + xhr.responseText);
+    //         return;
+    //       }
       
-          // Résoudre avec l'URL de l'image
-          resolve(json.location);
-        };
+    //       // Résoudre avec l'URL de l'image
+    //       resolve(json.location);
+    //     };
       
-        // Gestion des erreurs
-        xhr.onerror = () => {
-          reject('Le téléchargement de l\'image a échoué en raison d\'une erreur de transport XHR. Code : ' + xhr.status);
-        };
+    //     // Gestion des erreurs
+    //     xhr.onerror = () => {
+    //       reject('Le téléchargement de l\'image a échoué en raison d\'une erreur de transport XHR. Code : ' + xhr.status);
+    //     };
       
-        // Création du FormData pour le fichier image
-        const formData = new FormData();
-        formData.append('file', blobInfo.blob(), blobInfo.filename());
+    //     // Création du FormData pour le fichier image
+    //     const formData = new FormData();
+    //     formData.append('file', blobInfo.blob(), blobInfo.filename());
       
-        // Envoi des données
-        xhr.send(formData);
-      });
-      function initializeTinyMCE() {
+    //     // Envoi des données
+    //     xhr.send(formData);
+    //   });
+    //   function initializeTinyMCE() {
 
-        tinymce.init({
-            selector: 'textarea',
-            plugins: ['code', 'lists', 'link', 'table', 'image', 'codesample'],
-            toolbar: 'bold italic underline | numlist bullist | image | code | codesample',
-            allow_unsafe_link_target: true,
-            menubar: false,
-            branding: false,
-            images_upload_url: '/uploadImg',
-            automatic_uploads: true,
-            images_upload_handler: example_image_upload_handler,
-            setup: (editor) => {
-                editor.on('SetContent', (e) => {
-                    const images = editor.getDoc().querySelectorAll('img');
-                    images.forEach((img) => {
-                        img.setAttribute('loading', 'lazy');
-                    });
-                });
-            },
-        });
-    }
+    //     tinymce.init({
+    //         selector: 'textarea',
+    //         plugins: ['code', 'lists', 'link', 'table', 'image', 'codesample'],
+    //         toolbar: 'bold italic underline | numlist bullist | image | code | codesample',
+    //         allow_unsafe_link_target: true,
+    //         menubar: false,
+    //         branding: false,
+    //         images_upload_url: '/uploadImg',
+    //         automatic_uploads: true,
+    //         images_upload_handler: example_image_upload_handler,
+    //         setup: (editor) => {
+    //             editor.on('SetContent', (e) => {
+    //                 const images = editor.getDoc().querySelectorAll('img');
+    //                 images.forEach((img) => {
+    //                     img.setAttribute('loading', 'lazy');
+    //                 });
+    //             });
+    //         },
+    //     });
+    // }
 
-    initializeTinyMCE();
+    // initializeTinyMCE();
 
-    const paragraphContainer = document.querySelector('.paragraph');
-    const observer = new MutationObserver(() => {
-        tinymce.remove();
-        initializeTinyMCE();
+    // const paragraphContainer = document.querySelector('.paragraph');
+    // const observer = new MutationObserver(() => {
+    //     tinymce.remove();
+    //     initializeTinyMCE();
 
-    });
-    observer.observe(paragraphContainer, { childList: true });
+    // });
+    // observer.observe(paragraphContainer, { childList: true });
 
 document.addEventListener('DOMContentLoaded', function () {
-    initializeTinyMCE();
     setupEventListeners();
     attachChatGptButtons();
 
@@ -89,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
 function setupEventListeners() {
     toggleDivWithButton('.button__altImg', '.add__altImg');
     toggleDivWithButton('.button__link', '.add__link');
-    setupAddParagraphButton();
+    // setupAddParagraphButton();
     setupAddListButton();
 
 }
@@ -110,30 +109,30 @@ function toggleDivWithButton(buttonId, divId) {
 
 attachChatGptButtons();
 
-function setupAddParagraphButton() {
-    const addParagraphButton = document.querySelector('.button_paragraph');
-    if (addParagraphButton) {
-        addParagraphButton.addEventListener('click', function() {
-            let collectionHolder = document.querySelector('.paragraph');
-            if (!collectionHolder) return; // Si collectionHolder n'existe pas, on sort de la fonction
+// function setupAddParagraphButton() {
+//     const addParagraphButton = document.querySelector('.button_paragraph');
+//     if (addParagraphButton) {
+//         addParagraphButton.addEventListener('click', function() {
+//             let collectionHolder = document.querySelector('.paragraph');
+//             if (!collectionHolder) return; // Si collectionHolder n'existe pas, on sort de la fonction
 
-            let index = collectionHolder.dataset.index;
+//             let index = collectionHolder.dataset.index;
 
-            let newParagraph = collectionHolder.dataset.prototype;
+//             let newParagraph = collectionHolder.dataset.prototype;
 
-            // On crée un nouvel élément <li> et on y ajoute le paragraphe
-             let newParagraphLi = document.createElement('li');
-            newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
-            newParagraphLi.innerHTML = newParagraph;
+//             // On crée un nouvel élément <li> et on y ajoute le paragraphe
+//              let newParagraphLi = document.createElement('li');
+//             newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
+//             newParagraphLi.innerHTML = newParagraph;
 
-            // On ajoute le nouveau paragraphe au conteneur
-            collectionHolder.appendChild(newParagraphLi);
+//             // On ajoute le nouveau paragraphe au conteneur
+//             collectionHolder.appendChild(newParagraphLi);
                 
-            collectionHolder.dataset.index = parseInt(index) + 1;
-
-        });
-    }
-}
+//             collectionHolder.dataset.index = parseInt(index) + 1;
+//             ClassicEditor.create(textarea, editorConfig)
+//         });
+//     }
+// }
 
 function setupAddListButton() {
     const addListButton = document.querySelector('.button__list');
@@ -154,30 +153,30 @@ function setupAddListButton() {
 }
 
 
-function setupTextareaObserver() {
-    const container = document.querySelector('.paragraph'); // Ou un autre conteneur contenant vos textareas
+// function setupTextareaObserver() {
+//     const container = document.querySelector('.paragraph'); // Ou un autre conteneur contenant vos textareas
 
-    const observer = new MutationObserver(() => {
-        // Chaque fois qu'un nouveau textarea est ajouté, on initialise TinyMCE dessus
-        const newTextarea = container.querySelector('textarea');
-        if (newTextarea && !tinymce.get(newTextarea.id)) {
-            tinymce.init({
-                selector: `textarea#${newTextarea.id}`,
-                plugins: ['lists', 'link', 'table', 'image'],
-                toolbar: 'bold italic underline | numlist bullist | image',
-                menubar: false,
-                branding: false,
-                images_upload_url: '/uploadImg',
-                automatic_uploads: true,
-                images_upload_handler: example_image_upload_handler,
-            });
-        }
-    });
+//     const observer = new MutationObserver(() => {
+//         // Chaque fois qu'un nouveau textarea est ajouté, on initialise TinyMCE dessus
+//         const newTextarea = container.querySelector('textarea');
+//         if (newTextarea && !tinymce.get(newTextarea.id)) {
+//             tinymce.init({
+//                 selector: `textarea#${newTextarea.id}`,
+//                 plugins: ['lists', 'link', 'table', 'image'],
+//                 toolbar: 'bold italic underline | numlist bullist | image',
+//                 menubar: false,
+//                 branding: false,
+//                 images_upload_url: '/uploadImg',
+//                 automatic_uploads: true,
+//                 images_upload_handler: example_image_upload_handler,
+//             });
+//         }
+//     });
 
-    observer.observe(container, { childList: true });
-}
+//     observer.observe(container, { childList: true });
+// }
 
-setupTextareaObserver();
+// setupTextareaObserver();
 
 
 function attachChatGptButtons() {

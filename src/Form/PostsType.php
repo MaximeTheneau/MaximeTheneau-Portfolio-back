@@ -19,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class PostsType extends AbstractType
 {
@@ -78,7 +79,7 @@ class PostsType extends AbstractType
                 'label' => 'Paragraphe',
                 'required' => false,
                 'attr' => [
-                    'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                    'class' => ' block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                     'placeholder' => 'Paragraphe de l\'article* (max 5000 caractères) ',
                     'maxlength' => '5000',
                     'rows' => '4',

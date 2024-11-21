@@ -39,18 +39,20 @@
             {{ form_row(form.title) }}
             {{ form_row(form.metaDescription) }}
             {{ form_row(form.contents, {'attr': {'data-controller': 'tinymce'}}) }}
-              <div class="pt-4">
+              <div class="pt-4" >
                 <ul 
+                    id="paragraph-container"
                     class="paragraph"
                     data-index="{{ form.paragraphPosts|length > 0 ? form.paragraphPosts|last.vars.name + 1 : 0 }}"
                     data-prototype="{{ form_widget(form.paragraphPosts.vars.prototype)|e('html_attr') }}"
                 >   
                     {% for paragraph in form.paragraphPosts %}
-                        <li class="h-auto">
+                        <li class="h-auto ">
                             {{ form_row(paragraph.subtitle) }}
                             {{ form_row(paragraph.chatGptButton, {'attr': {'data-subtitle':  paragraph.subtitle.vars.value, 'data-id': paragraph.vars.id}}) }}
 
                             <p >Changez le descriptif de l'image</p>
+                            
                             {{ form_widget(paragraph) }}
                         </li>
                     {% endfor %}
@@ -113,6 +115,6 @@
 {{ form_end(form) }}
 
 {% block javascripts %}
-    <script src="https://cdn.tiny.cloud/1/7u35jqplbqwmajtzpxrhtp68lx5t04fxq9qtnrtwxf03z0pw/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- <script src="https://cdn.tiny.cloud/1/7u35jqplbqwmajtzpxrhtp68lx5t04fxq9qtnrtwxf03z0pw/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> -->
     <script src={{asset('js/posts.js')}}></script>
 {% endblock %}

@@ -19,7 +19,7 @@ class ImgForTextController extends ApiController
     #[Route('/uploadImg', name: 'image_upload', methods: [ 'POST'])]
     public function uploadImg(Request $request): JsonResponse
     {
-        $file = $request->files->get('file');
+        $file = $request->files->get('upload');
 
         if ($file) {
             $slug = uniqid(); // Générer un ID unique pour l'image
@@ -28,7 +28,7 @@ class ImgForTextController extends ApiController
             // Retourner l'URL de l'image téléchargée
             $url = 'https://res.cloudinary.com/' . $_ENV['CLOUD_NAME'] . '/image/upload/portfolio/' . $slug . '.webp';
 
-            return new JsonResponse(['location' => $url]);
+            return new JsonResponse(['url' => $url]);
         }
 
         return new JsonResponse(['error' => 'Aucun fichier téléchargé'], 400);
