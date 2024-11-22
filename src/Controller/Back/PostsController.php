@@ -416,4 +416,107 @@ class PostsController extends AbstractController
         
         return $this->redirectToRoute('app_back_posts_edit', ['id' => $postId], Response::HTTP_SEE_OTHER);
     }
+
+     #[Route('/gpt/save-data', name: 'save_data', methods: ['POST'])]
+    public function saveParagraph(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $paragraph = $request->request->get('paragraph-id');
+
+        if (empty($paragraph)) {
+            return new JsonResponse(['error' => 'Le paragraph est vide'], 400);
+        }
+
+        // Sauvegarde en BDD
+        $entity = $em->getRepository(ParagraphPosts::class)->findOneBy(['id' => $paragraph]);
+
+        $entity->setParagraph($request->request->get('paragraph'));
+        $em->persist($entity);
+        $em->flush();
+
+        // Retourne une réponse JSON
+        return new JsonResponse(['success' => true, 'message' => 'Données enregistrées avec succès']);
+    }
+     #[Route('/gpt/save-data/posts', name: 'save_data', methods: ['POST'])]
+    public function savePosts(Request $request, EntityManagerInterface $em): JsonResponse
+    {   
+        $data = $request->request->all();
+
+        $post = $em->getRepository(Posts::class)->findOneBy(['title' => $data['posts']['title']]);
+
+        foreach ($data['posts'] as $key => $value) {
+                    if ($key === 'category' || $key === 'subcategory') {
+            continue;  // Ignore la catégorie
+        }
+                $setter = 'set' . ucfirst($key); // On crée le nom du setter dynamiquement (par exemple 'setTitle')
+
+                if (method_exists($post, $setter)) {
+                    $post->$setter($value); // Appel du setter pour affecter la valeur à l'entité
+                }
+            }
+
+        $em->persist($post);
+        $em->flush();
+
+        // Retourne une réponse JSON
+        return new JsonResponse(['success' => true, 'message' => 'Données enregistrées avec succès']);
+    }
+
+    #[Route('/gpt/gpt-generate', name: 'gpt_generate', methods: ['POST'])]
+    public function gptGenerate(Request $request): JsonResponse
+    {
+        // Récupérer le paramètre 'subtitle' envoyé via le corps de la requête
+        $subtitle = $request->request->get('subtitle');
+
+        if (!$subtitle) {
+            return new JsonResponse(['error' => 'Rajouter une '], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        try {
+
+            // $client = HttpClient::create();
+
+            // $response = $client->request('POST', 'https://api.openai.com/v1/chat/completions', [
+            //     'headers' => [
+            //         'Authorization' => 'Bearer ' . $_ENV['CHATGPT_API_KEY'],
+            //         'Content-Type' => 'application/json',
+            //     ],
+            //     'json' => [
+            //         'model' => 'gpt-4o-mini',
+            //         'messages' => [
+            //             [
+            //                 'role' => 'user',
+            //                 'content' => [
+            //                     [
+            //                         'type' => 'text',
+            //                         'text' => "Génère un paragraphe en français basé sur ce sous-titre : \"$subtitle\"."
+            //                     ],
+            //                 ]
+            //             ]
+            //         ],
+            //         'max_tokens' => 300,
+            //         'temperature' => 0.7,
+            //     ],
+            // ]);
+
+
+            // $data = $response->toArray();
+
+            $content = "Ceci est un paragraphe généré pour tester l'API. Votre sous-titre était : \"$subtitle\".";
+
+
+            $content = $this->markdownProcessor->processMarkdown($content);
+            
+            return $this->json([
+                'message' => $content
+            ]);
+            // if (isset($data['choices']) && count($data['choices']) > 0) {
+
+            // }
+
+
+            return new JsonResponse(['content' => trim($content)]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Error communicating with GPT: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

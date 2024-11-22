@@ -1,17 +1,16 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-
-.button {
-  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-col justify-center items-center;
-}
 
 @font-face {
   font-family: 'principal';
   src: url('/assets/fonts/principal.woff2');
   font-weight: normal;
   font-style: normal;
+}
+.button {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex flex-col justify-center items-center;
 }
 
 .body{
@@ -36,8 +35,8 @@
 
 input,
 textarea,
-select,
-button {
+select
+ {
   width: 100%;
   background: rgb(245, 245, 245);
   font-size: 1.5rem;
@@ -71,8 +70,6 @@ form button.button,
 a.button{
   width: 50%;
   display: block;
-  margin: 1rem auto;
-
 }
 nav a.button.is-black,
 a.button.is-info,

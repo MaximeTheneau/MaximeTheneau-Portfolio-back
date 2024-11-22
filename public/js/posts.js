@@ -81,7 +81,6 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     setupEventListeners();
-    attachChatGptButtons();
 
 });
 
@@ -107,33 +106,6 @@ function toggleDivWithButton(buttonId, divId) {
   }
 
 
-attachChatGptButtons();
-
-// function setupAddParagraphButton() {
-//     const addParagraphButton = document.querySelector('.button_paragraph');
-//     if (addParagraphButton) {
-//         addParagraphButton.addEventListener('click', function() {
-//             let collectionHolder = document.querySelector('.paragraph');
-//             if (!collectionHolder) return; // Si collectionHolder n'existe pas, on sort de la fonction
-
-//             let index = collectionHolder.dataset.index;
-
-//             let newParagraph = collectionHolder.dataset.prototype;
-
-//             // On crée un nouvel élément <li> et on y ajoute le paragraphe
-//              let newParagraphLi = document.createElement('li');
-//             newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
-//             newParagraphLi.innerHTML = newParagraph;
-
-//             // On ajoute le nouveau paragraphe au conteneur
-//             collectionHolder.appendChild(newParagraphLi);
-                
-//             collectionHolder.dataset.index = parseInt(index) + 1;
-//             ClassicEditor.create(textarea, editorConfig)
-//         });
-//     }
-// }
-
 function setupAddListButton() {
     const addListButton = document.querySelector('.button__list');
     if (addListButton) {
@@ -153,40 +125,7 @@ function setupAddListButton() {
 }
 
 
-// function setupTextareaObserver() {
-//     const container = document.querySelector('.paragraph'); // Ou un autre conteneur contenant vos textareas
 
-//     const observer = new MutationObserver(() => {
-//         // Chaque fois qu'un nouveau textarea est ajouté, on initialise TinyMCE dessus
-//         const newTextarea = container.querySelector('textarea');
-//         if (newTextarea && !tinymce.get(newTextarea.id)) {
-//             tinymce.init({
-//                 selector: `textarea#${newTextarea.id}`,
-//                 plugins: ['lists', 'link', 'table', 'image'],
-//                 toolbar: 'bold italic underline | numlist bullist | image',
-//                 menubar: false,
-//                 branding: false,
-//                 images_upload_url: '/uploadImg',
-//                 automatic_uploads: true,
-//                 images_upload_handler: example_image_upload_handler,
-//             });
-//         }
-//     });
-
-//     observer.observe(container, { childList: true });
-// }
-
-// setupTextareaObserver();
-
-
-function attachChatGptButtons() {
-    const buttons = document.querySelectorAll('.button__chatGpt');
-
-    buttons.forEach(button => {
-        button.removeEventListener('click', handleChatGptClick); 
-        button.addEventListener('click', handleChatGptClick);
-    });
-}
 
 function handleChatGptClick(event) {
     const subtitle = this.getAttribute('data-subtitle');
@@ -194,49 +133,4 @@ function handleChatGptClick(event) {
 
     submitChatGptForm(event,  subtitle, id);
 }
-function submitChatGptForm(event, subtitle, id) {
-    event.preventDefault();
 
-    const loader = document.getElementById(id + '_loader');
-    loader.style.display = 'block';
-
-    const button = document.getElementById(id + '_chatGptButton');
-    button.disabled = true;
-
-
-    
-    fetch('/generate-content', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            subtitle: subtitle,
-        }),
-    })
-    .then(response => response.json()) 
-    .then(data => {
-        if (data.content === 'Plus de points') {
-            const solde = document.getElementById(id + '_solde');
-            solde.style.display = 'block';
-        }
-        if (data.content) {
-            const formattedContent = data.content.replace(/\\n/g, '\n'); 
-            const editorId = id + '_paragraph';
-            const editor = tinymce.get(editorId);
-
-            editor.setContent(formattedContent);
-            document.getElementById(id + '_paragraph').value = 'test';
-            console.log(document.getElementById(id + '_paragraph').value);
-        } else {
-            console.error('No content returned');
-        }
-    })
-    .catch(error => {
-        console.error('Erreur lors de la récupération de la réponse de GPT:', error);
-    })
-    .finally(() => {
-        loader.style.display = 'none';
-        button.disabled = false; 
-    });
-}

@@ -21,8 +21,9 @@ class ParagraphPostsType extends AbstractType
         $builder
         ->add('chatGptButton', ButtonType::class, [
             'attr' => [
-                'class' => 'button__chatGpt',
                 'type' => 'button',
+                'data-controller' => 'gpt',
+                'data-action' => 'gpt#handleChatGptFill',
             ],
             'label' => 'Remplir le paragraphe avec ChatGPT',
         ])

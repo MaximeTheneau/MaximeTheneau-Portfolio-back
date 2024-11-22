@@ -195,24 +195,33 @@ const editorConfig = {
 	table: {
 		contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
 	},
-	translations: [translations]
+		translations: [translations]
 
 };
 
 
 ClassicEditor.create(document.querySelector('#posts_contents'), editorConfig);
-
 document.addEventListener('DOMContentLoaded', () => {
-    const initializeEditor = (selector) => {
-        ClassicEditor.create(document.querySelector(selector), editorConfig)
+    const initializeEditor = (textarea) => {
+        if (textarea.dataset.editorInitialized === 'true') {
+            return;
+        }
+
+        ClassicEditor.create(textarea, editorConfig)
+            .then(() => {
+                textarea.dataset.editorInitialized = 'true';
+            })
+            .catch(error => {
+                console.error(`Erreur lors de l'initialisation de l'éditeur pour : ${textarea.id}`, error);
+            });
     };
 
-    // Initialiser tous les éditeurs existants
     document.querySelectorAll('.paragraph textarea').forEach(textarea => {
-        initializeEditor(`#${textarea.id}`);
+        initializeEditor(textarea);
     });
-	setupAddParagraphButton()
 });
+
+setupAddParagraphButton()
 
 function setupAddParagraphButton() {
     const addParagraphButton = document.querySelector('.button_paragraph');

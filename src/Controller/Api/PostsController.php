@@ -8,22 +8,26 @@ use App\Entity\Category;
 use App\Entity\Subcategory;
 use App\Repository\PostsRepository;
 use App\Repository\SubcategoryRepository;
-use App\Repository\CategoryRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpFoundation\Cookie;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use App\Service\MarkdownProcessor;
 
 #[Route('/api/posts', name: 'api_posts_')]
 class PostsController extends ApiController
 {
+    private $markdownProcessor;
+
+    public function __construct(
+        MarkdownProcessor $markdownProcessor,
+    ) {
+        $this->markdownProcessor = $markdownProcessor;
+    }
+	
+
     #[Route('/home', name: 'home', methods: ['GET'])]
     public function browse(PostsRepository $postsRepository, EntityManagerInterface $em ): JsonResponse
     {
@@ -294,6 +298,6 @@ class PostsController extends ApiController
         );
     }
 
-   
+
 
 }

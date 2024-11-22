@@ -1,12 +1,28 @@
 {{ form_start(form) }}
 
-        
-
     {% if post.imgPost is empty %}
             <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/Accueil.webp'}} alt="imgHeader" > 
     {% else %}
             <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/' ~ post.imgPost ~ '.webp'}} alt="imgHeader" >
     {% endif %}
+
+            <!-- Modal -->
+            <div id="gptModal" class="fixed z-10 inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+                    <h2 class="text-xl font-bold mb-4">Validation du texte</h2>
+                    <div id="gptMessage" class="text-gray-700 mb-6"></div>
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="acceptBtn" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Valider</button>
+                        <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Annuler</button>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" data-controller="gpt" data-action="gpt#handleChatGptPosts" class="button " >
+                Créer le posts avec ChatGPT
+            </button>
+            <div id="posts_loader" style="display: none;">Chargement...</div>
+
             <ul class="pb-4">
                 <li class="flex text-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -38,7 +54,7 @@
             {{ form_row(form.heading) }}
             {{ form_row(form.title) }}
             {{ form_row(form.metaDescription) }}
-            {{ form_row(form.contents, {'attr': {'data-controller': 'tinymce'}}) }}
+            {{ form_row(form.contents) }}
               <div class="pt-4" >
                 <ul 
                     id="paragraph-container"
@@ -49,10 +65,15 @@
                     {% for paragraph in form.paragraphPosts %}
                         <li class="h-auto ">
                             {{ form_row(paragraph.subtitle) }}
-                            {{ form_row(paragraph.chatGptButton, {'attr': {'data-subtitle':  paragraph.subtitle.vars.value, 'data-id': paragraph.vars.id}}) }}
+                            {{ form_row(paragraph.chatGptButton, {'attr': 
+                                { 
+                                    'class': 'button ',
+                                    'data-subtitle':  paragraph.subtitle.vars.value,
+                                    'data-id': paragraph.vars.id,
+                                    'data-paragraph-id': paragraph.vars.value.id
+                                }}) }}
+                            <div id="{{paragraph.vars.id}}_loader" style="display: none;">Chargement...</div>
 
-                            <p >Changez le descriptif de l'image</p>
-                            
                             {{ form_widget(paragraph) }}
                         </li>
                     {% endfor %}
