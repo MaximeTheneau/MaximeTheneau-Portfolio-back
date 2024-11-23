@@ -183,7 +183,6 @@ const editorConfig = {
 	simpleUpload: {
 		uploadUrl: "/uploadImg"
 	},
-
 	list: {
 		properties: {
 			styles: true,

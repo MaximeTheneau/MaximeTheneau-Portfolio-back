@@ -210,7 +210,6 @@ class CommentsController extends ApiController
                 // false,  // Désactivez l'option HttpOnly pour permettre l'accès via JavaScript
                 // 'lax',
             );
-            dd($cookie);
     
             $response = new JsonResponse(['message' => true]);
             $response->headers->set('Content-Type', 'application/json');
