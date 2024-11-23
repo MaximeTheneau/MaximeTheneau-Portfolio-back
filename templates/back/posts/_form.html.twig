@@ -5,7 +5,20 @@
     {% else %}
             <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/' ~ post.imgPost ~ '.webp'}} alt="imgHeader" >
     {% endif %}
-
+            <!-- Loader -->
+            <div id="loader" class="fixed z-10 inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
+                <div class="bg-white rounded-lg shadow-lg w-96 p-6 text-center">
+                    <!-- Spinner -->
+                    <div class="flex justify-center mb-4">
+                        <svg class="animate-spin h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 1116 0A8 8 0 014 12z"></path>
+                        </svg>
+                    </div>
+                    <!-- Message -->
+                    <p class="text-lg font-semibold text-gray-800">Attendre le résultat de ChatGPT...</p>
+                </div>
+            </div>
             <!-- Modal -->
             <div id="gptModal" class="fixed z-10 inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">
                 <div class="bg-white rounded-lg shadow-lg w-96 p-6">
@@ -21,7 +34,7 @@
             <button type="button" data-controller="gpt" data-action="gpt#handleChatGptPosts" class="button " >
                 Créer le posts avec ChatGPT
             </button>
-            <div id="posts_loader" style="display: none;">Chargement...</div>
+            
 
             <ul class="pb-4">
                 <li class="flex text-lg">

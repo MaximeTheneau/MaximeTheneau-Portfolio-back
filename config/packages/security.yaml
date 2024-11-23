@@ -38,7 +38,7 @@ security:
         - { path: ^/api/*, roles: PUBLIC_ACCESS}
 
         - { path: ^/login, roles: PUBLIC_ACCESS}
-
+        - { path: ^/posts/gpt/gpt-generate-posts, roles: PUBLIC_ACCESS}
         - { path: ^/back/(.*)/(new|edit), roles: [ROLE_ADMIN] }
         - { path: ^/back/(.*)/\d+$, roles: [ROLE_ADMIN] , methods: [POST]}
         - { path: ^/, roles: ROLE_MANAGER }

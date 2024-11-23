@@ -461,8 +461,8 @@ class PostsController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'Données enregistrées avec succès']);
     }
 
-    #[Route('/gpt/gpt-generate', name: 'gpt_generate', methods: ['POST'])]
-    public function gptGenerate(Request $request): JsonResponse
+    #[Route('/gpt/gpt-generate-paragraph', name: 'gpt_generate_paragraph', methods: ['POST'])]
+    public function gptGenerateParagraph(Request $request): JsonResponse
     {
         // Récupérer le paramètre 'subtitle' envoyé via le corps de la requête
         $subtitle = $request->request->get('subtitle');
@@ -518,5 +518,184 @@ class PostsController extends AbstractController
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Error communicating with GPT: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    #[Route('/gpt/gpt-generate-posts', name: 'gpt_generate', methods: ['POST'])]
+    public function gptGeneratePosts(Request $request, PostsRepository $postsRepository): JsonResponse
+    {
+        // Récupérer le paramètre 'subtitle' envoyé via le corps de la requête
+        $subtitle = $request->request->get('subtitle');
+        
+        if (!$subtitle) {
+            return new JsonResponse(['error' => 'Rajouter un Titre '], JsonResponse::HTTP_BAD_REQUEST);
+        }
+        
+        $post = $this->entityManager->getRepository(Posts::class)->findOneBy(['heading' => $subtitle]);
+        
+        
+        // try {
+
+            $client = HttpClient::create();
+
+            $content = $content = "Rédige un article structuré au format JSON suivant les spécifications ci-dessous :
+
+            - **title** : Un titre concis et captivant (max 60 caractères), incluant des mots-clés pertinents pour le sujet.
+            - **heading** : Un en-tête décrivant brièvement le sujet de l'article (max 60 caractères).
+            - **metaDescription** : Une description SEO optimisée pour les moteurs de recherche (max 135 caractères).
+            - **contents** : Une introduction claire et engageante qui présente le sujet de l'article.
+            - **paragraphPosts** : Une liste de sections, chacune incluant :
+            - **subtitle** : Un sous-titre accrocheur et informatif.
+            - **paragraph** : Un paragraphe détaillant le contenu sous le sous-titre.
+
+            Le sujet de l'article est : \"$subtitle\". Respecte les limites de caractères et veille à ce que chaque champ soit bien structuré et adapté à une audience générale. 
+
+            Génère le contenu sous le format JSON strict suivant :
+
+            ```json
+            {
+            \"title\": \"\",
+            \"heading\": \"\",
+            \"metaDescription\": \"\",
+            \"contents\": \"\",
+            \"paragraphPosts\": [
+                {
+                \"subtitle\": \"\",
+                \"paragraph\": \"\"
+                },
+                {
+                \"subtitle\": \"\",
+                \"paragraph\": \"\"
+                }
+            ]
+            }";
+
+            $response = $client->request('POST', 'https://api.openai.com/v1/chat/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $_ENV['CHATGPT_API_KEY'],
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'gpt-4o-mini',
+                    'messages' => [
+                        [
+                            'role' => 'user',
+                            'content' => [
+                                [
+                                    'type' => 'text',
+                                    'text' => $content
+                                ],
+                            ]
+                        ]
+                    ],
+                    'max_tokens' => 1000,
+                    'temperature' => 0.7,
+                ],
+            ]);
+
+            $data = $response->toArray();
+            
+            $responseJson = $data['choices'][0]['message']['content'];
+            preg_match('/```json\n(.*?)\n```/s', $responseJson, $matches);
+            $jsonContent = $matches[1]; 
+
+
+            // $jsonContent = '{
+            //     "title": "Comprendre",
+            //     "heading": "Explorezqssqsq les nuances de l\'Accusantium en droit",
+            //     "metaDescription": "Découvrez l\'Accusantium, ses enjeux et implications en droit.",
+            //     "contents": "L\'Accusantium est un concept juridique complexe qui touche à des enjeux cruciaux. Cet article explore ses implications et comment il influence les décisions judiciaires.",
+            //     "paragraphPosts": [
+            //         {
+            //             "subtitle": "Définitiffgonsqssq de l\'Accusantium",
+            //             "paragraph": "L\'Accusantium se réfère à un ensemble de circonstances dans lesquelles une accusation est formulée. Il est essentiel de comprendre cette notion pour saisir les subtilités du droit pénal et les responsabilités qui en découlent."
+            //         },
+            //         {
+            //             "subtitle": "Conséquencefgfgsqsqsqs Juridiques",
+            //             "paragraph": "Les conséquences de l\'Accusantium peuvent être lourdes, tant pour l\'accusé que pour la société. En effet, une accusation mal fondée peut entraîner des répercussions graves, d\'où l\'importance d\'une compréhension approfondie de ce concept."
+            //         }
+            //     ]
+            // }';
+            $response = json_decode($jsonContent, true);
+
+
+            if(!$post) {
+                $post = new Posts();
+                $post->setTitle($response['title']);
+                $slug = $this->createSlug($subtitle);
+            }
+            $slug = $post->getSlug();
+            
+            if($post->getSlug() !== "Accueil") {
+                $post->setSlug($slug);
+                $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
+                $subcategorySlug = $post->getSubcategory() ? $post->getSubcategory()->getSlug() : null;
+            
+                $url = $this->urlGeneratorService->generatePath($slug, $categorySlug, $subcategorySlug);
+                $post->setUrl($url);
+            } 
+
+
+            $categorySlug = $post->getCategory() ? $post->getCategory()->getSlug() : null;
+            $subcategorySlug = $post->getSubcategory() ? $post->getSubcategory()->getSlug() : null;
+            $url = $this->urlGeneratorService->generatePath($slug, $categorySlug, $subcategorySlug);
+            $post->setUrl($url);
+            $post->setHeading($response['heading']);
+            $post->setContents($response['contents']);
+            $post->setMetaDescription($response['metaDescription']);
+
+            
+            // DATE
+            $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE, null, null, 'dd MMMM yyyy');
+            $post->setUpdatedAt(new DateTime());
+            $updatedDate = $formatter->format($post->getUpdatedAt());
+            $createdAt = $formatter->format($post->getCreatedAt());
+
+            $post->setFormattedDate('Publié le ' . $createdAt . '. Mise à jour le ' . $updatedDate);
+            
+            foreach ($response['paragraphPosts'] as $paragraph) {
+                $subtitle = $paragraph['subtitle'];
+                $markdownText = $paragraph['paragraph'];
+                
+                $existingParagraph = $this->entityManager->getRepository(ParagraphPosts::class)->findOneBy(['subtitle' => $subtitle]);
+
+                if (!$existingParagraph) {
+                    $existingParagraph = new ParagraphPosts();
+                    $post->addParagraphPost($existingParagraph);  // Ajouter le nouveau paragraphe
+                } 
+
+                $existingParagraph->setSubtitle($subtitle);
+
+                // MARKDOWN TO HTML
+                $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
+                $existingParagraph->setParagraph($htmlText);
+                // SLUG
+                if (!empty($existingParagraph->getSubtitle())) {
+                    $slugPara = $this->createSlug($subtitle);
+                    $slugPara = substr($slugPara, 0, 30); 
+                    $existingParagraph->setSlug($slugPara);
+                    $categoryLink = $post->getCategory()->getSlug();
+                    if ($categoryLink === "Pages") {
+                        $existingParagraph->setLinkSubtitle('/' . $slugPara);
+                    } else {
+                        $existingParagraph->setLinkSubtitle('/' . $categoryLink . '/' . $slugPara);
+                } 
+                
+                $this->entityManager->persist($existingParagraph);
+                } 
+                    
+                }
+                $this->entityManager->persist($post);
+                // Persister l'entité ParagraphPosts
+                // $this->entityManager->persist($post);
+                $this->entityManager->flush();
+
+
+            return $this->json([
+                'message' => true
+            ]);
+
+        // } catch (\Exception $e) {
+        //     return new JsonResponse(['error' => 'Error communicating with GPT: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        // }
     }
 }

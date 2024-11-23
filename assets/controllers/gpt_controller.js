@@ -16,12 +16,13 @@ export default class extends Controller {
         const id =  button.dataset.id;
         console.log(` Subtitle: ${subtitle}, Paragraph ID: ${paragraphId}`);
 
-        const loader = document.getElementById(id + '_loader');
-        loader.style.display = 'block';
+        const loader = document.getElementById('loader');
+        loader.classList.remove('hidden');
+
 
         button.disabled = true;
         
-        fetch('/api/posts/gpt-generate', {
+        fetch('/posts/gpt/gpt-generate-paragraph', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -32,6 +33,8 @@ export default class extends Controller {
         })
         .then(response => response.json()) 
         .then(data => {
+            loader.classList.add('hidden');
+
             const modal = document.getElementById('gptModal');
             const gptMessage = document.getElementById('gptMessage');
             const acceptBtn = document.getElementById('acceptBtn');
@@ -43,9 +46,9 @@ export default class extends Controller {
             modal.classList.remove('hidden');
             
             acceptBtn.onclick = () => {
+
                 const textarea = document.querySelector(`#${paragraphId} .ck-editor__editable_inline`);
                 const domEditableElement = document.querySelector( '.ck-editor__editable_inline '   );
-                console.log(button.dataset.paragraphId)
                 const editorInstance = textarea.ckeditorInstance;
                 editorInstance.setData(data.message);
 
@@ -71,7 +74,6 @@ export default class extends Controller {
             console.error('Erreur lors de la récupération de la réponse de GPT:', error);
         })
         .finally(() => {
-            loader.style.display = 'none';
             button.disabled = false; 
         });
     }
@@ -79,83 +81,66 @@ export default class extends Controller {
     async handleChatGptPosts(event) {
         event.preventDefault();
 
-        const form = document.querySelector('form');
-
-        const formData = new FormData(form);
-
-        // try {
-        //     const response = await fetch('/posts/gpt/save-data/posts', {
-        //         method: 'POST',
-        //         body: formData
-        //     });
-
-        //     if (response.ok) {
-        //         const result = await response.json();
-        //         console.log('Données enregistrées avec succès:', result);
-        //     } else {
-        //         console.error('Erreur lors de l\'enregistrement:', response.statusText);
-        //     }
-        //     } catch (error) {
-        //     console.error('Erreur réseau:', error);
-        //     }
+        
         const button = event.currentTarget;
         const subtitle = document.getElementById('posts_heading');
 
-        const id =  button.dataset.id;
-
-        const loader = document.getElementById('posts_loader');
-        loader.style.display = 'block';
+        const loader = document.getElementById('loader');
+        loader.classList.remove('hidden');
 
         button.disabled = true;
         
-        fetch('/posts/gpt/gpt-generate', {
+        fetch('/posts/gpt/gpt-generate-posts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({
-                subtitle: subtitle,
+                subtitle: subtitle.value,
             }),
         })
         .then(response => response.json()) 
         .then(data => {
-            const modal = document.getElementById('gptModal');
-            const gptMessage = document.getElementById('gptMessage');
-            const acceptBtn = document.getElementById('acceptBtn');
-            const cancelBtn = document.getElementById('cancelBtn');            
+            loader.classList.add('hidden');
+            if (data.message === true) {
+            loader.style.display = 'none';
+                window.location.href =  window.location.href
+            }
+            // const modal = document.getElementById('gptModal');
+            // const gptMessage = document.getElementById('gptMessage');
+            // const acceptBtn = document.getElementById('acceptBtn');
+            // const cancelBtn = document.getElementById('cancelBtn');            
             
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = data.message;
-            gptMessage.textContent = tempDiv.textContent;
-            modal.classList.remove('hidden');
+            // const tempDiv = document.createElement('div');
+            // tempDiv.innerHTML = data.message;
+            // gptMessage.textContent = tempDiv.textContent;
+            // modal.classList.remove('hidden');
             
-            acceptBtn.onclick = () => {
-                // const textarea = document.querySelector(`#${paragraphId} .ck-editor__editable_inline`);
-                const domEditableElement = document.querySelector( '.ck-editor__editable_inline '   );
-                // console.log(button.dataset.paragraphId)
-                // const editorInstance = textarea.ckeditorInstance;
-                // editorInstance.setData(data.message);
+            // acceptBtn.onclick = () => {
+            //     const textarea = document.querySelector(`#posts_contents .ck-editor__editable_inline`);
+            //     const domEditableElement = document.querySelector( '.ck-editor__editable_inline '   );
+            //     const editorInstance = textarea.ckeditorInstance;
+            //     editorInstance.setData(data.message);
 
-                fetch('/posts/gpt/save-data/posts', {
-                    method: 'POST',
-                    headers: {
-                        'enctype': 'multipart/form-data',
-                    },
-                    body: formData,
-                });
+            //     fetch('/posts/gpt/save-data/posts', {
+            //         method: 'POST',
+            //         headers: {
+            //             'enctype': 'multipart/form-data',
+            //         },
+            //         body: formData,
+            //     });
                 
-                modal.classList.add('hidden'); 
-            };
+            //     modal.classList.add('hidden'); 
+            // };
 
-            cancelBtn.onclick = () => {
-                modal.classList.add('hidden'); 
-            };
+            // cancelBtn.onclick = () => {
+            //     modal.classList.add('hidden'); 
+            // };
         })
         .catch(error => {
             console.error('Erreur lors de la récupération de la réponse de GPT:', error);
         })
         .finally(() => {
-            loader.style.display = 'none';
             button.disabled = false; 
         });
     }
