@@ -587,7 +587,7 @@ class PostsController extends AbstractController
                             ]
                         ]
                     ],
-                    'max_tokens' => 1000,
+                    'max_tokens' => 2500,
                     'temperature' => 0.7,
                 ],
             ]);

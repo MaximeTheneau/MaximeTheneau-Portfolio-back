@@ -21,6 +21,7 @@ class ParagraphPostsType extends AbstractType
         $builder
         ->add('chatGptButton', ButtonType::class, [
             'attr' => [
+                'class' => 'button my-4 ',
                 'type' => 'button',
                 'data-controller' => 'gpt',
                 'data-action' => 'gpt#handleChatGptFill',
@@ -58,7 +59,7 @@ class ParagraphPostsType extends AbstractType
         //         ]
         //     ])
         ->add('subtitle', TextType::class, [
-            'label' => 'Sous-titre',
+            'label' => 'Titre intermédiaire pour organiser le contenu',
             'required' => true,
             'attr' => [
                 'class' => 'block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
@@ -67,9 +68,9 @@ class ParagraphPostsType extends AbstractType
                 ]
                 ])
             ->add('paragraph', TextareaType::class, [
-                'label' => 'Paragraphe',
+                'label' => 'Contenu du paragraphe (texte de l\'article)',
                 'attr' => [
-                    'class' => 'ckeditor block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                    'class' => 'py-4 ckeditor block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                     'placeholder' => 'Paragraphe de l\'article (max 5000 caractères)',
                     'maxlength' => '5000',
                     'rows' => '4',

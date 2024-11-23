@@ -45,7 +45,7 @@ class PostsType extends AbstractType
             ]
                 )
             ->add('heading', TextType::class, [
-                    'label' => 'Titre de l\'article',
+                    'label' => 'Titre qui apparaîtra sur Google (obligatoire)',
                     'required' => true,
                     'attr' => [
                         'class' => 'block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
@@ -56,7 +56,7 @@ class PostsType extends AbstractType
                         ]
                 ])
             ->add('title', TextType::class, [
-                'label' => 'Titre',
+                'label' => 'Titre affiché en haut de l\'article ',
                 'required' => true,
                 'attr' => [
                     'class' => 'block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
@@ -66,7 +66,7 @@ class PostsType extends AbstractType
                     ]
             ])
             ->add('metaDescription', TextType::class, [
-                'label' => 'Meta description',
+                'label' => 'Résumé de l\'article affiché sur Google (obligatoire)',
                 'required' => true,
                 'attr' => [
                     'class' => 'block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
@@ -76,22 +76,22 @@ class PostsType extends AbstractType
                     ]
             ])
             ->add('contents', TextareaType::class, [
-                'label' => 'Paragraphe',
+                'label' => 'Texte d\'introduction visible en haut de l\'article (obligatoire)',
                 'required' => false,
                 'attr' => [
-                    'class' => ' block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                    'class' => ' block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                     'placeholder' => 'Paragraphe de l\'article* (max 5000 caractères) ',
                     'maxlength' => '5000',
                     'rows' => '4',
                     ]
             ])
             ->add('imgPost', FileType::class, [
-                'label' => 'Image*',
+                'label' => 'Image',
                 'required' => false,
                 'data_class' => null,
                 'mapped' => true,
                 'attr' => [
-                    'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+                    'class' => 'block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
                     'id' => 'image',
                 ],
                 'constraints' => [
@@ -107,32 +107,32 @@ class PostsType extends AbstractType
                     ])
                 ],
             ],)
-            ->add('video', FileType::class, [
-                'label' => 'Vidéo',
-                'required' => false,
-                'data_class' => null,
-                'mapped' => true,
-                'attr' => [
-                    'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
-                    'id' => 'image',
-                ],
-                'constraints' => [
-                    new File([
-                        'mimeTypes' => [
-                            'video/mp4',
-                            'video/ogg',
-                            'video/webm',
-                        ],
-                        'maxSize' => '10M',
-                        'mimeTypesMessage' => 'Veuillez uploader une vidéo valide(ogg, mp4, webm)', 
-                    ])
-                ],
-            ],)
+            // ->add('video', FileType::class, [
+            //     'label' => 'Vidéo',
+            //     'required' => false,
+            //     'data_class' => null,
+            //     'mapped' => true,
+            //     'attr' => [
+            //         'class' => 'block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500',
+            //         'id' => 'image',
+            //     ],
+            //     'constraints' => [
+            //         new File([
+            //             'mimeTypes' => [
+            //                 'video/mp4',
+            //                 'video/ogg',
+            //                 'video/webm',
+            //             ],
+            //             'maxSize' => '10M',
+            //             'mimeTypesMessage' => 'Veuillez uploader une vidéo valide(ogg, mp4, webm)', 
+            //         ])
+            //     ],
+            // ],)
             ->add('altImg', TextType::class, [
-                'label' => false,
+                'label' => 'Description de l\'image principale de l\'article (obligatoire)',
                 'required' => false,
                 'attr' => [
-                    'class' => ' block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark',
+                    'class' => ' block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark',
                     'placeholder' => 'Texte alternatif de l\'image (max 165 caractères)',
                     'maxlength' => '165',
                 ]
@@ -150,7 +150,7 @@ class PostsType extends AbstractType
                 'label' => 'Lien',
                 'required' => false,
                 'attr' => [
-                    'class' => 'add__link block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
+                    'class' => 'add__link block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
                     'placeholder' => 'ex: https://www.exemple.fr',
                     'maxlength' => '500',
                 ]
@@ -159,7 +159,7 @@ class PostsType extends AbstractType
                     'label' => 'Texte du lien',
                     'required' => false,
                     'attr' => [
-                        'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
+                        'class' => 'block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
                         'placeholder' => 'max 255 caractères',
                         'maxlength' => '255',
                     ]
@@ -177,7 +177,7 @@ class PostsType extends AbstractType
                     'label' => false,
                     'required' => false,
                     'attr' => [
-                        'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
+                        'class' => 'block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
                         'placeholder' => 'ex: https://www.exemple.fr',
                         'maxlength' => '500',
                     ]
@@ -186,7 +186,7 @@ class PostsType extends AbstractType
                     'label' => false,
                     'required' => false,
                     'attr' => [
-                        'class' => 'block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
+                        'class' => 'block p-2.5 w-full  text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 list-input',
                         'placeholder' => 'ex: https://www.exemple.fr',
                         'maxlength' => '500',
                     ]
