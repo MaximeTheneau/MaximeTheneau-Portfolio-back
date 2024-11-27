@@ -69,6 +69,7 @@
             {{ form_row(form.metaDescription) }}
             {{ form_row(form.contents) }}
             <hr>
+
                 <ul 
                     id="paragraph-container"
                     class="paragraph"
@@ -87,7 +88,7 @@
                                 }}) }}
                             <div id="{{paragraph.vars.id}}_loader" style="display: none;">Chargement...</div>
 
-                            {{ form_widget(paragraph) }}
+                            {{ form_row(paragraph) }}
             <hr>
 
                         </li>
@@ -102,7 +103,7 @@
 
             <ul 
                 class="list"
-                data-index="{{ form.listPosts|length > 0 ? form.listPosts|last.vars.name + 0 : 0 }}"
+                data-index="{{ form.listPosts|length > 0 ? form.listPosts|last.vars.name + 1 : 0 }}"
                 data-prototype="{{ form_widget(form.listPosts.vars.prototype)|e('html_attr') }}"
             >   
                 {% for tag in form.listPosts %}

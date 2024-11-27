@@ -228,15 +228,14 @@ function setupAddParagraphButton() {
         addParagraphButton.addEventListener('click', function() {
             let collectionHolder = document.querySelector('.paragraph');
             if (!collectionHolder) return; // Si collectionHolder n'existe pas, on sort de la fonction
-
-            let index = collectionHolder.dataset.index;
-
-            let newParagraph = collectionHolder.dataset.prototype;
-
+			
+            const index = collectionHolder.dataset.index;
+            let newParagraphHtml = collectionHolder.dataset.prototype.replace(/__name__/g, index);
+			console.log(newParagraphHtml);
             // On crée un nouvel élément <li> et on y ajoute le paragraphe
              let newParagraphLi = document.createElement('li');
             newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
-            newParagraphLi.innerHTML = newParagraph;
+            newParagraphLi.innerHTML = newParagraphHtml;
 
             // On ajoute le nouveau paragraphe au conteneur
             collectionHolder.appendChild(newParagraphLi);
