@@ -43,6 +43,7 @@ select
   margin: 0.1rem 0;
   padding: .5rem;
   font-family: 'principal';
+
   &::placeholder {
     color: rgb(31, 30, 30);
   }
@@ -111,6 +112,6 @@ hr{
 }
 
 .ck-editor__editable {
-    min-height: 300px; 
-    height: auto; 
+    min-height: 250px;
+    height: auto;
 }

@@ -417,7 +417,7 @@ class PostsController extends AbstractController
         return $this->redirectToRoute('app_back_posts_edit', ['id' => $postId], Response::HTTP_SEE_OTHER);
     }
 
-     #[Route('/gpt/save-data', name: 'save_data', methods: ['POST'])]
+    #[Route('/gpt/save-data', name: 'save_data', methods: ['POST'])]
     public function saveParagraph(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $paragraph = $request->request->get('paragraph-id');

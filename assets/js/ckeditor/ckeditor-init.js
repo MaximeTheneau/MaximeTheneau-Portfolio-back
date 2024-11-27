@@ -43,6 +43,7 @@ import {
 
 import translations from './translations/fr.js';
 const editorConfig = {
+
 	toolbar: {
 		items: [
 			'undo',
