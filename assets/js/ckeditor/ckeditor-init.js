@@ -248,4 +248,27 @@ function setupAddParagraphButton() {
     }
 }
 
+function setupRemoveParagraphButtons() {
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('remove-paragraph-btn')) {
+            const paragraphLi = event.target.closest('li'); // Trouve le <li> parent du bouton
+            if (paragraphLi) {
+                paragraphLi.remove(); // Supprime l'élément <li>
+            }
 
+            // Optionnel : Réinitialisez les indices si nécessaire
+            const collectionHolder = document.querySelector('.paragraph');
+            if (collectionHolder) {
+                const items = collectionHolder.querySelectorAll('li');
+                items.forEach((item, index) => {
+                    item.setAttribute('id', `paragraph-${index}`);
+                });
+
+                // Met à jour l'index global
+                collectionHolder.dataset.index = items.length;
+            }
+        }
+    });
+}
+
+setupRemoveParagraphButtons();
