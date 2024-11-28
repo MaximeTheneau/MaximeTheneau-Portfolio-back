@@ -37,6 +37,7 @@ use \IntlDateFormatter;
 use App\Service\MarkdownProcessor;
 use App\Service\UrlGeneratorService;
 use App\Message\UpdateNextAppMessage;
+use DOMDocument;
 use Symfony\Component\String\UnicodeString;
 
 #[Route('/posts')]
@@ -270,6 +271,25 @@ class PostsController extends AbstractController
                 $post->setImgPost($imgPost);
             }
             
+
+            // MARKDOWN TO HTML
+            $markdownText = $post->getContents();
+
+            $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
+
+            $dom = new DOMDocument();
+            @$dom->loadHTML($htmlText, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+            $images = $dom->getElementsByTagName('img');
+            
+            /** @var \DOMElement $image */
+            foreach ($images as $image) {
+                $image->setAttribute('loading', 'lazy');
+            }
+
+            $htmlTextWithLazyLoading = $dom->saveHTML();
+
+            $post->setContents($htmlTextWithLazyLoading);    
             // DATE
             $formatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::FULL, IntlDateFormatter::NONE, null, null, 'dd MMMM yyyy');
             $post->setUpdatedAt(new DateTime());
@@ -290,7 +310,19 @@ class PostsController extends AbstractController
 
                 $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
-                $paragraph->setParagraph($htmlText);
+                $dom = new DOMDocument();
+                @$dom->loadHTML($htmlText, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+                $images = $dom->getElementsByTagName('img');
+                
+                /** @var \DOMElement $image */
+                foreach ($images as $image) {
+                    $image->setAttribute('loading', 'lazy');
+                }
+
+                $htmlTextWithLazyLoading = $dom->saveHTML();
+
+                $paragraph->setParagraph($htmlTextWithLazyLoading);                
                 
                 // SLUG
                 if (!empty($paragraph->getSubtitle())) {
