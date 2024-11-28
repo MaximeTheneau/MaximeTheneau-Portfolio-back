@@ -49,7 +49,42 @@ class ImageOptimizer
 
     public function setPicture( $brochureFile, $slug ): void
     {       
-        
+
+
+
+    
+
+        $temporaryPath = $this->photoDir . $slug . '.' . $brochureFile->getClientOriginalExtension();
+
+        $brochureFile->move($this->photoDir, $slug . '.' . $brochureFile->getClientOriginalExtension());
+
+        $mimeType = mime_content_type($temporaryPath);
+
+        // Si le fichier est un GIF, le télécharger directement sans conversion
+        if ($mimeType === 'image/gif') {
+            // Upload directement sur Cloudinary
+            $this->uploadApi->upload($temporaryPath, array(
+                 "public_id" => $slug,
+                "folder" => "portfolio",
+                "overwrite" => true,
+                "resource_type" => "auto",
+                "quality" => "auto",
+                "fetch_format" => "gif",
+                "width" => 1280,
+                "height" => 1080,
+                "crop" => "limit",
+                "secure" => true)
+            );
+            
+            if (file_exists($temporaryPath)) {
+            unlink($temporaryPath);
+            } else {
+                throw new \Exception("Fichier temporaire introuvable : " . $temporaryPath);
+            }
+
+            return; 
+        }
+
         $localFilePath = $this->photoDir . $slug . '.webp';
 
         // Save Local File
