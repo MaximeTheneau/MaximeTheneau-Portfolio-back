@@ -311,7 +311,7 @@ class PostsController extends AbstractController
                 $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
                 $dom = new DOMDocument();
-                @$dom->loadHTML($htmlText, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                @$dom->loadHTML('<?xml encoding="UTF-8">' . $htmlText, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
                 $images = $dom->getElementsByTagName('img');
                 
