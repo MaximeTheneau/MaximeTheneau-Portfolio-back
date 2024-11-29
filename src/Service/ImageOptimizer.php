@@ -51,9 +51,6 @@ class ImageOptimizer
     {       
 
 
-
-    
-
         $temporaryPath = $this->photoDir . $slug . '.' . $brochureFile->getClientOriginalExtension();
 
         $brochureFile->move($this->photoDir, $slug . '.' . $brochureFile->getClientOriginalExtension());
@@ -88,7 +85,7 @@ class ImageOptimizer
         $localFilePath = $this->photoDir . $slug . '.webp';
 
         // Save Local File
-        $this->imagine->open($brochureFile)
+        $this->imagine->open($temporaryPath)
             ->thumbnail(new Box(1280, 1080))
             ->save($localFilePath, ['webp_quality' => 100]);
 
