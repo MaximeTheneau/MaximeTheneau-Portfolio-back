@@ -23,6 +23,4 @@ jobs:
           rm -rf migrations/*
           bin/console ma:mi
           bin/console d:m:m
-          pnpm run build
-          bin/console asset-map:compile
           bin/console c:c

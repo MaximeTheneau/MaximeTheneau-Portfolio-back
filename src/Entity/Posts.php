@@ -128,6 +128,15 @@ class Posts
     #[Groups(['api_posts_read'])]
     private Collection $comments;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $imgWidth = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imgHeight = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $srcset = null;
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
@@ -533,6 +542,42 @@ class Posts
                 $comment->setCommentsPosts(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImgWidth(): ?int
+    {
+        return $this->imgWidth;
+    }
+
+    public function setImgWidth(?int $imgWidth): static
+    {
+        $this->imgWidth = $imgWidth;
+
+        return $this;
+    }
+
+    public function getImgHeight(): ?int
+    {
+        return $this->imgHeight;
+    }
+
+    public function setImgHeight(?int $imgHeight): static
+    {
+        $this->imgHeight = $imgHeight;
+
+        return $this;
+    }
+
+    public function getSrcset(): ?string
+    {
+        return $this->srcset;
+    }
+
+    public function setSrcset(?string $srcset): static
+    {
+        $this->srcset = $srcset;
 
         return $this;
     }
