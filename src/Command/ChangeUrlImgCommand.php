@@ -50,23 +50,54 @@ class ChangeUrlImgCommand extends Command
         $posts = $this->entityManager->getRepository(Posts::class)->findAll();
         foreach ($posts as $post) {
         $urlImg = $_ENV['DOMAIN_IMG'] . $post->getSlug() . '.webp';
-        $post->setImgPost($urlImg);
+        $tempFilePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $post->getSlug() . '.webp';
+        try {
+            $imageContent = file_get_contents($urlImg);
+            if ($imageContent === false) {
+                $io->error("Failed to download image: $urlImg");
+                continue;
+            }
 
-        // Srcset Image
-        $srcset = '';
-        foreach (self::IMAGE_SIZES as $size) {
-            if($size <= $post->getImgWidth()) {
-                $srcset .= $urlImg . '?width=' . $size . ' ' . $size . 'w,';
+            file_put_contents($tempFilePath, $imageContent);
+
+            if (file_exists($tempFilePath)) {
+                [$width, $height] = getimagesize($tempFilePath);
+                $post->setImgWidth($width);
+                $post->setImgHeight($height);
+            } else {
+                $io->error("Temporary file not found: $tempFilePath");
+                continue;
+            }
+
+             
+            $post->setImgPost($urlImg);
+
+            // Srcset Image
+            $srcset = '';
+            foreach (self::IMAGE_SIZES as $size) {
+                if($size <= $post->getImgWidth()) {
+                    $srcset .= $urlImg . '?width=' . $size . ' ' . $size . 'w,';
+                }
+            }
+            $srcset .= $urlImg . ' ' . $post->getImgWidth() . 'w';
+
+            $post->setSrcset($srcset);
+
+            unlink($tempFilePath);
+            $this->entityManager->persist($post);
+
+            $this->entityManager->flush();
+            $io->success('Url img changed');
+            
+            return Command::SUCCESS;
+
+        } catch (\Exception $e) {
+            $io->error("Error processing image for post {$post->getId()}: " . $e->getMessage());
+            if (file_exists($tempFilePath)) {
+                unlink($tempFilePath);
             }
         }
-        $srcset .= $urlImg . ' ' . $post->getImgWidth() . 'w';
+    }
 
-        $post->setSrcset($srcset);
-        }
-
-        $this->entityManager->flush();
-        $io->success('Url img changed');
-
-        return Command::SUCCESS;
     }
 }
