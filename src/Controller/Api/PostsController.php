@@ -266,6 +266,8 @@ class PostsController extends ApiController
             'title' => $relatedPost->getTitle(),
             'altImg' => $relatedPost->getAltImg(),
             'url' => $relatedPost->getUrl(),
+            'imgPost' => $relatedPost->getImgPost(),
+
         ];
     }
 
