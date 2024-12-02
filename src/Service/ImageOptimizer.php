@@ -15,6 +15,9 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Cloudinary\Configuration\Configuration;
 use Cloudinary\Api\Upload\UploadApi;
+use Symfony\Component\HttpClient\HttpClient;
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
 
 class ImageOptimizer
 {
@@ -24,8 +27,8 @@ class ImageOptimizer
     private $photoDir;
     private $projectDir;
     private $imagine;
-    private $cloudinary;
     private $uploadApi;
+    private const IMAGE_SIZES = [320, 640, 750, 828, 1080, 1200, 1920, 2048, 3840];
 
     public function __construct(
         SluggerInterface $slugger,
@@ -38,78 +41,119 @@ class ImageOptimizer
             $this->serializer = $serializer;
             $this->photoDir =  $this->params->get('app.imgDir');
             $this->projectDir =  $this->params->get('app.projectDir');
+            $this->s3Key = $this->params->get('amazon.s3.key');
+            $this->s3Secret = $this->params->get('amazon.s3.secret');
+            $this->s3Region = $this->params->get('amazon.s3.region');
+            $this->s3Bucket = $this->params->get('amazon.s3.bucket');
+            $this->s3BucketFront = $this->params->get('amazon.s3.bucket.front');
+            $this->s3Version = $this->params->get('amazon.s3.version');
+            $this->domainImg = $this->params->get('app.domain.img');
+            $this->s3Client = new S3Client([
+                'version' => $this->s3Version,
+                'region' => $this->s3Region,
+                'credentials' => [
+                    'key' => $this->s3Key,
+                    'secret' => $this->s3Secret,
+                ],
+            ]);
             $this->imagine = new Imagine();
-            $this->uploadApi = Configuration::instance();
-            $this->uploadApi->cloud->cloudName = $_ENV['CLOUD_NAME'];
-            $this->uploadApi->cloud->apiKey = $_ENV['CLOUD_API_KEY'];
-            $this->uploadApi->cloud->apiSecret = $_ENV['CLOUD_API_SECRET'];
-            $this->uploadApi->url->secure = true;
-            $this->uploadApi = new UploadApi();
+
+            // $this->uploadApi = Configuration::instance();
+            // $this->uploadApi->cloud->cloudName = $_ENV['CLOUD_NAME'];
+            // $this->uploadApi->cloud->apiKey = $_ENV['CLOUD_API_KEY'];
+            // $this->uploadApi->cloud->apiSecret = $_ENV['CLOUD_API_SECRET'];
+            // $this->uploadApi->url->secure = true;
+            // $this->uploadApi = new UploadApi();
     }
 
-    public function setPicture( $brochureFile, $slug ): void
-    {       
+    public function setPicture( $brochureFile, $post, $slug ): void
+    {   
+        $localImagePath = $_ENV['IMG_DIR'] . $slug . '.webp'; // Path Local Image
 
+        $imageS3Path = $this->s3Bucket . '/' . $slug . '.webp'; // Path S3 Image
 
-        $temporaryPath = $this->photoDir . $slug . '.' . $brochureFile->getClientOriginalExtension();
+        $img = $this->imagine->open($brochureFile);
 
-        $brochureFile->move($this->photoDir, $slug . '.' . $brochureFile->getClientOriginalExtension());
+        $img->strip()->save($localImagePath, ['webp_quality' => 80]);
 
-        $mimeType = mime_content_type($temporaryPath);
-
-        // Si le fichier est un GIF, le télécharger directement sans conversion
-        if ($mimeType === 'image/gif') {
-            // Upload directement sur Cloudinary
-            $this->uploadApi->upload($temporaryPath, array(
-                 "public_id" => $slug,
-                "folder" => "portfolio",
-                "overwrite" => true,
-                "resource_type" => "auto",
-                "quality" => "auto",
-                "fetch_format" => "gif",
-                "width" => 1280,
-                "height" => 1080,
-                "crop" => "limit",
-                "secure" => true)
-            );
+        if ($post->getImgPost() !== null) {
             
-            if (file_exists($temporaryPath)) {
-            unlink($temporaryPath);
-            } else {
-                throw new \Exception("Fichier temporaire introuvable : " . $temporaryPath);
-            }
+            $bucketDomain = $_ENV['DOMAIN_IMG']; 
+            $key = str_replace($bucketDomain, "", $post->getImgPost());
 
-            return; 
+            $this->s3Client->deleteObject([
+                'Bucket' => $this->s3Bucket,
+                'Key'    => $key,
+            ]);
+
+            $this->s3Client->deleteMatchingObjects($this->s3BucketFront, $slug . '.webp');
+
+            $this->s3Client->deleteObject([
+                'Bucket' => $this->s3BucketFront,
+                'Key'    => $post->getImgPost(),
+            ]);
+
+            $slug = $slug . '-' . rand(0, 10);
+
+            $this->s3Client->putObject([
+                'Bucket' => $this->s3Bucket,
+                'Key'    => $slug . '.webp',
+                'Body'   => fopen($localImagePath, 'rb'),
+            ]);
         }
-
-        $localFilePath = $this->photoDir . $slug . '.webp';
-
-        // Save Local File
-        $this->imagine->open($temporaryPath)
-            ->thumbnail(new Box(1280, 1080))
-            ->save($localFilePath, ['webp_quality' => 100]);
-
-        // Save Cloudinary File
-
-        $this->uploadApi->upload($this->photoDir.$slug.'.webp', array(
-            "public_id" => $slug,
-            "folder" => "portfolio",
-            "overwrite" => true,
-            "resource_type" => "auto",
-            "quality" => "auto",
-            "fetch_format" => "webp",
-            "width" => 1280,
-            "height" => 1080,
-            "crop" => "limit",
-            "secure" => true)
-        );
-         if (file_exists($localFilePath)) {
-        unlink($localFilePath);
-        } else {
-            throw new \Exception("Fichier temporaire introuvable : " . $localFilePath);
-        }
-    }
         
+        // Srcset Image
+        $srcset = '';
+        
+        $imgUrl = $this->domainImg . $slug . '.webp';
+        foreach (self::IMAGE_SIZES as $size) {
+            if($size <= $img->getSize()->getWidth()) {
+                $srcset .= $imgUrl . '?width=' . $size . ' ' . $size . 'w,';
+            }
+        }
+        
+        $srcset .= $imgUrl . ' ' . $img->getSize()->getWidth() . 'w';
+        
+        try {
+            $this->s3Client->putObject([
+                'Bucket' => $this->s3Bucket,
+                'Key'    => $slug . '.webp',
+                'Body'   => fopen($localImagePath, 'rb'),
+            ]);
+            
+            $post->setImgPost($imgUrl); // Url Image
+            $post->setSrcset($srcset); // Srcset Image
+            $post->setImgWidth($img->getSize()->getWidth()); // Width Image
+            $post->setImgHeight($img->getSize()->getHeight()); // Height Image
+
+        } catch (AwsException $e) {
+            echo $e->getMessage();
+        } finally {
+            unlink($localImagePath);
+        }
+
+    }
+
+    public function deletedPicture($slug): void
+    {
+        try {
+            $this->s3Client->deleteObject([
+                'Bucket' => $this->s3Bucket,
+                'Key'    => $slug . '.webp',
+            ]);
+
+            $this->s3Client->deleteMatchingObjects($this->s3BucketFront, $slug . '.webp');
+
+            $this->s3Client->deleteObject([
+                'Bucket' => $this->s3BucketFront,
+                'Key'    => $slug . '.webp',
+            ]);
+        } catch (AwsException $e) {
+            echo $e->getMessage();
+        }
+      
+    }
+
 }
 
 

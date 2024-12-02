@@ -22,7 +22,7 @@
                     </td>
                     <td>
 
-                        <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/' ~ post.imgPost ~ '.webp'}} alt="imgHeader" width="100px">
+                        <img src="{{post.imgPost}}" alt="imgHeader" width="100px">
                     </td>
                     <td>
                         <a href="{{ path('app_back_posts_edit', {'id': post.id}) }}" class="button is-info">Modifier</a>

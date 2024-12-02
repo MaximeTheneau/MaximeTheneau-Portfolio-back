@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class PostsType extends AbstractType
 {
@@ -204,7 +205,10 @@ class PostsType extends AbstractType
                         'multiple' => true,
                         'by_reference' => false,
                     ])
-                    ;
+                //    ->add('postId', HiddenType::class, [
+                //         'mapped' => false, 
+                //     ]) 
+                ;
 
                 $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
                     $form = $event->getForm();

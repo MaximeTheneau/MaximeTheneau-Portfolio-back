@@ -6,6 +6,17 @@
 parameters:
     app.projectDir : '%env(resolve:APP_PROJECTDIR)%'
     app.imgDir : '%env(resolve:IMG_DIR)%'
+    app.domain.img : '%env(resolve:DOMAIN_IMG)%'
+
+
+    amazon.s3.key:     '%env(resolve:AWS_KEY)%'
+    amazon.s3.secret:  '%env(resolve:AWS_SECRET)%'
+    amazon.s3.region:  '%env(resolve:AWS_REGION)%'
+    amazon.s3.bucket:  '%env(resolve:AWS_BUCKET)%'
+    amazon.s3.version: '%env(resolve:AWS_VERSION)%'
+        
+    #CloudFront
+    amazon.s3.bucket.front:  '%env(resolve:AWS_BUCKET_FRONT)%'
 
 services:
     # default configuration for services in *this* file

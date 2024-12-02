@@ -42,6 +42,9 @@ import {
 } from './ckeditor5.js';
 
 import translations from './translations/fr.js';
+
+const postId = document.querySelector('#postId')?.value;
+
 const editorConfig = {
 
 	toolbar: {
@@ -182,7 +185,8 @@ const editorConfig = {
 	},
 	placeholder: 'Entrez ici votre article',
 	simpleUpload: {
-		uploadUrl: "/uploadImg"
+		uploadUrl: `/uploadImg?id=${postId}`,
+		withCredentials: true,
 	},
 	list: {
 		properties: {
@@ -231,11 +235,11 @@ function setupAddParagraphButton() {
 			
             const index = collectionHolder.dataset.index;
             let newParagraphHtml = collectionHolder.dataset.prototype.replace(/__name__/g, index);
-			console.log(newParagraphHtml);
             // On crée un nouvel élément <li> et on y ajoute le paragraphe
              let newParagraphLi = document.createElement('li');
             newParagraphLi.classList.add('h-auto', 'mb-8', 'border', 'border-gray-200');
             newParagraphLi.innerHTML = newParagraphHtml;
+            newParagraphLi.setAttribute('id', `posts_paragraphPosts_${index}`); // Ajout de l'ID unique
 
             // On ajoute le nouveau paragraphe au conteneur
             collectionHolder.appendChild(newParagraphLi);

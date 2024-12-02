@@ -1,9 +1,9 @@
 {{ form_start(form, {'attr': { 'class': 'bg-slate-100 p-4 '}})  }}
-
+            <input type="hidden" id="postId" value="{{ post.id }}">
     {% if post.imgPost is empty %}
-            <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/Accueil.webp'}} alt="imgHeader" > 
+            <img src={{'https://picture.theneaumaxime.fr/Accueil.webp'}} alt="imgHeader" > 
     {% else %}
-            <img src={{'https://res.cloudinary.com/dsn2zwbis/image/upload/portfolio/' ~ post.imgPost ~ '.webp'}} alt="imgHeader" >
+            <img src={{post.imgPost}} alt="imgHeader" >
     {% endif %}
             <!-- Loader -->
             <div id="loader" class="fixed z-10 inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 hidden">

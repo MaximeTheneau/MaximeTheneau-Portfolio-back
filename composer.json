@@ -9,6 +9,7 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "api-platform/core": "^3.0",
+        "aws/aws-sdk-php": "^3.332",
         "cloudinary/cloudinary_php": "^2.10",
         "doctrine/doctrine-bundle": "^2.11",
         "doctrine/doctrine-migrations-bundle": "^3.3",
