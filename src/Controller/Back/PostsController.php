@@ -265,7 +265,7 @@ class PostsController extends AbstractController
             if (!empty($brochureFile)) {
                 
                 $post->setImgPost($slug);
-                $this->imageOptimizer->setPicture($brochureFile, $post->getImgPost(), $post );
+                $this->imageOptimizer->setPicture($brochureFile, $post, $slug);
                 
             } else {
                 $post->setImgPost($imgPost);
