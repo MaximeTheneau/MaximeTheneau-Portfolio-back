@@ -129,15 +129,15 @@ class Posts
     private Collection $comments;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['api_posts_read'])]
+    #[Groups(['api_posts_read', 'api_posts_home'])]
     private ?int $imgWidth = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['api_posts_read'])]
+    #[Groups(['api_posts_read', 'api_posts_home'])]
     private ?int $imgHeight = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
-    #[Groups(['api_posts_read'])]
+    #[Groups(['api_posts_read', 'api_posts_home'])]
     private ?string $srcset = null;
 
     public function __construct()
