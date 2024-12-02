@@ -14,11 +14,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:change-url-img',
-    description: 'change url img',
+    description: 'Change the URL of images and generate srcset',
 )]
 class ChangeUrlImgCommand extends Command
 {
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
+
     private const IMAGE_SIZES = [320, 640, 750, 828, 1080, 1200, 1920, 2048, 3840];
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -30,9 +31,8 @@ class ChangeUrlImgCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
+            ->addArgument('arg1', InputArgument::OPTIONAL, 'Optional argument')
+            ->addOption('option1', null, InputOption::VALUE_NONE, 'Optional option');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -44,60 +44,56 @@ class ChangeUrlImgCommand extends Command
             $io->note(sprintf('You passed an argument: %s', $arg1));
         }
 
-        if ($input->getOption('option1')) {
-
-        }
         $posts = $this->entityManager->getRepository(Posts::class)->findAll();
+
         foreach ($posts as $post) {
-        $urlImg = $_ENV['DOMAIN_IMG'] . $post->getSlug() . '.webp';
-        $tempFilePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $post->getSlug() . '.webp';
-        try {
-            $imageContent = file_get_contents($urlImg);
-            if ($imageContent === false) {
-                $io->error("Failed to download image: $urlImg");
-                continue;
-            }
+            $slug = $post->getSlug();
+            $urlImg = $_ENV['DOMAIN_IMG'] . $slug . '.webp';
+            $tempFilePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $slug . '.webp';
 
-            file_put_contents($tempFilePath, $imageContent);
+            try {
+                $imageContent = file_get_contents($urlImg);
+                if ($imageContent === false) {
+                    throw new \RuntimeException("Failed to download image: $urlImg");
+                }
 
-            if (file_exists($tempFilePath)) {
+                file_put_contents($tempFilePath, $imageContent);
+
+                if (!file_exists($tempFilePath)) {
+                    throw new \RuntimeException("Temporary file not found: $tempFilePath");
+                }
+
                 [$width, $height] = getimagesize($tempFilePath);
+                if (!$width || !$height) {
+                    throw new \RuntimeException("Invalid dimensions for image: $tempFilePath");
+                }
+
                 $post->setImgWidth($width);
                 $post->setImgHeight($height);
-            } else {
-                $io->error("Temporary file not found: $tempFilePath");
-                continue;
-            }
+                $post->setImgPost($urlImg);
 
-             
-            $post->setImgPost($urlImg);
+                $srcset = '';
+                foreach (self::IMAGE_SIZES as $size) {
+                    if ($size <= $width) {
+                        $srcset .= $urlImg . '?width=' . $size . ' ' . $size . 'w, ';
+                    }
+                }
+                $srcset .= $urlImg . ' ' . $width . 'w';
+                $post->setSrcset(trim($srcset, ', '));
 
-            // Srcset Image
-            $srcset = '';
-            foreach (self::IMAGE_SIZES as $size) {
-                if($size <= $post->getImgWidth()) {
-                    $srcset .= $urlImg . '?width=' . $size . ' ' . $size . 'w,';
+                $this->entityManager->persist($post);
+            } catch (\Exception $e) {
+                $io->error("Error processing post ID {$post->getId()}: " . $e->getMessage());
+            } finally {
+                if (file_exists($tempFilePath)) {
+                    unlink($tempFilePath);
                 }
             }
-            $srcset .= $urlImg . ' ' . $post->getImgWidth() . 'w';
-
-            $post->setSrcset($srcset);
-
-            unlink($tempFilePath);
-            $this->entityManager->persist($post);
-
-            $this->entityManager->flush();
-            $io->success('Url img changed');
-            
-            return Command::SUCCESS;
-
-        } catch (\Exception $e) {
-            $io->error("Error processing image for post {$post->getId()}: " . $e->getMessage());
-            if (file_exists($tempFilePath)) {
-                unlink($tempFilePath);
-            }
         }
-    }
 
+        $this->entityManager->flush();
+
+        $io->success('All images processed successfully.');
+        return Command::SUCCESS;
     }
 }
