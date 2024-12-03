@@ -23,5 +23,4 @@ jobs:
           rm -rf migrations/*
           bin/console ma:mi
           bin/console d:m:m
-          bin/console app:change-url-img
           bin/console c:c
