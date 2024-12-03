@@ -136,7 +136,7 @@ class PostsController extends AbstractController
                 $post->setAltImg('Image de présentation');
             } else {
                 $post->setImgPost($slug);
-                $this->imageOptimizer->setPicture($brochureFile, $slug, $post );
+                $this->imageOptimizer->setPicture($brochureFile, $post, $slug );
                 
             }
 

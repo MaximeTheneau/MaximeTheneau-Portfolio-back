@@ -57,16 +57,9 @@ class ImageOptimizer
                 ],
             ]);
             $this->imagine = new Imagine();
-
-            // $this->uploadApi = Configuration::instance();
-            // $this->uploadApi->cloud->cloudName = $_ENV['CLOUD_NAME'];
-            // $this->uploadApi->cloud->apiKey = $_ENV['CLOUD_API_KEY'];
-            // $this->uploadApi->cloud->apiSecret = $_ENV['CLOUD_API_SECRET'];
-            // $this->uploadApi->url->secure = true;
-            // $this->uploadApi = new UploadApi();
     }
 
-    public function setPicture( $brochureFile, $post, $slug ): void
+    public function setPicture(File $brochureFile, $post, $slug ): void
     {   
         $localImagePath = $_ENV['IMG_DIR'] . $slug . '.webp'; // Path Local Image
 
