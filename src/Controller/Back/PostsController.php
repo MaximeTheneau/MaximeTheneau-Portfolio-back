@@ -278,8 +278,10 @@ class PostsController extends AbstractController
             $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
             $dom = new DOMDocument();
-            @$dom->loadHTML('' . $htmlText, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
+            @$dom->loadHTML(
+                mb_convert_encoding($htmlText, 'HTML-ENTITIES', 'UTF-8'),
+                LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+            );
             $images = $dom->getElementsByTagName('img');
             
             /** @var \DOMElement $image */
@@ -310,8 +312,12 @@ class PostsController extends AbstractController
 
                 $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
 
-                $dom = new DOMDocument();
-                @$dom->loadHTML('<?xml encoding="UTF-8">' . $htmlText, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $dom = new DOMDocument('1.0', 'UTF-8');
+
+                @$dom->loadHTML(
+                    mb_convert_encoding($htmlText, 'HTML-ENTITIES', 'UTF-8'),
+                    LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+                );
 
                 $images = $dom->getElementsByTagName('img');
                 
