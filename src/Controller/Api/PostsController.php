@@ -33,12 +33,18 @@ class PostsController extends ApiController
     {
     
         $posts = $postsRepository->findOneBy(['slug'=> 'Accueil']);
-        
+        $category = $em->getRepository(Category::class)->findByName('Creations');
+        $creation = $em->getRepository(Posts::class)->findBy(['category' => $category, 'isHomeImage' => true], ['createdAt' => 'DESC'], 3);
+
+        $faq = $postsRepository->findOneBy(['slug'=> 'Foire-aux-questions']);
         $products = $em->getRepository(Product::class)->findAll();
 
         $allPosts = [
             'home' => $posts,
-            'products' => $products];
+            'products' => $products,
+            'creation'=> $creation,
+            'faq' => $faq->getListPosts()->slice(0, 3),
+        ];
 
         return $this->json(
             $allPosts,
