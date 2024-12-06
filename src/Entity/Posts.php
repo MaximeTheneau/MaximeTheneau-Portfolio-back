@@ -32,7 +32,7 @@ class Posts
     private ?string $heading = null;
 
     #[ORM\Column(length: 160)]
-    #[Groups(['api_posts_read', 'api_posts_home'])]
+    #[Groups(['api_posts_read', 'api_posts_home', 'api_posts_sitemap'])]
     private ?string $metaDescription = null;
 
     #[ORM\Column(length: 70, unique: true, type: Types::STRING)]
