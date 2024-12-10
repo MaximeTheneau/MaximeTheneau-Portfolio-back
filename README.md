@@ -22,11 +22,11 @@ Next.js - Symfony
 
 ### Front
 
-- [Next.js](https://nextjs.org/)
+- Next.js
 
 ### Back
 
-- [Symfony](https://fr.reactjs.org/)
+- Symfony
 
 ## Auteurs
 
