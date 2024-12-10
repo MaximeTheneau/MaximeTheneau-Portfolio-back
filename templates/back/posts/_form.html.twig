@@ -77,7 +77,7 @@
                     data-prototype="{{ form_widget(form.paragraphPosts.vars.prototype)|e('html_attr') }}"
                 >   
                     {% for paragraph in form.paragraphPosts %}
-                        <li class="h-auto ">
+                        <li class="h-auto " id="posts_paragraphPosts_{{ loop.index0 }}">
                             {{ form_row(paragraph.subtitle) }}
 
                             {{ form_row(paragraph.chatGptButton, {'attr': 
@@ -89,6 +89,7 @@
                             <div id="{{paragraph.vars.id}}_loader" style="display: none;">Chargement...</div>
                             
                             {{ form_row(paragraph) }}
+
                             <button type="button" class="remove-paragraph-btn">Supprimer</button>
             <hr>
 
@@ -154,4 +155,4 @@
 {% block javascripts %}
     <!-- <script src="https://cdn.tiny.cloud/1/7u35jqplbqwmajtzpxrhtp68lx5t04fxq9qtnrtwxf03z0pw/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> -->
     <!-- <script src={{asset('js/posts.js')}}></script> -->
-{% endblock %}
+{% endblock %} 
