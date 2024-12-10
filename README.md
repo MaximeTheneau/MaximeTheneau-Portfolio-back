@@ -14,10 +14,6 @@ Next.js - Symfony
 
 ---
 
-### Wireframe
-
-[![Wireframe](/docs/wireframes/tablet-home.jpg)](/docs/)
-
 ## Langages utilisés 
 
 ### Front
