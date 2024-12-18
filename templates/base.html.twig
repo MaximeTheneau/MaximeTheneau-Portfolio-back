@@ -16,8 +16,8 @@
         {% endblock %}
 
         {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
             {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('navbar') }}
         {% endblock %}
 
     </head>
@@ -76,6 +76,5 @@
         {% endblock %}
         </div>
       </div>
-      <script src={{asset('js/navbar.js')}}></script>
     </body>
 </html>

@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit Posts{% endblock %}
-    {% block importmap %}{{ importmap('ckeditor-init') }}{% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('ckeditor-init') }}
+    {% endblock %}
 {% block body %}
 
-       
 
     {{ include('back/posts/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
     
