@@ -203,7 +203,7 @@ const editorConfig = {
 };
 
 
-ClassicEditor.create(document.querySelector('#posts_contents'), editorConfig);
+// ClassicEditor.create(document.querySelector('#posts_contents'), editorConfig);
 document.addEventListener('DOMContentLoaded', () => {
     const initializeEditor = (textarea) => {
         if (textarea.dataset.editorInitialized === 'true') {
@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
-    document.querySelectorAll('.paragraph textarea').forEach(textarea => {
+    document.querySelectorAll('textarea').forEach(textarea => {
         initializeEditor(textarea);
     });
 });

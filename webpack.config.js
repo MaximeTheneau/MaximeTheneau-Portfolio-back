@@ -29,8 +29,6 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('ckeditor-init', './assets/js/ckeditor/ckeditor-init.js')
-    .addEntry('navbar', './assets/js/navbar.js')
-    .addEntry('post', './assets/js/posts.js')
 
     .addStyleEntry('global', './assets/styles/app.scss')
 

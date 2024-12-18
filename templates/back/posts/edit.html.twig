@@ -2,13 +2,12 @@
 
 {% block title %}Edit Posts{% endblock %}
     {% block javascripts %}
+        {{ parent() }} 
         {{ encore_entry_script_tags('ckeditor-init') }}
     {% endblock %}
 {% block body %}
 
-
     {{ include('back/posts/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
-    
 
     <form method="post" action="{{ path('app_back_posts_delete', {'id': post.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
