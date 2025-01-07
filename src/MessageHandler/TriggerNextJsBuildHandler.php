@@ -25,7 +25,7 @@ final class TriggerNextJsBuildHandler
             $url = 'https://api.github.com/repos/MaximeTheneau/' . $_ENV['TARGET_REPO_NAME'] . '/dispatches';
             
             $data = [
-                'event_type' => 'trigger-nextjs-build',
+                'event_type' => 'trigger-back-build',
             ];
 
             $headers = [
