@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Skill index{% endblock %}
+
+{% block body %}
+    <h1>Compétence index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Compétence</th>
+                <th>Icon</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for skill in skills %}
+            <tr>
+                <td>{{ skill.name }}</td>
+                <td>{{ skill.icon|raw }}</td>
+                <td>{{ skill.description }}</td>
+                <td>
+                    <a href="{{ path('app_back_skill_edit', {'id': skill.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_back_skill_new') }}">Nouveaux</a>
+{% endblock %}

@@ -140,6 +140,12 @@ class Posts
     #[Groups(['api_posts_read', 'api_posts_home'])]
     private ?string $srcset = null;
 
+    /**
+     * @var Collection<int, Skill>
+     */
+    #[ORM\ManyToMany(targetEntity: Skill::class, mappedBy: 'posts')]
+    private Collection $skills;
+
     public function __construct()
     {
         $this->listPosts = new ArrayCollection();
@@ -147,6 +153,7 @@ class Posts
         $this->subtopic = new ArrayCollection();
         $this->relatedPosts = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->skills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -581,6 +588,33 @@ class Posts
     public function setSrcset(?string $srcset): static
     {
         $this->srcset = $srcset;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): static
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills->add($skill);
+            $skill->addPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): static
+    {
+        if ($this->skills->removeElement($skill)) {
+            $skill->removePost($this);
+        }
 
         return $this;
     }
