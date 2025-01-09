@@ -18,7 +18,7 @@ class Skill
     #[ORM\Column(length: 70)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 1000)]
+    #[ORM\Column(type: 'text' )]
     private ?string $icon = null;
 
     #[ORM\Column(length: 255, nullable: true)]
