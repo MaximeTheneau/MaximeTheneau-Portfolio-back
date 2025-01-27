@@ -223,6 +223,7 @@ class PostsController extends ApiController
     public function read(EntityManagerInterface $em, string $slug )
     {
         $post = $em->getRepository(Posts::class)->findOneBy(['slug' => $slug]);
+        $latestPosts = $em->getRepository(Posts::class)->findBy([], ['createdAt' => 'DESC'], 3);
 
         if ($post === null)
         {
@@ -235,9 +236,38 @@ class PostsController extends ApiController
                 Response::HTTP_NOT_FOUND,// 404
             );
         }
+        $relatedPosts = $post->getRelatedPosts();
 
+            // Si vous voulez seulement certaines données des posts associés, vous pouvez mapper les entités en un tableau d'objets plus simples
+            $relatedPostsData = [];
+            foreach ($relatedPosts as $relatedPost) {
+                $relatedPostsData[] = [
+                    'id' => $relatedPost->getId(),
+                    'slug' => $relatedPost->getSlug(),
+                    'title' => $relatedPost->getTitle(),
+                    'altImg' => $relatedPost->getAltImg(),
+                    'url' => $relatedPost->getUrl(),
+                    'imgPost' => $relatedPost->getImgPost(),
+
+                ];
+            }
+
+            $latestPostsData = [];
+            foreach ($latestPosts as $latestPost) {
+                $latestPostsData[] = [
+                    'id' => $latestPost->getId(),
+                    'slug' => $latestPost->getSlug(),
+                    'title' => $latestPost->getTitle(),
+                    'url' => $latestPost->getUrl(),
+
+                ];
+            }
         return $this->json(
-            $post,
+            [
+                'post' => $post,
+                'latestPosts' => $latestPostsData,
+                'relatedPosts' => $relatedPostsData
+            ],
             Response::HTTP_OK,
             [],
             [
