@@ -259,7 +259,7 @@ class PostsController extends ApiController
                     'slug' => $latestPost->getSlug(),
                     'title' => $latestPost->getTitle(),
                     'url' => $latestPost->getUrl(),
-                    'createdAt' => $latestPost->getCreatedAt(),
+                    'formattedDate' => $latestPost->getFormattedDate(),
 
                 ];
             }
