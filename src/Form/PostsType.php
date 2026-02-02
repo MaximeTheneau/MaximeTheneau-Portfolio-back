@@ -96,16 +96,16 @@ class PostsType extends AbstractType
                     'id' => 'image',
                 ],
                 'constraints' => [
-                    new File([
-                        'mimeTypes' => [
+                    new File(
+                        mimeTypes: [
                             'image/jpeg',
                             'image/png',
                             'image/gif',
                             'image/webp'
                         ],
-                        'maxSize' => '5M',
-                        'mimeTypesMessage' => 'Veuillez uploader une image valide', 
-                    ])
+                        maxSize: '5M',
+                        mimeTypesMessage: 'Veuillez uploader une image valide',
+                    )
                 ],
             ],)
             // ->add('video', FileType::class, [

@@ -11,39 +11,33 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Doctrine\ORM\EntityManagerInterface;
-use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use DateTime;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\Routing\Attribute\Route as AttributeRoute;
 
-#[Route('/api/comments')]
+#[AttributeRoute('/api/comments')]
 class CommentsController extends ApiController
 {
     private $entityManager;
     private $passwordHasher;
-    private $JWTEncoderInterface;
     private $tokenStorage;
     private $jwtManager;
 
     public function __construct(
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager, 
-        JWTEncoderInterface $JWTEncoderInterface, 
-        JWTTokenManagerInterface $jwtManager, 
         TokenStorageInterface $tokenStorage,
     )
     {
         $this->passwordHasher = $passwordHasher;
         $this->entityManager = $entityManager;
-        $this->JWTEncoderInterface = $JWTEncoderInterface;
-        $this->jwtManager = $jwtManager;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -55,7 +49,7 @@ class CommentsController extends ApiController
         $content = $request->getContent();
 
         $jwtToken = $request->cookies->get('jwt');
-        $tokenData = $this->JWTEncoderInterface->decode($jwtToken);
+        $tokenData = ($jwtToken);
 
         $user = $tokenData['username'];
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $user]);

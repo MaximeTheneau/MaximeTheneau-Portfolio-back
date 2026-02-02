@@ -1,0 +1,6 @@
+twig_component:
+    defaults:
+        # Namespace & directory for components
+        App\Twig\Components\: 'components/'
+        # EasyAdmin components
+        EasyCorp\Bundle\EasyAdminBundle\Twig\Component\: '@EasyAdmin/components/'
