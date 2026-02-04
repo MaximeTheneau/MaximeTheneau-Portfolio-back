@@ -5,6 +5,9 @@ namespace App\Controller\Api;
 use App\Service\BookingSlotService;
 use App\Service\GoogleCalendarService;
 use App\DTO\BookingRequest;
+use App\Entity\BookingAttempt;
+use App\Repository\BookingAttemptRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,15 +18,24 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 #[Route('/api/booking')]
 class BookingController extends ApiController
 {
+    private const MAX_BOOKINGS_PER_IP = 2;
+    private const RATE_LIMIT_DAYS = 30;
+
     private $bookingSlotService;
     private $googleCalendarService;
+    private $bookingAttemptRepository;
+    private $entityManager;
 
     public function __construct(
         BookingSlotService $bookingSlotService,
-        GoogleCalendarService $googleCalendarService
+        GoogleCalendarService $googleCalendarService,
+        BookingAttemptRepository $bookingAttemptRepository,
+        EntityManagerInterface $entityManager
     ) {
         $this->bookingSlotService = $bookingSlotService;
         $this->googleCalendarService = $googleCalendarService;
+        $this->bookingAttemptRepository = $bookingAttemptRepository;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -78,6 +90,17 @@ class BookingController extends ApiController
         try {
             $data = $request->request->all();
 
+            // Vérification du rate limit par IP
+            $clientIp = $request->getClientIp() ?? 'unknown';
+            $bookingCount = $this->bookingAttemptRepository->countByIpSince($clientIp, self::RATE_LIMIT_DAYS);
+
+            if ($bookingCount >= self::MAX_BOOKINGS_PER_IP) {
+                return $this->json([
+                    'erreur' => 'Vous avez atteint le nombre maximum de réservations autorisées (' . self::MAX_BOOKINGS_PER_IP . '). Veuillez nous contacter directement pour plus de rendez-vous.',
+                    'code_error' => Response::HTTP_TOO_MANY_REQUESTS
+                ], Response::HTTP_TOO_MANY_REQUESTS);
+            }
+
             $bookingRequest = BookingRequest::fromArray($data);
 
             $validationErrors = $bookingRequest->validate();
@@ -111,6 +134,14 @@ class BookingController extends ApiController
                 $endDateTime,
                 $attendeeData
             );
+
+            // Enregistrer la tentative de réservation réussie
+            $bookingAttempt = new BookingAttempt();
+            $bookingAttempt->setIpAddress($clientIp);
+            $bookingAttempt->setEmail($bookingRequest->email);
+            $bookingAttempt->setPhone($bookingRequest->phone);
+            $this->entityManager->persist($bookingAttempt);
+            $this->entityManager->flush();
 
             return $this->json([
                 'message' => 'Votre rendez-vous a été réservé avec succès',
