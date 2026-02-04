@@ -2,8 +2,8 @@
 
 {% block title %}Edit Posts{% endblock %}
     {% block javascripts %}
-        {{ parent() }} 
-        {{ encore_entry_script_tags('ckeditor-init') }}
+        {{ parent() }}
+        <script type="module" src="{{ asset('build/ckeditor/ckeditor-init.js') }}"></script>
     {% endblock %}
 {% block body %}
 

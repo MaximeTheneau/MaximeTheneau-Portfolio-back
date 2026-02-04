@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}New Pages{% endblock %}
-    {% block importmap %}{{ importmap('ckeditor-init') }}{% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        <script type="module" src="{{ asset('build/ckeditor/ckeditor-init.js') }}"></script>
+    {% endblock %}
 
 {% block body %}
 
