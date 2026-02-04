@@ -91,14 +91,10 @@ class BookingController extends ApiController
             $data = $request->request->all();
             $bookingRequest = BookingRequest::fromArray($data);
             $clientIp = $request->getClientIp() ?? 'unknown';
-            $adminEmail = $_ENV['MAILER_TO'] ?? '';
             $adminIp = $_ENV['ADMIN_IP'] ?? '88.138.139.74';
 
-            // Exclure l'email admin et l'IP admin du rate limiting
-            $isAdmin = (!empty($adminEmail) && strtolower($bookingRequest->email) === strtolower($adminEmail))
-                || $clientIp === $adminIp;
-
-            if (!$isAdmin) {
+            // Exclure l'IP admin du rate limiting
+            if ($clientIp !== $adminIp) {
                 // Vérification du rate limit par IP
                 $bookingCount = $this->bookingAttemptRepository->countByIpSince($clientIp, self::RATE_LIMIT_DAYS);
 
