@@ -89,19 +89,26 @@ class BookingController extends ApiController
     {
         try {
             $data = $request->request->all();
-
-            // Vérification du rate limit par IP
-            $clientIp = $request->getClientIp() ?? 'unknown';
-            $bookingCount = $this->bookingAttemptRepository->countByIpSince($clientIp, self::RATE_LIMIT_DAYS);
-
-            if ($bookingCount >= self::MAX_BOOKINGS_PER_IP) {
-                return $this->json([
-                    'erreur' => 'Vous avez atteint le nombre maximum de réservations autorisées (' . self::MAX_BOOKINGS_PER_IP . '). Veuillez nous contacter directement pour plus de rendez-vous.',
-                    'code_error' => Response::HTTP_TOO_MANY_REQUESTS
-                ], Response::HTTP_TOO_MANY_REQUESTS);
-            }
-
             $bookingRequest = BookingRequest::fromArray($data);
+            $clientIp = $request->getClientIp() ?? 'unknown';
+            $adminEmail = $_ENV['MAILER_TO'] ?? '';
+            $adminIp = $_ENV['ADMIN_IP'] ?? '88.138.139.74';
+
+            // Exclure l'email admin et l'IP admin du rate limiting
+            $isAdmin = (!empty($adminEmail) && strtolower($bookingRequest->email) === strtolower($adminEmail))
+                || $clientIp === $adminIp;
+
+            if (!$isAdmin) {
+                // Vérification du rate limit par IP
+                $bookingCount = $this->bookingAttemptRepository->countByIpSince($clientIp, self::RATE_LIMIT_DAYS);
+
+                if ($bookingCount >= self::MAX_BOOKINGS_PER_IP) {
+                    return $this->json([
+                        'erreur' => 'Vous avez atteint le nombre maximum de réservations autorisées (' . self::MAX_BOOKINGS_PER_IP . '). Veuillez nous contacter directement pour plus de rendez-vous.',
+                        'code_error' => Response::HTTP_TOO_MANY_REQUESTS
+                    ], Response::HTTP_TOO_MANY_REQUESTS);
+                }
+            }
 
             $validationErrors = $bookingRequest->validate();
             if (!empty($validationErrors)) {
