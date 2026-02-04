@@ -114,6 +114,9 @@ class GoogleCalendarService
 
             $createdEvent = $this->service->events->insert($this->calendarId, $event);
 
+            // Envoyer notification par email
+            $this->sendBookingNotification($start, $attendeeData);
+
             return $createdEvent->getId();
         } catch (\Exception $e) {
             $this->sendErrorEmail('Erreur lors de la création de l\'événement: ' . $e->getMessage());
@@ -165,6 +168,31 @@ class GoogleCalendarService
         }
 
         return $description;
+    }
+
+    /**
+     * Envoie un email de notification pour une nouvelle réservation
+     */
+    private function sendBookingNotification(\DateTime $dateTime, array $attendeeData): void
+    {
+        try {
+            $email = (new TemplatedEmail())
+                ->to($_ENV['MAILER_TO'])
+                ->from($_ENV['MAILER_TO'])
+                ->subject('Nouvelle réservation - ' . $dateTime->format('d/m/Y H:i'))
+                ->htmlTemplate('emails/booking_notification.html.twig')
+                ->context([
+                    'datetime' => $dateTime,
+                    'name' => $attendeeData['name'] ?? 'N/A',
+                    'email' => $attendeeData['email'] ?? 'N/A',
+                    'phone' => $attendeeData['phone'] ?? 'N/A',
+                    'message' => $attendeeData['message'] ?? '',
+                ]);
+
+            $this->mailer->send($email);
+        } catch (\Exception $e) {
+            error_log('Impossible d\'envoyer l\'email de notification: ' . $e->getMessage());
+        }
     }
 
     /**
