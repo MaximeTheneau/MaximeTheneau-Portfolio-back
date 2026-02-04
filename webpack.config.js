@@ -31,6 +31,12 @@ Encore
 
     .addStyleEntry('global', './assets/styles/app.scss')
 
+    // Copy CKEditor files without processing
+    .copyFiles({
+        from: './assets/js/ckeditor',
+        to: 'ckeditor/[path][name].[ext]'
+    })
+
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -54,11 +60,6 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
-
-    // configure Babel
-    // .configureBabel((config) => {
-    //     config.plugins.push('@babel/a-babel-plugin');
-    // })
 
     // enables and configure @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {
