@@ -6,7 +6,7 @@
     <p><strong>Date :</strong> {{ datetime|date('d/m/Y') }}</p>
     <p><strong>Heure :</strong> {{ datetime|date('H:i') }}</p>
     <p><strong>Nom :</strong> {{ name }}</p>
-    <p><strong>Email :</strong> {{ email }}</p>
+    <p><strong>Email :</strong> {{ clientEmail }}</p>
     <p><strong>Téléphone :</strong> {{ phone }}</p>
     {% if message is defined and message is not empty %}
         <p><strong>Message :</strong> {{ message }}</p>

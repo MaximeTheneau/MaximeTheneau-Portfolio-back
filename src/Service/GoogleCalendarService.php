@@ -184,7 +184,7 @@ class GoogleCalendarService
                 ->context([
                     'datetime' => $dateTime,
                     'name' => $attendeeData['name'] ?? 'N/A',
-                    'email' => $attendeeData['email'] ?? 'N/A',
+                    'clientEmail' => $attendeeData['email'] ?? 'N/A',
                     'phone' => $attendeeData['phone'] ?? 'N/A',
                     'message' => $attendeeData['message'] ?? '',
                 ]);
