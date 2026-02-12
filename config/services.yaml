@@ -41,6 +41,10 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    App\Controller\Admin\PostsCrudController:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
     # Google Calendar Service
     App\Service\GoogleCalendarService:
         arguments:

@@ -11,6 +11,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: CommentsRepository::class)]
 class Comments
 {
+    public function __toString(): string
+    {
+        return $this->user ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

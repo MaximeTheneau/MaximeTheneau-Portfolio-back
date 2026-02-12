@@ -11,6 +11,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
 class ProductOption
 {
+    public function __toString(): string
+    {
+        return $this->label ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

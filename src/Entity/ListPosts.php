@@ -10,6 +10,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource]
 class ListPosts
 {
+    public function __toString(): string
+    {
+        return $this->title ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

@@ -17,6 +17,11 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 #[ORM\Entity(repositoryClass: PostsRepository::class)]
 class Posts
 {
+    public function __toString(): string
+    {
+        return $this->title ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

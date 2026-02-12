@@ -11,6 +11,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: SubtopicRepository::class)]
 class Subtopic
 {
+    public function __toString(): string
+    {
+        return $this->name ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

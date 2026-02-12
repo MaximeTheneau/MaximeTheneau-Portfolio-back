@@ -51,13 +51,13 @@
             </div>
             <ul data-target="navbar.submenu" class="block add__posts nav_toogle hidden p-2">
                 <li class=" flex text-lg pl-4" >
-                    <a href="{{ path('app_back_category_new') }}">Ajouter une categories</a>
+                    <a href="{{ ea_url().setController('App\\\\Controller\\\\Admin\\\\CategoryCrudController').setAction('new') }}">Ajouter une catégorie</a>
                 </li>
                 <li class=" flex text-lg pl-4" >
-                  <a href="{{ path('app_back_subcategory_new') }}">Ajouter une sous-categories</a>
-                </li>                
+                  <a href="{{ ea_url().setController('App\\\\Controller\\\\Admin\\\\SubcategoryCrudController').setAction('new') }}">Ajouter une sous-catégorie</a>
+                </li>
                 <li class=" flex text-lg pl-4" >
-                  <a href="{{ path('app_back_posts_new') }}">Ajouter un Articles</a>
+                  <a href="{{ ea_url().setController('App\\\\Controller\\\\Admin\\\\PostsCrudController').setAction('new') }}">Ajouter un article</a>
               </li>
             </ul>
           </li>

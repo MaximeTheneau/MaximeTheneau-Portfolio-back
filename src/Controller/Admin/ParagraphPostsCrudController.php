@@ -7,7 +7,7 @@ use App\Service\MarkdownProcessor;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,16 +45,18 @@ class ParagraphPostsCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
 
-        yield AssociationField::new('posts', 'Post')
-            ->setRequired(true)
-            ->setColumns(12);
+        // Masquer le champ posts dans le formulaire embarqué (CollectionField)
+        if ($pageName !== Crud::PAGE_EDIT && $pageName !== Crud::PAGE_NEW || !$this->isEmbedded()) {
+            yield AssociationField::new('posts', 'Post')
+                ->setRequired(true)
+                ->setColumns(12);
+        }
 
         yield TextField::new('subtitle', 'Sous-titre')
             ->setHelp('Max 170 caractères')
             ->setColumns(12);
 
-        yield TextareaField::new('paragraph', 'Contenu (Markdown)')
-            ->setHelp('Utilisez le format Markdown, sera converti en HTML automatiquement')
+        yield TextEditorField::new('paragraph', 'Contenu')
             ->setColumns(12);
 
         yield TextField::new('imgPostParagh', 'Image du paragraphe')
@@ -72,6 +74,12 @@ class ParagraphPostsCrudController extends AbstractCrudController
         yield TextField::new('linkSubtitle', 'Lien généré')
             ->hideOnForm()
             ->setColumns(6);
+    }
+
+    private function isEmbedded(): bool
+    {
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        return $request && $request->query->has('referrer');
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
@@ -96,10 +104,9 @@ class ParagraphPostsCrudController extends AbstractCrudController
 
     private function processParagraph(ParagraphPosts $paragraph): void
     {
-        // MARKDOWN TO HTML
+        // Lazy loading images dans le paragraphe HTML (TextEditorField produit du HTML)
         if (!empty($paragraph->getParagraph())) {
-            $markdownText = $paragraph->getParagraph();
-            $htmlText = $this->markdownProcessor->processMarkdown($markdownText);
+            $htmlText = $paragraph->getParagraph();
 
             $dom = new DOMDocument('1.0', 'UTF-8');
             @$dom->loadHTML(
