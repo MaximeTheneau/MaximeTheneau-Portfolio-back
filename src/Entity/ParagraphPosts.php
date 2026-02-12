@@ -10,6 +10,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ORM\Entity(repositoryClass: ParagraphPostsRepository::class)]
 class ParagraphPosts
 {
+    public function __toString(): string
+    {
+        return $this->subtitle ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

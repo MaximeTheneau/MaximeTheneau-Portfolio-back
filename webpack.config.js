@@ -37,6 +37,13 @@ Encore
         to: 'ckeditor/[path][name].[ext]'
     })
 
+    // Copy Trix upload script
+    .copyFiles({
+        from: './assets/js',
+        pattern: /trix-upload\.js$/,
+        to: 'js/[name].[ext]'
+    })
+
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

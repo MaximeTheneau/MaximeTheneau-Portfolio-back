@@ -34,14 +34,13 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/$, roles: PUBLIC_ACCESS}
         - { path: ^/api/*, roles: PUBLIC_ACCESS}
-
         - { path: ^/login, roles: PUBLIC_ACCESS}
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/back/(.*)/(new|edit), roles: [ROLE_ADMIN] }
-        - { path: ^/back/(.*)/\d+$, roles: [ROLE_ADMIN] , methods: [POST]}
+        - { path: ^/uploadImg, roles: ROLE_ADMIN }
+        - { path: ^/gpt/, roles: ROLE_ADMIN }
         - { path: ^/, roles: ROLE_MANAGER }
-        # - { path: ^/*, roles: ROLE_USER}
 
         # - { path: ^/user*, roles: ROLE_ADMIN}
 

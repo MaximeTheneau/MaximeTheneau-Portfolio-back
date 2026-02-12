@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'idx_ip_created', columns: ['ip_address', 'created_at'])]
 class BookingAttempt
 {
+    public function __toString(): string
+    {
+        return $this->email ?? '';
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

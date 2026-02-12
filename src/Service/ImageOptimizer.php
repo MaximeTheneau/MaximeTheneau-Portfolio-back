@@ -127,6 +127,30 @@ class ImageOptimizer
 
     }
 
+    public function uploadToS3(File $file, string $slug): string
+    {
+        $localImagePath = $_ENV['IMG_DIR'] . $slug . '.webp';
+
+        $img = $this->imagine->open($file);
+        $img->strip()->save($localImagePath, ['webp_quality' => 80]);
+
+        try {
+            $this->s3Client->putObject([
+                'Bucket' => $this->s3Bucket,
+                'Key'    => $slug . '.webp',
+                'Body'   => fopen($localImagePath, 'rb'),
+            ]);
+        } catch (AwsException $e) {
+            throw $e;
+        } finally {
+            if (file_exists($localImagePath)) {
+                unlink($localImagePath);
+            }
+        }
+
+        return $this->domainImg . $slug . '.webp';
+    }
+
     public function deletedPicture($slug): void
     {
         try {

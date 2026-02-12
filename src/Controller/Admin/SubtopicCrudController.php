@@ -2,16 +2,15 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Subcategory;
+use App\Entity\Subtopic;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class SubcategoryCrudController extends AbstractCrudController
+class SubtopicCrudController extends AbstractCrudController
 {
     private SluggerInterface $slugger;
 
@@ -22,14 +21,14 @@ class SubcategoryCrudController extends AbstractCrudController
 
     public static function getEntityFqcn(): string
     {
-        return Subcategory::class;
+        return Subtopic::class;
     }
 
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            ->setEntityLabelInSingular('Subcategory')
-            ->setEntityLabelInPlural('Subcategories')
+            ->setEntityLabelInSingular('Subtopic')
+            ->setEntityLabelInPlural('Subtopics')
             ->setSearchFields(['name', 'slug']);
     }
 
@@ -38,12 +37,11 @@ class SubcategoryCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('name', 'Nom');
         yield TextField::new('slug', 'Slug')->hideOnForm();
-        yield AssociationField::new('category', 'Catégorie');
     }
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if (!$entityInstance instanceof Subcategory) {
+        if (!$entityInstance instanceof Subtopic) {
             return;
         }
 
@@ -57,7 +55,7 @@ class SubcategoryCrudController extends AbstractCrudController
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if (!$entityInstance instanceof Subcategory) {
+        if (!$entityInstance instanceof Subtopic) {
             return;
         }
 

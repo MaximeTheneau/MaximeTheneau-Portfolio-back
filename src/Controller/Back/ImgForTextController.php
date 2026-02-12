@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
 class ImgForTextController extends AbstractController
 {
     private $imageOptimizer;
@@ -29,7 +31,7 @@ class ImgForTextController extends AbstractController
 
         if ($file) {
             $slug = $post->getSlug();
-            
+
             $this->imageOptimizer->setPicture($file, $post , $slug);
 
             // Retourner l'URL de l'image téléchargée
@@ -39,5 +41,22 @@ class ImgForTextController extends AbstractController
         }
 
         return new JsonResponse(['error' => 'Aucun fichier téléchargé'], 400);
+    }
+
+    #[Route('/admin/upload-image', name: 'admin_upload_image', methods: ['POST'])]
+    public function uploadEditorImage(Request $request, SluggerInterface $slugger): JsonResponse
+    {
+        $file = $request->files->get('upload');
+
+        if (!$file) {
+            return new JsonResponse(['error' => 'Aucun fichier téléchargé'], 400);
+        }
+
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $slug = $slugger->slug($originalFilename)->lower() . '-' . uniqid();
+
+        $url = $this->imageOptimizer->uploadToS3($file, $slug);
+
+        return new JsonResponse(['url' => $url]);
     }
 }
