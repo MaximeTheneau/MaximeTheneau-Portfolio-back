@@ -29,6 +29,10 @@ class Subcategory
     #[Groups(['api_posts_category', 'api_posts_read', 'api_posts_browse', 'api_posts_desc', 'api_posts_subcategory', 'api_posts_read', 'api_posts__allSubcategory'])]
     private ?string $slug = null;
 
+    #[ORM\ManyToOne(targetEntity: Category::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Category $category = null;
+
     #[ORM\OneToMany(mappedBy: 'subcategory', targetEntity: Posts::class)]
     private Collection $posts;
 

@@ -91,14 +91,22 @@ class PostsCrudController extends AbstractCrudController
             return;
         }
 
-        yield TextField::new('title', 'Titre')->setColumns(6);
-        yield TextField::new('heading', 'En-tête')->setColumns(6);
+        yield TextField::new('title', 'Titre (meta title)')
+            ->setFormTypeOption('attr.maxlength', 70)
+            ->setHelp('Max 70 caractères')
+            ->setColumns(6);
+        yield TextField::new('heading', 'En-tête (h1)')
+            ->setFormTypeOption('attr.maxlength', 65)
+            ->setHelp('Max 65 caractères')
+            ->setColumns(6);
         yield TextareaField::new('metaDescription', 'Meta Description')
+            ->setFormTypeOption('attr.maxlength', 160)
             ->setHelp('Max 160 caractères')
             ->setColumns(12);
 
         yield TextField::new('slug', 'Slug')
-            ->setHelp('Laissez vide pour générer automatiquement')
+            ->setFormTypeOption('attr.maxlength', 70)
+            ->setHelp('Laissez vide pour générer automatiquement — Max 70 caractères')
             ->setColumns(6);
 
         yield TextEditorField::new('contents', 'Contenu')
@@ -170,7 +178,7 @@ class PostsCrudController extends AbstractCrudController
         }
 
         $this->processPost($entityInstance, false);
-        $this->processImage($entityInstance);
+        $this->processImage($entityInstance, $entityManager);
 
         $message = new TriggerNextJsBuild('Build');
         $this->messageBus->dispatch($message);
@@ -178,14 +186,22 @@ class PostsCrudController extends AbstractCrudController
         parent::updateEntity($entityManager, $entityInstance);
     }
 
-    private function processImage(Posts $post): void
+    private function processImage(Posts $post, ?EntityManagerInterface $entityManager = null): void
     {
         $imgPost = $post->getImgPost();
 
         // Si imgPost est une URL (existante sur S3), ne rien faire
         if (empty($imgPost) || str_starts_with($imgPost, 'http')) {
-            // Pas de nouvelle image uploadée
             if (empty($imgPost)) {
+                // En édition : restaurer l'ancienne image depuis la BDD
+                if ($entityManager && $post->getId()) {
+                    $originalData = $entityManager->getUnitOfWork()->getOriginalEntityData($post);
+                    if (!empty($originalData['imgPost'])) {
+                        $post->setImgPost($originalData['imgPost']);
+                        return;
+                    }
+                }
+                // En création : valeurs par défaut
                 $post->setImgPost('Accueil');
                 $post->setAltImg('Image de présentation');
             }
